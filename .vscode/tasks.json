@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build debug",
+            "type": "shell",
+            "command": "make;./../build/debug/magic",
+            "group":
+            {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build release",
+            "type": "shell",
+            "command": "make;./../build/release/magic",
+            "group":
+            {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
