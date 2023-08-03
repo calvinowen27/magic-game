@@ -15,33 +15,29 @@ class ContentManager;
 class Object
 {
 protected:
-    Game *_pGame;
-    ObjectManager *_pObjectManager;
-    ContentManager *_pContentManager;
+    Game *pGame;
+    ObjectManager *pObjectManager;
+    ContentManager *pContentManager;
 
-    // Vector2 _pos;       // m --> 128 pixels/m default
-    //                     // position is at bottom left of object
-    // Vector2Int _pxPos;  // pixel position, at top left of object
-    // Vector2 _dims;      // dimensions (m)
-    // Vector2Int _pxDims; // pixel dimensions
+    Vector2 velocity;  // m/s
 
-    Vector2 _velocity;  // m/s
+    TransformComponent *pTransform;
 
-    TransformComponent *_pTransform;
-
-    std::string _type;
-    CollisionBox _colBox;
+    std::string type;
+    CollisionBox colBox;
 
     float colLeftX;
     float colRightX;
     float colTopY;
     float colBottomY;
 
-    int borderEnabled[4]{1, 1, 1, 1}; // left right bottom top
+    bool isStatic = true;
+
+private:
+    int _borderEnabled[4]{1, 1, 1, 1}; // left right bottom top
 
     bool _doCollisions = true;
     bool _flipped = false;
-    bool _isStatic = true;
 
     float _textureAngle = 0; // degrees
 
@@ -55,16 +51,16 @@ public:
     virtual void update(float time);
     void handleCollisions(Vector2 deltaPos);
 
-    inline std::string type() { return _type; }
-    inline Vector2 pos() { return _pTransform->pos(); }
-    inline Vector2 velocity() { return _velocity; }
-    inline Vector2Int pxPos() { return _pTransform->pxPos(); }
-    inline Vector2 dims() { return _pTransform->dims(); }
-    inline Vector2Int pxDims() { return _pTransform->pxDims(); }
+    inline std::string getType() { return type; }
+    inline Vector2 getVelocity() { return velocity; }
+    inline Vector2 pos() { return pTransform->pos(); }
+    inline Vector2Int pxPos() { return pTransform->pxPos(); }
+    inline Vector2 dims() { return pTransform->dims(); }
+    inline Vector2Int pxDims() { return pTransform->pxDims(); }
     inline SDL_Texture *getTexture() { return _pTexture; }
 
-    inline void disableBorder(int i) { borderEnabled[i] = 0; }
-    inline void enableBorder(int i) { borderEnabled[i] = 1; }
+    inline void disableBorder(int i) { _borderEnabled[i] = 0; }
+    inline void enableBorder(int i) { _borderEnabled[i] = 1; }
 };
 
 #endif

@@ -88,18 +88,18 @@ void WorldManager::loadWorld()
 
             obj = _worldMap[i][j];
 
-            if (obj->type() == "wall")
+            if (obj->getType() == "wall")
             {
-                if (i > 0 && _worldMap[i - 1][j] != nullptr && _worldMap[i - 1][j]->type() == "wall")
+                if (i > 0 && _worldMap[i - 1][j] != nullptr && _worldMap[i - 1][j]->getType() == "wall")
                     obj->disableBorder(0);
 
-                if (i < WORLD_SIZE - 1 && _worldMap[i + 1][j] != nullptr && _worldMap[i + 1][j]->type() == "wall")
+                if (i < WORLD_SIZE - 1 && _worldMap[i + 1][j] != nullptr && _worldMap[i + 1][j]->getType() == "wall")
                     obj->disableBorder(1);
 
-                if (j > 0 && _worldMap[i][j - 1] != nullptr && _worldMap[i][j - 1]->type() == "wall")
+                if (j > 0 && _worldMap[i][j - 1] != nullptr && _worldMap[i][j - 1]->getType() == "wall")
                     obj->disableBorder(2);
 
-                if (j < WORLD_SIZE - 1 && _worldMap[i][j + 1] != nullptr && _worldMap[i][j + 1]->type() == "wall")
+                if (j < WORLD_SIZE - 1 && _worldMap[i][j + 1] != nullptr && _worldMap[i][j + 1]->getType() == "wall")
                     obj->disableBorder(3);
             }
         }

@@ -48,7 +48,7 @@ void UIManager::update()
     _pFPScounter->setText("FPS: " + std::to_string(_pGame->getFPS()));
     _pUPScounter->setText("UPS: " + std::to_string(_pGame->getUPS()));
     _pPosDisplay->setText("Position: " + _pGame->pPlayer->pos().round(3).to_string());
-    _pVelDisplay->setText("Velocity: " + _pGame->pPlayer->velocity().round(3).to_string());
+    _pVelDisplay->setText("Velocity: " + _pGame->pPlayer->getVelocity().round(3).to_string());
 
     // el.update()
     for(UIElement *el : _uiElements)

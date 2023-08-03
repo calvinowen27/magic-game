@@ -3,6 +3,8 @@
 
 #include "Object.hpp"
 #include "Vector2.hpp"
+#include "Components.hpp"
+
 #include "../SDL2/SDL.h"
 
 #include <string>
@@ -13,18 +15,17 @@ class ContentManager;
 class Particle
 {
 protected:
-    Game *_pGame;
-    ContentManager *_pContentManager;
+    Game *pGame;
+    ContentManager *pContentManager;
 
-    Vector2 _pos;
-    Vector2Int _pxPos;
-    Vector2 _dims;
-    Vector2Int _pxDims;
+    TransformComponent *pTransform;
 
+    std::string type;
+
+private:
     SDL_Texture *_pTexture;
     SDL_Rect _spriteRect;
 
-    std::string _type;
 
     float _textureAngle = 0; // degrees
     bool _flipped = false;

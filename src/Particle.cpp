@@ -4,16 +4,18 @@
 
 Particle::Particle(std::string type, Vector2 pos, Vector2 dims, float lifeDur)
 {
-    _pGame = Game::getInstance();
-    _pContentManager = _pGame->pContentManager;
-    _pos = pos;
-    _pxPos = _pGame->worldToPixel(_pos);
-    _dims = dims;
-    _pxDims = (Vector2Int)(_dims * _pGame->ppm);
+    pGame = Game::getInstance();
+    pContentManager = pGame->pContentManager;
+    // _pos = pos;
+    // _pxPos = _pGame->worldToPixel(_pos);
+    // _dims = dims;
+    // _pxDims = (Vector2Int)(_dims * _pGame->ppm);
 
-    _type = type;
+    pTransform = new TransformComponent(pos, dims);
 
-    _pTexture = _pContentManager->getTextureFromType(_type);
+    this->type = type;
+
+    _pTexture = pContentManager->getTextureFromType(type);
 }
 
 Particle::~Particle()
@@ -23,13 +25,13 @@ Particle::~Particle()
 
 void Particle::draw(SDL_Renderer *pRenderer)
 {
-    _spriteRect = SDL_Rect{_pxPos.x, _pxPos.y, _pxDims.x, _pxDims.y};
+    _spriteRect = SDL_Rect{pTransform->pxPos().x, pTransform->pxPos().y, pTransform->pxDims().x, pTransform->pxDims().y};
 
     SDL_RenderCopyEx(pRenderer, _pTexture, NULL, &_spriteRect, _textureAngle, NULL, _flipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 
 void Particle::update(float time)
 {
-    _pxPos = _pGame->worldToPixel(_pos) - Vector2Int(0, _pxDims.y);
-    _pxDims = (Vector2Int)(_dims * _pGame->ppm);
+    // _pxPos = _pGame->worldToPixel(_pos) - Vector2Int(0, _pxDims.y);
+    // _pxDims = (Vector2Int)(_dims * _pGame->ppm);
 }
