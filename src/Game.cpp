@@ -13,8 +13,8 @@
 #include "../include/game/ObjectManager.hpp"
 #include "../include/game/Spell.hpp"
 #include "../include/game/SpellManager.hpp"
-#include "../include/game/Registry.hpp"
-#include "../include/game/Components.hpp"
+#include "../include/game/ECS/Registry.hpp"
+#include "../include/game/ECS/Components.hpp"
 
 #include <thread>
 #include <chrono>

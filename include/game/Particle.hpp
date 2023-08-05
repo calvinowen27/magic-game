@@ -3,7 +3,7 @@
 
 #include "Object.hpp"
 #include "Vector2.hpp"
-#include "Components.hpp"
+#include "ECS/Components.hpp"
 
 #include "../SDL2/SDL.h"
 

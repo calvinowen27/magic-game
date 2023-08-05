@@ -1,43 +1,38 @@
-SRCDIR = src
-INCLUDEDIR = include/game
-OBJDIR = build/obj
-DBGDIR = build/debug/
-RLSDIR = build/release/
+SRC_DIR = src
+ECS_DIR = $(SRC_DIR)/ECS
+INCLUDE_DIR = include/game
+SRC_DIR_O = build/obj
+ECS_DIR_O = $(SRC_DIR_O)/ECS
+DBG_DIR = build/debug
 
-SOURCES = $(wildcard $(SRCDIR)/*.cpp)
-OBJECTS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SOURCES))
+SRC = $(wildcard $(SRC_DIR)/*.cpp)
+SRC_OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(SRC_DIR_O)/%.o, $(SRC))
+
+ECS = $(wildcard $(ECS_DIR)/*.cpp)
+ECS_OBJS = $(patsubst $(ECS_DIR)/%.cpp, $(ECS_DIR_O)/%.o, $(ECS))
 
 CC = g++
-CFLAGS = -std=c++17 -Wall -Wextra -pedantic -I$(INCLUDEDIR)
+CFLAGS = -std=c++17 -Wall -Wextra -pedantic
 
 LDFLAGS = -L./lib -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lUser32
 
 EXECUTABLE = magic
 
-debug: $(OBJECTS) $(DBGDIR)
-	rm -rf $(DBGDIR)content
-	mkdir -p $(DBGDIR)content
-	cp -r content $(DBGDIR)
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $(DBGDIR)$(EXECUTABLE)
+debug: $(SRC_OBJS) $(ECS_OBJS) $(DBG_DIR)
+	rm -rf $(DBG_DIR)/content
+	mkdir -p $(DBG_DIR)/content
+	cp -r content $(DBG_DIR)
+	$(CC) $(SRC_OBJS) $(ECS_OBJS) $(LDFLAGS) -o $(DBG_DIR)/$(EXECUTABLE)
 
-release: $(OBJECTS) $(RLSDIR)
-	rm -rf $(RLSDIR)content
-	mkdir -p $(RLSDIR)content
-	cp -r content $(RLSDIR)
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $(RLSDIR)$(EXECUTABLE)
-
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(INCLUDEDIR)/%.hpp $(OBJDIR)
+$(SRC_DIR_O)/%.o: $(SRC_DIR)/%.cpp $(INCLUDE_DIR)/%.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR):
-	mkdir -p $@
+$(ECS_DIR_O)/%.o: $(ECS_DIR)/%.cpp $(INCLUDE_DIR)/ECS/%.hpp
+	$(CC) $(CFLAGS) -c $< -o $@
 
-$(DBGDIR):
-	mkdir -p $@
-
-$(RLSDIR):
+$(SRC_DIR_O) $(ECS_DIR_O) $(DBG_DIR):
 	mkdir -p $@
 
 .PHONY: clean
 clean:
-	rm -f $(EXECUTABLE) $(OBJECTS)
+	rm -f $(DBG_DIR)/$(EXECUTABLE) $(SRC_OBJS) $(ECS_OBJS)

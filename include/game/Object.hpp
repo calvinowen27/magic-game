@@ -6,7 +6,7 @@
 #include "CollisionBox.hpp"
 // #include "ObjectManager.hpp"
 // #include "Game.hpp"
-#include "Components.hpp"
+#include "ECS/Components.hpp"
 
 class Game;
 class ObjectManager;
