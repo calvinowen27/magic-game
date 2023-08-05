@@ -23,7 +23,7 @@ void Spell::update(float time)
         {
             _aliveTime += time;
 
-            pTransform->pos() += _dir * _speed * time;
+            pTransform->pos += _dir * _speed * time;
         }
         else
         {
@@ -38,24 +38,24 @@ void Spell::update(float time)
                 if(_types[1] == SpellType::Exploding)
                 {
                     std::cout << "EXPLODE!" << std::endl;
-                    new Spell(type, pTransform->pos(), _dir, _element, newTypes);
+                    new Spell(type, pTransform->pos, _dir, _element, newTypes);
                 }
 
                 if(_types[1] == SpellType::Projectile)
                 {
-                    new Spell(type, pTransform->pos(), _dir, _element, newTypes);
+                    new Spell(type, pTransform->pos, _dir, _element, newTypes);
                 }
 
                 if(_types[1] == SpellType::Radial)
                 {
-                    new Spell(type, pTransform->pos(), Vector2(0, 1), _element, newTypes);
-                    new Spell(type, pTransform->pos(), Vector2(1, 1).normalized(), _element, newTypes);
-                    new Spell(type, pTransform->pos(), Vector2(1, 0), _element, newTypes);
-                    new Spell(type, pTransform->pos(), Vector2(1, -1).normalized(), _element, newTypes);
-                    new Spell(type, pTransform->pos(), Vector2(0, -1), _element, newTypes);
-                    new Spell(type, pTransform->pos(), Vector2(-1, -1).normalized(), _element, newTypes);
-                    new Spell(type, pTransform->pos(), Vector2(-1, 0), _element, newTypes);
-                    new Spell(type, pTransform->pos(), Vector2(-1, 1).normalized(), _element, newTypes);
+                    new Spell(type, pTransform->pos, Vector2(0, 1), _element, newTypes);
+                    new Spell(type, pTransform->pos, Vector2(1, 1).normalized(), _element, newTypes);
+                    new Spell(type, pTransform->pos, Vector2(1, 0), _element, newTypes);
+                    new Spell(type, pTransform->pos, Vector2(1, -1).normalized(), _element, newTypes);
+                    new Spell(type, pTransform->pos, Vector2(0, -1), _element, newTypes);
+                    new Spell(type, pTransform->pos, Vector2(-1, -1).normalized(), _element, newTypes);
+                    new Spell(type, pTransform->pos, Vector2(-1, 0), _element, newTypes);
+                    new Spell(type, pTransform->pos, Vector2(-1, 1).normalized(), _element, newTypes);
                 }
             }
 

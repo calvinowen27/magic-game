@@ -15,6 +15,7 @@
 #include "../include/game/SpellManager.hpp"
 #include "../include/game/ECS/Registry.hpp"
 #include "../include/game/ECS/Components.hpp"
+#include "../include/game/ECS/ColliderHandler.hpp"
 
 #include <thread>
 #include <chrono>
@@ -106,6 +107,7 @@ int Game::gameInit()
     }
 
     pRegistry = new Registry();
+    pColliderHandler = new ColliderHandler(pRegistry);
 
     pKeyboardHandler = new KeyboardHandler();
     pMouseHandler = new MouseHandler();
@@ -246,6 +248,8 @@ void Game::physicsUpdate()
     pKeyboardHandler->processInputs();
 
     pRegistry->update(updateTime);
+
+    pColliderHandler->update(updateTime);
 
     pObjectManager->update(updateTime);
 

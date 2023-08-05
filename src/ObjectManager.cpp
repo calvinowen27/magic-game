@@ -31,10 +31,6 @@ ObjectManager *ObjectManager::getInstance()
 
 void ObjectManager::init()
 {
-    _colBoxes = {
-        {"wall", CollisionBox(Vector2::zero, Vector2(1, 0.35f))},
-        {"player", CollisionBox(Vector2(0.25f, 0), Vector2(0.75f, 0.25f))}
-    };
 }
 
 void ObjectManager::draw(SDL_Renderer *pRenderer)
@@ -57,9 +53,4 @@ void ObjectManager::update(float time)
     {
         obj->update(time);
     }
-}
-
-CollisionBox &ObjectManager::getColBox(std::string objType)
-{
-    return _colBoxes[objType];
 }

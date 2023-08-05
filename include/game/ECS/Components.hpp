@@ -2,9 +2,11 @@
 #define COMPONENTS_INCLUDE
 
 #include "../Vector2.hpp"
+#include "../../SDL2/SDL.h"
 
 class Game;
 class Registry;
+class RigidbodyComponent;
 
 class Component
 {
@@ -18,20 +20,50 @@ public:
 
 class TransformComponent : public Component
 {
-private:
-    Vector2 _pos;
-    Vector2Int _pxPos;
-    Vector2 _dims;
-    Vector2Int _pxDims;
-
 public:
+    Vector2 pos;
+    Vector2Int pxPos;
+    Vector2 dims;
+    Vector2Int pxDims;
+
     TransformComponent(Vector2 pos, Vector2 dims);
     void update(float time);
+};
 
-    inline Vector2& pos() { return _pos; }
-    inline Vector2Int pxPos() { return _pxPos; }
-    inline Vector2 dims() { return _dims; }
-    inline Vector2Int pxDims() { return _pxDims; }
+class ColliderComponent : public Component
+{
+public:
+    Vector2 start;
+    Vector2 end;
+
+    TransformComponent *pTransform;
+    RigidbodyComponent *pRigidbody;
+
+    float leftX;
+    float rightX;
+    float topY;
+    float bottomY;
+
+    int borderEnabled[4]{1, 1, 1, 1}; // left right bottom top
+
+    bool doCollisions = true;
+
+    ColliderComponent(Vector2 start, Vector2 end, TransformComponent *pTransform, RigidbodyComponent *pRigidbody, bool doCollisions = true);
+    void update(float time);
+};
+
+class RigidbodyComponent : public Component
+{
+public:
+    bool isStatic = false;
+
+    Vector2 velocity;
+
+    TransformComponent *pTransform;
+    ColliderComponent *pCollider;
+
+    RigidbodyComponent(TransformComponent *pTransform, ColliderComponent *pCollider, bool isStatic = false);
+    void update(float time);
 };
 
 #endif

@@ -27,6 +27,7 @@ class MouseHandler;
 class WorldManager;
 class SpellManager;
 class Registry;
+class ColliderHandler;
 
 class Game
 {
@@ -49,6 +50,7 @@ public:
     ObjectManager *pObjectManager;
     SpellManager *pSpellManager;
     Registry *pRegistry;
+    ColliderHandler *pColliderHandler;
 
     Player *pPlayer;
 

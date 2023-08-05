@@ -7,7 +7,6 @@ std::map<SDL_Scancode, bool> inputState;
 Player::Player(Vector2 pos) : Object("player", pos, Vector2(1, 1))
 {
     _pKeyboardHandler = pGame->pKeyboardHandler;
-    isStatic = false;
 }
 
 void Player::update(float time)
@@ -28,10 +27,10 @@ void Player::update(float time)
     if(_pKeyboardHandler->getInputState(InputKey::ZoomOut)) // zoom in
         pGame->zoomOut();
 
-    velocity = moveDir.normalized() * 2;
+    pRigidbody->velocity = moveDir.normalized() * 2;
 
     if(_pKeyboardHandler->getInputState(InputKey::Sprint)) // sprint
-        velocity *= 2.5;
+        pRigidbody->velocity *= 2.5;
 
     Object::update(time);
 }

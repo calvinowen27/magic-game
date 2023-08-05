@@ -25,7 +25,7 @@ Particle::~Particle()
 
 void Particle::draw(SDL_Renderer *pRenderer)
 {
-    _spriteRect = SDL_Rect{pTransform->pxPos().x, pTransform->pxPos().y, pTransform->pxDims().x, pTransform->pxDims().y};
+    _spriteRect = SDL_Rect{pTransform->pxPos.x, pTransform->pxPos.y, pTransform->pxDims.x, pTransform->pxDims.y};
 
     SDL_RenderCopyEx(pRenderer, _pTexture, NULL, &_spriteRect, _textureAngle, NULL, _flipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }

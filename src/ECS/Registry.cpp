@@ -6,7 +6,7 @@ Registry::Registry()
 
 Registry::~Registry()
 {
-    for (auto transform : _transformComponents)
+    for (auto transform : _transforms)
     {
         delete transform;
     }
@@ -14,7 +14,7 @@ Registry::~Registry()
 
 void Registry::update(float time)
 {
-    for (auto transform : _transformComponents)
+    for (auto transform : _transforms)
     {
         transform->update(time);
     }

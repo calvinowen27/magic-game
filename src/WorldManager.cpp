@@ -91,16 +91,16 @@ void WorldManager::loadWorld()
             if (obj->getType() == "wall")
             {
                 if (i > 0 && _worldMap[i - 1][j] != nullptr && _worldMap[i - 1][j]->getType() == "wall")
-                    obj->disableBorder(0);
+                    obj->getCollider()->borderEnabled[0] = 0;
 
                 if (i < WORLD_SIZE - 1 && _worldMap[i + 1][j] != nullptr && _worldMap[i + 1][j]->getType() == "wall")
-                    obj->disableBorder(1);
+                    obj->getCollider()->borderEnabled[1] = 0;
 
                 if (j > 0 && _worldMap[i][j - 1] != nullptr && _worldMap[i][j - 1]->getType() == "wall")
-                    obj->disableBorder(2);
+                    obj->getCollider()->borderEnabled[2] = 0;
 
                 if (j < WORLD_SIZE - 1 && _worldMap[i][j + 1] != nullptr && _worldMap[i][j + 1]->getType() == "wall")
-                    obj->disableBorder(3);
+                    obj->getCollider()->borderEnabled[3] = 0;
             }
         }
     }
