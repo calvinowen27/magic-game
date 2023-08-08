@@ -11,12 +11,14 @@
 
 class Game;
 class ContentManager;
+class Registry;
 
 class Particle
 {
 protected:
     Game *pGame;
     ContentManager *pContentManager;
+    Registry *pRegistry;
 
     TransformComponent *pTransform;
 

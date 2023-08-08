@@ -5,14 +5,19 @@
 #include "../../SDL2/SDL.h"
 
 class Game;
-class Registry;
 class RigidbodyComponent;
+
+enum class ComponentType
+{
+    Transform,
+    Collider,
+    Rigidbody
+};
 
 class Component
 {
 protected:
     Game *pGame;
-    Registry *pRegistry;
 
 public:
     Component();
@@ -26,7 +31,8 @@ public:
     Vector2 dims;
     Vector2Int pxDims;
 
-    TransformComponent(Vector2 pos, Vector2 dims);
+    TransformComponent();
+    bool init(Vector2 pos, Vector2 dims);
     void update(float time);
 };
 
@@ -48,7 +54,8 @@ public:
 
     bool doCollisions = true;
 
-    ColliderComponent(Vector2 start, Vector2 end, TransformComponent *pTransform, RigidbodyComponent *pRigidbody, bool doCollisions = true);
+    ColliderComponent();
+    bool init(Vector2 start, Vector2 end, TransformComponent *pTransform, RigidbodyComponent *pRigidbody, bool doCollisions = true);
     void update(float time);
 };
 
@@ -62,7 +69,8 @@ public:
     TransformComponent *pTransform;
     ColliderComponent *pCollider;
 
-    RigidbodyComponent(TransformComponent *pTransform, ColliderComponent *pCollider, bool isStatic = false);
+    RigidbodyComponent();
+    bool init(TransformComponent *pTransform, ColliderComponent *pCollider, bool isStatic = false);
     void update(float time);
 };
 

@@ -8,6 +8,7 @@
 class Game;
 class ObjectManager;
 class ContentManager;
+class Registry;
 
 class Object
 {
@@ -15,6 +16,7 @@ protected:
     Game *pGame;
     ObjectManager *pObjectManager;
     ContentManager *pContentManager;
+    Registry *pRegistry;
 
     TransformComponent *pTransform;
     RigidbodyComponent *pRigidbody;

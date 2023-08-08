@@ -1,17 +1,16 @@
 #include "../include/game/Particle.hpp"
 #include "../include/game/Game.hpp"
 #include "../include/game/ContentManager.hpp"
+#include "../include/game/ECS/Registry.hpp"
 
 Particle::Particle(std::string type, Vector2 pos, Vector2 dims, float lifeDur)
 {
     pGame = Game::getInstance();
     pContentManager = pGame->pContentManager;
-    // _pos = pos;
-    // _pxPos = _pGame->worldToPixel(_pos);
-    // _dims = dims;
-    // _pxDims = (Vector2Int)(_dims * _pGame->ppm);
+    pRegistry = pGame->pRegistry;
 
-    pTransform = new TransformComponent(pos, dims);
+    pTransform = static_cast<TransformComponent *>(pRegistry->newComponent(ComponentType::Transform));
+    pTransform->init(pos, dims);
 
     this->type = type;
 

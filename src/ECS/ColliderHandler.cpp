@@ -8,28 +8,27 @@ ColliderHandler::ColliderHandler(Registry *pRegistry)
     _pRegistry = pRegistry;
 
     _colliderEndpoints = {
-        {"wall", std::vector<Vector2>{ Vector2::zero, Vector2(1, 0.35f) }},
-        {"player", std::vector<Vector2>{ Vector2(0.25f, 0), Vector2(0.75f, 0.25f) }},
-        {"grass", std::vector<Vector2>{ Vector2::zero, Vector2(1, 1) }}
-    };
+        {"wall", std::vector<Vector2>{Vector2::zero, Vector2(1, 0.35f)}},
+        {"player", std::vector<Vector2>{Vector2(0.25f, 0), Vector2(0.75f, 0.25f)}},
+        {"grass", std::vector<Vector2>{Vector2::zero, Vector2(1, 1)}}};
 }
 
 void ColliderHandler::update(float time)
 {
     std::vector<ColliderComponent *> colliders = _pRegistry->getColliders();
-    for(auto pCol : colliders)
+    for (auto pCol : colliders)
     {
         pCol->update(time);
 
         Vector2 deltaPos = pCol->pRigidbody->velocity * time;
         Vector2 nextPos = pCol->pTransform->pos + deltaPos;
 
-        for(auto pOther : colliders)
+        for (auto pOther : colliders)
         {
-            if(pCol == pOther)
+            if (pCol == pOther)
                 continue;
 
-            if(!pCol->doCollisions || !pOther->doCollisions)
+            if (!pCol->doCollisions || !pOther->doCollisions)
                 continue;
 
             // skip if not touching

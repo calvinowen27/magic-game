@@ -6,18 +6,21 @@
 Component::Component()
 {
     pGame = Game::getInstance();
-    pRegistry = pGame->pRegistry;
 }
 
 /* TRANSFORM COMPONENT */
-TransformComponent::TransformComponent(Vector2 pos, Vector2 dims) : Component()
+TransformComponent::TransformComponent() : Component()
+{
+}
+
+bool TransformComponent::init(Vector2 pos, Vector2 dims)
 {
     this->pos = pos;
     this->dims = dims;
     pxDims = (Vector2Int)(dims * pGame->ppm);
     pxPos = pGame->worldToPixel(pos) - Vector2Int(0, pxDims.y);
 
-    pRegistry->addTransform(this);
+    return true;
 }
 
 void TransformComponent::update(float time)
@@ -27,7 +30,11 @@ void TransformComponent::update(float time)
 }
 
 /* COLLIDER COMPONENT */
-ColliderComponent::ColliderComponent(Vector2 start, Vector2 end, TransformComponent *pTransform, RigidbodyComponent *pRigidbody, bool doCollisions)
+ColliderComponent::ColliderComponent()
+{
+}
+
+bool ColliderComponent::init(Vector2 start, Vector2 end, TransformComponent *pTransform, RigidbodyComponent *pRigidbody, bool doCollisions)
 {
     this->start = start;
     this->end = end;
@@ -35,8 +42,6 @@ ColliderComponent::ColliderComponent(Vector2 start, Vector2 end, TransformCompon
     this->pRigidbody = pRigidbody;
 
     this->doCollisions = doCollisions;
-
-    pRegistry->addCollider(this);
 }
 
 void ColliderComponent::update(float time)
@@ -48,12 +53,18 @@ void ColliderComponent::update(float time)
 }
 
 /* RIGIDBODY COMPONENT */
-RigidbodyComponent::RigidbodyComponent(TransformComponent *pTransform, ColliderComponent *pCollider, bool isStatic)
+RigidbodyComponent::RigidbodyComponent()
+{
+}
+
+bool RigidbodyComponent::init(TransformComponent *pTransform, ColliderComponent *pCollider, bool isStatic)
 {
     this->pTransform = pTransform;
     this->pCollider = pCollider;
 
     this->isStatic = isStatic;
+
+    return true;
 }
 
 void RigidbodyComponent::update(float time)
