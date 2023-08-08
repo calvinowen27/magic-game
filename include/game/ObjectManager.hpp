@@ -26,7 +26,6 @@ public:
     ~ObjectManager();
     static ObjectManager *getInstance();
     void init();
-    void draw(SDL_Renderer *pRenderer);
     void update(float time);
 
     inline void addObject(Object *obj) { _objs.push_back(obj); }

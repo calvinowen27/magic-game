@@ -33,19 +33,6 @@ void ObjectManager::init()
 {
 }
 
-void ObjectManager::draw(SDL_Renderer *pRenderer)
-{
-    // draw objects, y value render order
-    for(float y = (WorldManager::WORLD_SIZE / 2) - 1; y > -(WorldManager::WORLD_SIZE / 2); y -= 0.5f)
-    {
-        for (Object *obj : _objs)
-        {
-            if((float)((int)(obj->pos().y*4))/2.f == y)
-                obj->draw(pRenderer);
-        }
-    }
-}
-
 void ObjectManager::update(float time)
 {
     // obj.update();

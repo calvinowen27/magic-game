@@ -28,14 +28,15 @@ class WorldManager;
 class SpellManager;
 class Registry;
 class ColliderHandler;
+class TransformComponent;
 
 class Game
 {
 private:
-    const int TARGET_UPS = 60; // physics updates
+    const int TARGET_UPS = 60;  // physics updates
     const int TARGET_FPS = 120; // aim for this many fps
 
-    static Game* _pInstance;
+    static Game *_pInstance;
 
     int _fps = 0, _ups = 0; // frames per sec, updates per sec
 
@@ -59,13 +60,13 @@ public:
     int maxPPM = 128;
     int minPPM = 32;
     int zoomStep = 8;
-    SDL_Window* pWindow;
-    SDL_Renderer* pRenderer;
+    SDL_Window *pWindow;
+    SDL_Renderer *pRenderer;
 
     Vector2 cameraPos;
     bool running = true;
 
-    static Game* getInstance();
+    static Game *getInstance();
     Game();
     ~Game();
     int gameInit();
@@ -80,6 +81,7 @@ public:
     Vector2Int worldToPixel(Vector2 pos);
 
     bool objOnScreen(Object &obj);
+    bool isTransformOnScreen(TransformComponent &transform);
 
     friend bool operator==(const Game &a, const Game &b);
 

@@ -18,24 +18,17 @@ protected:
     ContentManager *pContentManager;
     Registry *pRegistry;
 
+    RendererComponent *pRenderer;
     TransformComponent *pTransform;
     RigidbodyComponent *pRigidbody;
     ColliderComponent *pCollider;
 
     std::string type;
 
-private:
-    bool _flipped = false;
-
-    float _textureAngle = 0; // degrees
-
-    SDL_Texture *_pTexture;
-    SDL_Rect _spriteRect;
-
 public:
-    Object(std::string objType, Vector2 pos, Vector2 dims, bool doCollisions = true);
-    virtual ~Object();
-    virtual void draw(SDL_Renderer *pRenderer);
+    Object(std::string objType);
+    ~Object();
+    void init(Vector2 pos, Vector2 dims, bool doCollisions = true);
     virtual void update(float time);
 
     inline std::string getType() { return type; }
@@ -44,7 +37,6 @@ public:
     inline Vector2Int pxPos() { return pTransform->pxPos; }
     inline Vector2 dims() { return pTransform->dims; }
     inline Vector2Int pxDims() { return pTransform->pxDims; }
-    inline SDL_Texture *getTexture() { return _pTexture; }
     inline ColliderComponent *getCollider() { return pCollider; }
 };
 

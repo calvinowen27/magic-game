@@ -1,11 +1,53 @@
 #include "../../include/game/ECS/Components.hpp"
 #include "../../include/game/Game.hpp"
+#include "../../include/game/ContentManager.hpp"
 #include "../../include/game/ECS/Registry.hpp"
 
 /* COMPONENT */
 Component::Component()
 {
     pGame = Game::getInstance();
+}
+
+/* RENDERER COMPONENT */
+RendererComponent::RendererComponent() : Component()
+{
+    pContentManager = pGame->pContentManager;
+}
+
+RendererComponent::~RendererComponent()
+{
+    SDL_DestroyTexture(pTexture);
+}
+
+bool RendererComponent::init(std::string objType, TransformComponent *pTransform)
+{
+    pTexture = pContentManager->getTextureFromType(objType);
+    this->pTransform = pTransform;
+
+    return true;
+}
+
+void RendererComponent::update(float time)
+{
+    isEnabled = pGame->isTransformOnScreen(*pTransform);
+}
+
+void RendererComponent::draw(SDL_Renderer *pRenderer)
+{
+    if (!isEnabled)
+        return;
+
+    spriteRect = SDL_Rect{pTransform->pxPos.x, pTransform->pxPos.y, pTransform->pxDims.x, pTransform->pxDims.y};
+
+    SDL_RenderCopyEx(pRenderer, pTexture, NULL, &spriteRect, spriteAngle, NULL, isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+}
+
+bool RendererComponent::setTexture(std::string textureName)
+{
+    pTexture = pContentManager->getTexture(textureName);
+
+    return true;
 }
 
 /* TRANSFORM COMPONENT */
@@ -69,7 +111,7 @@ bool RigidbodyComponent::init(TransformComponent *pTransform, ColliderComponent 
 
 void RigidbodyComponent::update(float time)
 {
-    if(isStatic)
+    if (isStatic)
         return;
 
     if (SDL_fabsf(velocity.x) < 0.0625)

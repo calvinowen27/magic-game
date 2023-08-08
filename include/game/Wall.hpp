@@ -7,7 +7,10 @@
 class Wall : public Object
 {
 public:
-    Wall(Vector2 pos) : Object("wall", pos, Vector2(1, 1)) {}
+    Wall(Vector2 pos) : Object("wall")
+    {
+        init(pos, Vector2(1, 1));
+    }
 };
 
 #endif

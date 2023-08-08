@@ -276,7 +276,7 @@ void Game::draw()
 
     SDL_SetRenderDrawColor(pRenderer, 47, 120, 46, 255);
 
-    pObjectManager->draw(pRenderer);
+    pRegistry->draw(pRenderer);
 
     pSpellManager->draw(pRenderer);
 
@@ -308,4 +308,10 @@ bool Game::objOnScreen(Object &obj)
     Vector2Int pxPos = obj.pxPos();
     Vector2Int pxDims = obj.pxDims();
     return pxPos.x <= winWidth && pxPos.x + pxDims.x >= 0 && pxPos.y <= winHeight && pxPos.y + pxDims.y >= 0;
+}
+
+bool Game::isTransformOnScreen(TransformComponent &transform)
+{
+    return transform.pxPos.x <= winWidth && transform.pxPos.x + transform.pxDims.x >= 0 &&
+           transform.pxPos.y <= winHeight && transform.pxPos.y + transform.pxDims.y >= 0;
 }
