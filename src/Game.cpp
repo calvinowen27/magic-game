@@ -15,7 +15,7 @@
 #include "../include/game/SpellManager.hpp"
 #include "../include/game/ECS/Registry.hpp"
 #include "../include/game/ECS/Components.hpp"
-#include "../include/game/ECS/ColliderHandler.hpp"
+#include "../include/game/ECS/ComponentHandler.hpp"
 
 #include <thread>
 #include <chrono>
@@ -109,7 +109,7 @@ int Game::init()
     }
 
     pRegistry = new Registry();
-    pColliderHandler = new ColliderHandler(pRegistry);
+    pComponentHandler = new ComponentHandler();
 
     pKeyboardHandler = new KeyboardHandler();
     pMouseHandler = new MouseHandler();
@@ -249,9 +249,7 @@ void Game::physicsUpdate()
 
     pKeyboardHandler->processInputs();
 
-    pRegistry->update(updateTime);
-
-    pColliderHandler->update(updateTime);
+    pComponentHandler->update(updateTime);
 
     pObjectManager->update(updateTime);
 
@@ -278,7 +276,7 @@ void Game::draw()
 
     SDL_SetRenderDrawColor(pRenderer, 47, 120, 46, 255);
 
-    pRegistry->draw(pRenderer);
+    pComponentHandler->draw(pRenderer);
 
     pSpellManager->draw(pRenderer);
 

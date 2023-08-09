@@ -8,7 +8,8 @@
 #include "Vector2.hpp"
 #include "ECS/Components.hpp"
 
-using namespace std;
+using std::string;
+using std::shared_ptr;
 
 class Game;
 class ObjectManager;
@@ -29,12 +30,11 @@ protected:
     shared_ptr<RigidbodyComponent> pRigidbody;
     shared_ptr<ColliderComponent> pCollider;
 
-    std::string type;
+    string type;
 
 public:
-    Object(std::string objType);
-    ~Object();
-    void init(Vector2 pos, Vector2 dims, bool doCollisions = true);
+    Object();
+    virtual void init(string objType, Vector2 pos, Vector2 dims, bool doCollisions = true);
     virtual void update(float time);
 
     inline std::string getType() { return type; }

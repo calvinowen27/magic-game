@@ -4,11 +4,9 @@
 
 std::map<SDL_Scancode, bool> inputState;
 
-Player::Player(Vector2 pos) : Object("player")
+Player::Player() : Object()
 {
     _pKeyboardHandler = game.pKeyboardHandler;
-
-    init(pos, Vector2(1, 1));
 }
 
 void Player::update(float time)

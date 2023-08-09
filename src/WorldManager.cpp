@@ -4,6 +4,7 @@
 #include "../include/game/Grass.hpp"
 #include "../include/game/Player.hpp"
 #include "../include/game/Game.hpp"
+#include "../include/game/ObjectManager.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -11,14 +12,14 @@
 
 WorldManager *WorldManager::_pInstance;
 
-WorldManager::WorldManager() : _game(*Game::getInstance())
+WorldManager::WorldManager() : _game(*Game::getInstance()), _objectManager(*_game.pObjectManager)
 {
     // _pGame = Game::getInstance();
 }
 
 WorldManager *WorldManager::getInstance()
 {
-    if(_pInstance == nullptr)
+    if (_pInstance == nullptr)
     {
         _pInstance = new WorldManager();
     }
@@ -62,22 +63,28 @@ void WorldManager::loadWorld()
             switch (line[i])
             {
             case '#':
-                _worldMap[x][y] = new Wall(pos);
+                // _worldMap[x][y] = new Wall(pos);
+                _worldMap[x][y] = _objectManager.newObj<Wall>();
+                _worldMap[x][y]->init("wall", pos, Vector2(1, 1));
                 break;
             case ',':
-                _worldMap[x][y] = new Grass(pos);
+                // _worldMap[x][y] = new Grass(pos);
+                _worldMap[x][y] = _objectManager.newObj<Grass>();
+                _worldMap[x][y]->init("grass", pos, Vector2(1, 1), false);
                 break;
             case '@':
-                _game.pPlayer = new Player(pos);
+                // _game.pPlayer = new Player(pos);
+                _game.pPlayer = _objectManager.newObj<Player>();
+                _game.pPlayer->init("player", pos, Vector2(1, 1));
                 break;
             }
         }
 
-        pos.y+=0.5f;
+        pos.y += 0.5f;
         y++;
     }
 
-    Object *obj;
+    shared_ptr<Object> obj;
 
     for (i = 0; i < WORLD_SIZE; i++)
     {

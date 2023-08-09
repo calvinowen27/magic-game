@@ -6,10 +6,14 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <memory>
 
 class Game;
-class WorldManager;
 class Object;
+
+using std::vector;
+using std::shared_ptr;
+using std::make_shared;
 
 class ObjectManager
 {
@@ -17,9 +21,9 @@ private:
     static ObjectManager *_pInstance;
 
     Game &_game;
-    WorldManager *_pWorldManager;
 
-    std::vector<Object *> _objs;
+    // vector<Object *> _objs;
+    vector<shared_ptr<Object>> _objects;
 
 public:
     ObjectManager();
@@ -28,8 +32,16 @@ public:
     void init();
     void update(float time);
 
-    inline void addObject(Object *obj) { _objs.push_back(obj); }
-    inline std::vector<Object *> &getObjs() { return _objs; }
+    // inline void addObject(Object *obj) { _objs.push_back(obj); }
+    // inline std::vector<Object *> &getObjs() { return _objs; }
+
+    template <typename T>
+    shared_ptr<T> newObj()
+    {
+        auto obj = make_shared<T>();
+        _objects.push_back(obj);
+        return obj;
+    }
 };
 
 #endif

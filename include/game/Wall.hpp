@@ -7,9 +7,8 @@
 class Wall : public Object
 {
 public:
-    Wall(Vector2 pos) : Object("wall")
+    Wall() : Object()
     {
-        init(pos, Vector2(1, 1));
     }
 };
 

@@ -9,6 +9,7 @@
 #include "../Vector2.hpp"
 
 using std::shared_ptr;
+using std::string;
 
 class Game;
 class ContentManager;
@@ -40,7 +41,7 @@ public:
 
     RendererComponent();
     ~RendererComponent();
-    bool init(std::string textureName, shared_ptr<TransformComponent> pTransform); // returns true if successful
+    bool init(string objType, shared_ptr<TransformComponent> pTransform); // returns true if successful
     void update(float time);
     void draw(SDL_Renderer *pRenderer);
     bool setTexture(std::string textureName); // returns true if successful

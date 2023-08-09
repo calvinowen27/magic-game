@@ -10,6 +10,7 @@
 #include <mutex>
 #include <queue>
 #include <iostream>
+#include <memory>
 
 #include "../SDL2/SDL.h"
 #include "../SDL2/SDL_image.h"
@@ -28,8 +29,10 @@ class MouseHandler;
 class WorldManager;
 class SpellManager;
 class Registry;
-class ColliderHandler;
+class ComponentHandler;
 class TransformComponent;
+
+using std::shared_ptr;
 
 class Game
 {
@@ -52,9 +55,9 @@ public:
     ObjectManager *pObjectManager;
     SpellManager *pSpellManager;
     Registry *pRegistry;
-    ColliderHandler *pColliderHandler;
+    ComponentHandler *pComponentHandler;
 
-    Player *pPlayer;
+    shared_ptr<Player> pPlayer;
 
     int winWidth = 1500, winHeight = 1000;
     int ppm = 64; // pixels per meter, 128 by default

@@ -7,9 +7,8 @@
 class Grass : public Object
 {
 public:
-    Grass(Vector2 pos) : Object("grass")
+    Grass() : Object()
     {
-        init(pos, Vector2(1, 1), false);
     }
 };
 

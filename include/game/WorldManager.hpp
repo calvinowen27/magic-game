@@ -2,9 +2,14 @@
 #define WORLD_MANAGER_INCLUDE
 
 #include <string>
+#include <memory>
+
+using std::shared_ptr;
+using std::string;
 
 class Game;
 class Object;
+class ObjectManager;
 
 class WorldManager
 {
@@ -15,10 +20,11 @@ private:
     static WorldManager *_pInstance;
 
     Game &_game;
+    ObjectManager &_objectManager;
 
-    Object *_worldMap[WORLD_SIZE][WORLD_SIZE];
+    shared_ptr<Object> _worldMap[WORLD_SIZE][WORLD_SIZE];
 
-    std::string _filePath = "./world/world.txt";
+    string _filePath = "./world/world.txt";
 
 public:
     WorldManager();

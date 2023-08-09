@@ -1,17 +1,42 @@
-#include "../../include/game/ECS/ColliderHandler.hpp"
-#include "../../include/game/ECS/Components.hpp"
+#include "../../include/game/ECS/ComponentHandler.hpp"
 #include "../../include/game/ECS/Registry.hpp"
 #include "../../include/game/Game.hpp"
+#include "../../include/game/WorldManager.hpp"
 
-ColliderHandler::ColliderHandler(Registry *pRegistry) : _game(*Game::getInstance()), _registry(*_game.pRegistry)
+ComponentHandler::ComponentHandler() : _game(*Game::getInstance()), _registry(*_game.pRegistry)
 {
-    _colliderEndpoints = {
-        {"wall", std::vector<Vector2>{Vector2::zero, Vector2(1, 0.35f)}},
-        {"player", std::vector<Vector2>{Vector2(0.25f, 0), Vector2(0.75f, 0.25f)}},
-        {"grass", std::vector<Vector2>{Vector2::zero, Vector2(1, 1)}}};
 }
 
-void ColliderHandler::update(float time)
+void ComponentHandler::draw(SDL_Renderer *pRenderer)
+{
+    auto renderers = _registry.getComponents<RendererComponent>();
+
+    // y value render order
+    for(float y = (WorldManager::WORLD_SIZE / 2) - 1; y > -(WorldManager::WORLD_SIZE / 2); y -= 0.5f)
+    {
+        for (auto renderer : renderers)
+        {
+            if((float)((int)(renderer->pTransform->pos.y*4))/2.f == y)
+                renderer->draw(pRenderer);
+        }
+    }
+}
+
+void ComponentHandler::update(float time)
+{
+    updateTransforms(time);
+    updateColliders(time);
+}
+
+void ComponentHandler::updateTransforms(float time)
+{
+    for (auto transform : _registry.getComponents<TransformComponent>())
+    {
+        transform->update(time);
+    }
+}
+
+void ComponentHandler::updateColliders(float time)
 {
     auto colliders = _registry.getComponents<ColliderComponent>();
     for (auto pCol : colliders)
@@ -65,9 +90,4 @@ void ColliderHandler::update(float time)
 
         pCol->pTransform->pos = nextPos;
     }
-}
-
-std::vector<Vector2> ColliderHandler::getEndsOfType(std::string type)
-{
-    return _colliderEndpoints[type];
 }

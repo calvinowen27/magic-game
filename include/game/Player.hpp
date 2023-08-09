@@ -13,7 +13,7 @@ private:
     KeyboardHandler *_pKeyboardHandler;
 
 public:
-    Player(Vector2 pos);
+    Player();
     void update(float time) override;
 };
 

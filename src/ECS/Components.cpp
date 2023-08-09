@@ -18,7 +18,7 @@ RendererComponent::~RendererComponent()
     SDL_DestroyTexture(pTexture);
 }
 
-bool RendererComponent::init(std::string objType, shared_ptr<TransformComponent> pTransform)
+bool RendererComponent::init(string objType, shared_ptr<TransformComponent> pTransform)
 {
     pTexture = contentManager.getTextureFromType(objType);
     this->pTransform = pTransform;

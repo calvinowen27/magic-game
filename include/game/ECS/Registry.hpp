@@ -36,11 +36,6 @@ public:
 class Registry
 {
 public:
-    Registry();
-    ~Registry();
-    void update(float time);
-    void draw(SDL_Renderer *pRenderer);
-
     template <typename T>
     shared_ptr<T> newComponent(); // create/add a new component to TypeVector<T>
 
