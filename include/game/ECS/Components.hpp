@@ -15,14 +15,6 @@ class ContentManager;
 class TransformComponent;
 class RigidbodyComponent;
 
-enum class ComponentType
-{
-    Renderer,
-    Transform,
-    Collider,
-    Rigidbody
-};
-
 class Component
 {
 protected:

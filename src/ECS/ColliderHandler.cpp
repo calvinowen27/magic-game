@@ -5,8 +5,6 @@
 
 ColliderHandler::ColliderHandler(Registry *pRegistry) : _game(*Game::getInstance()), _registry(*_game.pRegistry)
 {
-    // _pRegistry = pRegistry;
-
     _colliderEndpoints = {
         {"wall", std::vector<Vector2>{Vector2::zero, Vector2(1, 0.35f)}},
         {"player", std::vector<Vector2>{Vector2(0.25f, 0), Vector2(0.75f, 0.25f)}},

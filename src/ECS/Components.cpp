@@ -6,13 +6,11 @@
 /* COMPONENT */
 Component::Component() : game(*Game::getInstance())
 {
-    // pGame = Game::getInstance();
 }
 
 /* RENDERER COMPONENT */
 RendererComponent::RendererComponent() : Component(), contentManager(*game.pContentManager)
 {
-    // pContentManager = pGame->pContentManager;
 }
 
 RendererComponent::~RendererComponent()

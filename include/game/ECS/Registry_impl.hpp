@@ -52,13 +52,15 @@ shared_ptr<T> TypeVector<T>::back()
 template <typename T>
 shared_ptr<T> Registry::newComponent()
 {
+    // do not use component creation function if type is not a component
     if (!is_base_of<Component, T>::value)
     {
         throw new std::invalid_argument("Registry::newComponent<Type>() : Type must be derived from Component class.");
     }
 
-    TypeVector<T>::getInstance()->push_back(make_shared<T>());
-    return TypeVector<T>::getInstance()->back();
+    auto vector_ = TypeVector<T>::getInstance();
+    vector_->push_back(make_shared<T>());
+    return vector_->back();
 }
 
 template <typename T>
