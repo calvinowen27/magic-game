@@ -3,9 +3,9 @@
 #include "../include/game/Spell.hpp"
 #include "../include/game/Player.hpp"
 
-MouseHandler::MouseHandler()
+MouseHandler::MouseHandler() : _game(*Game::getInstance())
 {
-    _pGame = Game::getInstance();
+    // _pGame = Game::getInstance();
     // _prevMousePos = Vector2::zero;
     // _pxPrevMousePos = Vector2Int(0, 0);
     // _mousePos = Vector2::zero;
@@ -19,7 +19,7 @@ void MouseHandler::update()
     _currButtonState = SDL_GetMouseState(&_pxMousePos.x, &_pxMousePos.y);
 
     _prevMousePos = _mousePos;
-    _mousePos = _pGame->pixelToWorld(_pxMousePos);
+    _mousePos = _game.pixelToWorld(_pxMousePos);
 }
 
 bool MouseHandler::isButtonPressed(int button)

@@ -6,7 +6,7 @@ std::map<SDL_Scancode, bool> inputState;
 
 Player::Player(Vector2 pos) : Object("player")
 {
-    _pKeyboardHandler = pGame->pKeyboardHandler;
+    _pKeyboardHandler = game.pKeyboardHandler;
 
     init(pos, Vector2(1, 1));
 }
@@ -20,14 +20,14 @@ void Player::update(float time)
     if(_pKeyboardHandler->getInputState(InputKey::Left)) // move left
         moveDir.x -= 1;
     if(_pKeyboardHandler->getInputState(InputKey::Up)) // move up
-        moveDir.y += 1;
+        moveDir.y += 0.5f;
     if(_pKeyboardHandler->getInputState(InputKey::Down)) // move down
-        moveDir.y -= 1;
+        moveDir.y -= 0.5f;
 
     if(_pKeyboardHandler->getInputState(InputKey::ZoomIn)) // zoom out
-        pGame->zoomIn();
+        game.zoomIn();
     if(_pKeyboardHandler->getInputState(InputKey::ZoomOut)) // zoom in
-        pGame->zoomOut();
+        game.zoomOut();
 
     pRigidbody->velocity = moveDir.normalized() * 2;
 

@@ -1,9 +1,14 @@
 #ifndef COMPONENTS_INCLUDE
 #define COMPONENTS_INCLUDE
 
-#include "../Vector2.hpp"
-#include "../../SDL2/SDL.h"
 #include <string>
+#include <memory>
+
+#include "../../SDL2/SDL.h"
+
+#include "../Vector2.hpp"
+
+using std::shared_ptr;
 
 class Game;
 class ContentManager;
@@ -21,7 +26,7 @@ enum class ComponentType
 class Component
 {
 protected:
-    Game *pGame;
+    Game &game;
 
 public:
     Component();
@@ -30,12 +35,12 @@ public:
 class RendererComponent : public Component
 {
 public:
-    ContentManager *pContentManager;
+    ContentManager &contentManager;
 
     SDL_Texture *pTexture;
     SDL_Rect spriteRect;
 
-    TransformComponent *pTransform;
+    shared_ptr<TransformComponent> pTransform;
 
     float spriteAngle = 0; // sprite rotation angle, degrees
     bool isFlipped = false; // over y axis
@@ -43,7 +48,7 @@ public:
 
     RendererComponent();
     ~RendererComponent();
-    bool init(std::string textureName, TransformComponent *pTransform); // returns true if successful
+    bool init(std::string textureName, shared_ptr<TransformComponent> pTransform); // returns true if successful
     void update(float time);
     void draw(SDL_Renderer *pRenderer);
     bool setTexture(std::string textureName); // returns true if successful
@@ -68,8 +73,8 @@ public:
     Vector2 start; // scalar of dims, relative to bottom left of object
     Vector2 end; // scalar of dims, relative to top right of object
 
-    TransformComponent *pTransform;
-    RigidbodyComponent *pRigidbody;
+    shared_ptr<TransformComponent> pTransform;
+    shared_ptr<RigidbodyComponent> pRigidbody;
 
     // positions of each border of collider
     float leftX;
@@ -82,7 +87,7 @@ public:
     bool doCollisions = true;
 
     ColliderComponent();
-    bool init(Vector2 start, Vector2 end, TransformComponent *pTransform, RigidbodyComponent *pRigidbody, bool doCollisions = true); // returns true if successful
+    bool init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions = true); // returns true if successful
     void update(float time);
 };
 
@@ -93,11 +98,11 @@ public:
 
     Vector2 velocity; // meter/sec
 
-    TransformComponent *pTransform;
-    ColliderComponent *pCollider;
+    shared_ptr<TransformComponent> pTransform;
+    shared_ptr<ColliderComponent> pCollider;
 
     RigidbodyComponent();
-    bool init(TransformComponent *pTransform, ColliderComponent *pCollider, bool isStatic = false); // returns true if successful
+    bool init(shared_ptr<TransformComponent> pTransform, shared_ptr<ColliderComponent> pCollider, bool isStatic = false); // returns true if successful
     void update(float time);
 };
 

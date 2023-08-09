@@ -18,7 +18,7 @@ class UIManager
 {
     private:
         static UIManager *_pInstance;
-        Game *_pGame;
+        Game &_game;
         Player *_pPlayer;
         std::vector<UIElement *> _uiElements;
 

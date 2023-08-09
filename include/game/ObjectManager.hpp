@@ -16,7 +16,7 @@ class ObjectManager
 private:
     static ObjectManager *_pInstance;
 
-    Game *_pGame;
+    Game &_game;
     WorldManager *_pWorldManager;
 
     std::vector<Object *> _objs;

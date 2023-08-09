@@ -33,12 +33,12 @@ void TextElement::update()
 {
     UIElement::update();
 
-    _pxTextWidth = ((float)_textDims.x/(float)_textDims.y)*_relativeDims.y*0.85*_pGame->winWidth;
+    _pxTextWidth = ((float)_textDims.x/(float)_textDims.y)*_relativeDims.y*0.85*_game.winWidth;
     _textRect = _drawRect;
     if(_pxTextWidth > _drawRect.w) 
     {
         _pxTextWidth = _drawRect.w*0.85;
-        _textRect.h = ((float)_textDims.y/(float)_textDims.x)*_relativeDims.x*_pGame->winHeight;
+        _textRect.h = ((float)_textDims.y/(float)_textDims.x)*_relativeDims.x*_game.winHeight;
     }
 
     _textRect.w = _pxTextWidth;
@@ -55,12 +55,12 @@ void TextElement::setText(std::string newText)
     // measure dims
     TTF_SizeUTF8(_pFont, newText.c_str(), &_textDims.x, &_textDims.y);
 
-    _pxTextWidth = ((float)_textDims.x/(float)_textDims.y)*_relativeDims.y*0.9*_pGame->winWidth;
+    _pxTextWidth = ((float)_textDims.x/(float)_textDims.y)*_relativeDims.y*0.9*_game.winWidth;
     _textRect = _drawRect;
     if(_pxTextWidth > _drawRect.w) 
     {
         _pxTextWidth = _drawRect.w;
-        _textRect.h = ((float)_textDims.x/(float)_textDims.y)*_relativeDims.x*_pGame->winHeight;
+        _textRect.h = ((float)_textDims.x/(float)_textDims.y)*_relativeDims.x*_game.winHeight;
     }
 
     _textRect.w = _pxTextWidth;
@@ -74,7 +74,7 @@ void TextElement::setText(std::string newText)
     {
         std::cerr << "TextElement: setText(): Failed to create surface: " << TTF_GetError() << std::endl;
     }
-    _texture = SDL_CreateTextureFromSurface(_pGame->pRenderer, _surface);
+    _texture = SDL_CreateTextureFromSurface(_game.pRenderer, _surface);
     if(_texture == NULL)
     {
         std::cout << "TextElement: setText(): Failed to create texture: " << IMG_GetError() << std::endl;
@@ -90,5 +90,5 @@ std::string TextElement::getText()
 
 void TextElement::setFont(std::string fontName)
 {
-    _pFont = _pContentManager->getFont(fontName);
+    _pFont = _contentManager.getFont(fontName);
 }

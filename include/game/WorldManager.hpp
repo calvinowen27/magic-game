@@ -14,7 +14,7 @@ public:
 private:
     static WorldManager *_pInstance;
 
-    Game *_pGame;
+    Game &_game;
 
     Object *_worldMap[WORLD_SIZE][WORLD_SIZE];
 

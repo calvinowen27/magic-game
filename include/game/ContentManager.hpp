@@ -15,12 +15,14 @@ class ContentManager
         const std::string TEXTURE_PATH = "./content/textures";
         const std::string FONT_PATH = "./content/fonts";
 
-        Game *_pGame;
+        Game &_game;
         std::map<std::string, SDL_Texture *> _textures;
         std::map<std::string, SDL_Texture *> _typeTextures;
         std::map<std::string, TTF_Font *> _fonts;
 
     public:
+        ContentManager();
+        ~ContentManager();
         void loadContent();
         void loadTextures();
         void loadFonts();
@@ -30,8 +32,6 @@ class ContentManager
         SDL_Texture* getTexture(std::string textureName);
         SDL_Texture *getTextureFromType(std::string type);
         TTF_Font* getFont(std::string fontName);
-        ContentManager();
-        ~ContentManager();
 };
 
 #endif

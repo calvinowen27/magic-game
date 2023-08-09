@@ -8,29 +8,29 @@
 #include "../include/SDL2/SDL.h"
 #include "../include/SDL2/SDL_image.h"
 
-Object::Object(std::string objType)
+Object::Object(std::string objType) : game(*Game::getInstance()), objectManager(*game.pObjectManager), contentManager(*game.pContentManager), registry(*game.pRegistry)
 {
-    pGame = Game::getInstance();
-    pObjectManager = ObjectManager::getInstance();
-    pContentManager = pGame->pContentManager;
-    pRegistry = pGame->pRegistry;
+    // pGame = Game::getInstance();
+    // pObjectManager = ObjectManager::getInstance();
+    // contentManager = game.contentManager;
+    // pRegistry = game.pRegistry;
 
-    pRenderer = static_cast<RendererComponent *>(pRegistry->newComponent(ComponentType::Renderer));
-    pTransform = static_cast<TransformComponent *>(pRegistry->newComponent(ComponentType::Transform));
-    pRigidbody = static_cast<RigidbodyComponent *>(pRegistry->newComponent(ComponentType::Rigidbody));
-    pCollider = static_cast<ColliderComponent *>(pRegistry->newComponent(ComponentType::Collider));
+    pRenderer = registry.newComponent<RendererComponent>();
+    pTransform = registry.newComponent<TransformComponent>();
+    pRigidbody = registry.newComponent<RigidbodyComponent>();
+    pCollider = registry.newComponent<ColliderComponent>();
 
     type = objType;
 
-    pObjectManager->addObject(this);
+    objectManager.addObject(this);
 }
 
 Object::~Object()
 {
-    delete pRenderer;
-    delete pTransform;
-    delete pCollider;
-    delete pRigidbody;
+    // delete pRenderer;
+    // delete pTransform;
+    // delete pCollider;
+    // delete pRigidbody;
 }
 
 void Object::init(Vector2 pos, Vector2 dims, bool doCollisions)
@@ -39,7 +39,7 @@ void Object::init(Vector2 pos, Vector2 dims, bool doCollisions)
     pTransform->init(pos, dims);
     pRigidbody->init(pTransform, pCollider);
 
-    std::vector<Vector2> colliderEndpoints = pGame->pColliderHandler->getEndsOfType(type);
+    std::vector<Vector2> colliderEndpoints = game.pColliderHandler->getEndsOfType(type);
     pCollider->init(colliderEndpoints[0], colliderEndpoints[1], pTransform, pRigidbody);
     pCollider->doCollisions = doCollisions;
 }

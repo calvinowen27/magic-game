@@ -16,8 +16,8 @@ class ContentManager;
 class UIElement
 {
     protected:
-        Game *_pGame;
-        ContentManager *_pContentManager;
+        Game &_game;
+        ContentManager &_contentManager;
         UIManager *_pUIManager;
         Vector2 _relativePos;
         Vector2 _relativeDims;

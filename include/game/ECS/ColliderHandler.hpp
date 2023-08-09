@@ -13,8 +13,8 @@ class ColliderComponent;
 class ColliderHandler
 {
 private:
-    Game *_pGame;
-    Registry *_pRegistry;
+    Game &_game;
+    Registry &_registry;
 
     std::map<std::string, std::vector<Vector2>> _colliderEndpoints;
 

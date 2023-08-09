@@ -3,18 +3,18 @@
 #include "../include/game/ContentManager.hpp"
 #include "../include/game/ECS/Registry.hpp"
 
-Particle::Particle(std::string type, Vector2 pos, Vector2 dims, float lifeDur)
+Particle::Particle(std::string type, Vector2 pos, Vector2 dims, float lifeDur) : game(*Game::getInstance()), contentManager(*game.pContentManager), registry(*game.pRegistry)
 {
-    pGame = Game::getInstance();
-    pContentManager = pGame->pContentManager;
-    pRegistry = pGame->pRegistry;
+    // pGame = Game::getInstance();
+    // pContentManager = pGame->pContentManager;
+    // pRegistry = game.pRegistry;
 
-    pTransform = static_cast<TransformComponent *>(pRegistry->newComponent(ComponentType::Transform));
+    pTransform = registry.newComponent<TransformComponent>();
     pTransform->init(pos, dims);
 
     this->type = type;
 
-    _pTexture = pContentManager->getTextureFromType(type);
+    _pTexture = contentManager.getTextureFromType(type);
 }
 
 Particle::~Particle()

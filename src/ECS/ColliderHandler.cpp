@@ -3,9 +3,9 @@
 #include "../../include/game/ECS/Registry.hpp"
 #include "../../include/game/Game.hpp"
 
-ColliderHandler::ColliderHandler(Registry *pRegistry)
+ColliderHandler::ColliderHandler(Registry *pRegistry) : _game(*Game::getInstance()), _registry(*_game.pRegistry)
 {
-    _pRegistry = pRegistry;
+    // _pRegistry = pRegistry;
 
     _colliderEndpoints = {
         {"wall", std::vector<Vector2>{Vector2::zero, Vector2(1, 0.35f)}},
@@ -15,7 +15,7 @@ ColliderHandler::ColliderHandler(Registry *pRegistry)
 
 void ColliderHandler::update(float time)
 {
-    std::vector<ColliderComponent *> colliders = _pRegistry->getColliders();
+    auto colliders = _registry.getComponents<ColliderComponent>();
     for (auto pCol : colliders)
     {
         pCol->update(time);

@@ -5,9 +5,9 @@
 
 ObjectManager *ObjectManager::_pInstance;
 
-ObjectManager::ObjectManager()
+ObjectManager::ObjectManager() : _game(*Game::getInstance())
 {
-    _pGame = Game::getInstance();
+    // _pGame = Game::getInstance();
     _pWorldManager = WorldManager::getInstance();
 }
 

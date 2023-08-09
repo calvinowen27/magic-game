@@ -1,13 +1,14 @@
 #ifndef PARTICLE_INCLUDE
 #define PARTICLE_INCLUDE
 
-#include "Object.hpp"
-#include "Vector2.hpp"
-#include "ECS/Components.hpp"
+#include <string>
+#include <memory>
 
 #include "../SDL2/SDL.h"
 
-#include <string>
+#include "Object.hpp"
+#include "Vector2.hpp"
+#include "ECS/Components.hpp"
 
 class Game;
 class ContentManager;
@@ -16,13 +17,13 @@ class Registry;
 class Particle
 {
 protected:
-    Game *pGame;
-    ContentManager *pContentManager;
-    Registry *pRegistry;
+    Game &game;
+    ContentManager &contentManager;
+    Registry &registry;
 
-    TransformComponent *pTransform;
+    shared_ptr<TransformComponent> pTransform;
 
-    std::string type;
+    string type;
 
 private:
     SDL_Texture *_pTexture;
@@ -33,7 +34,7 @@ private:
     bool _flipped = false;
 
 public:
-    Particle(std::string type, Vector2 pos, Vector2 dims, float lifeDur);
+    Particle(string type, Vector2 pos, Vector2 dims, float lifeDur);
     ~Particle();
     void draw(SDL_Renderer *pRenderer);
     void update(float time);

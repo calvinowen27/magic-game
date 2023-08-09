@@ -5,7 +5,7 @@
 Button::Button(std::string textureName, std::string buttonText, std::string fontName, SDL_Color textColor, Vector2 relativePos, Vector2 relativeDims, void (*actionFunc)()) : 
 TextElement(textureName, buttonText, fontName, textColor, relativePos, relativeDims, false, true)
 {
-    _pMouseHandler = _pGame->pMouseHandler;
+    _pMouseHandler = _game.pMouseHandler;
     _actionFunc = actionFunc;
 }
 

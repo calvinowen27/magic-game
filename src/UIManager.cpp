@@ -6,9 +6,9 @@
 
 UIManager* UIManager::_pInstance;
 
-UIManager::UIManager()
+UIManager::UIManager() : _game(*Game::getInstance())
 {
-    _pGame = Game::getInstance();
+    // _pGame = Game::getInstance();
     // _pPlayer = _pGame->pPlayer;
 }
 
@@ -45,10 +45,10 @@ void UIManager::init()
 
 void UIManager::update()
 {
-    _pFPScounter->setText("FPS: " + std::to_string(_pGame->getFPS()));
-    _pUPScounter->setText("UPS: " + std::to_string(_pGame->getUPS()));
-    _pPosDisplay->setText("Position: " + _pGame->pPlayer->pos().round(3).to_string());
-    _pVelDisplay->setText("Velocity: " + _pGame->pPlayer->getVelocity().round(3).to_string());
+    _pFPScounter->setText("FPS: " + std::to_string(_game.getFPS()));
+    _pUPScounter->setText("UPS: " + std::to_string(_game.getUPS()));
+    _pPosDisplay->setText("Position: " + _game.pPlayer->pos().round(3).to_string());
+    _pVelDisplay->setText("Velocity: " + _game.pPlayer->getVelocity().round(3).to_string());
 
     // el.update()
     for(UIElement *el : _uiElements)

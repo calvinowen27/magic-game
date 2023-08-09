@@ -1,9 +1,14 @@
 #ifndef OBJECT_INCLUDE
 #define OBJECT_INCLUDE
 
+#include <memory>
+
 #include "../SDL2/SDL.h"
+
 #include "Vector2.hpp"
 #include "ECS/Components.hpp"
+
+using namespace std;
 
 class Game;
 class ObjectManager;
@@ -13,15 +18,16 @@ class Registry;
 class Object
 {
 protected:
-    Game *pGame;
-    ObjectManager *pObjectManager;
-    ContentManager *pContentManager;
-    Registry *pRegistry;
+    // Game *pGame;
+    Game &game;
+    ObjectManager &objectManager;
+    ContentManager &contentManager;
+    Registry &registry;
 
-    RendererComponent *pRenderer;
-    TransformComponent *pTransform;
-    RigidbodyComponent *pRigidbody;
-    ColliderComponent *pCollider;
+    shared_ptr<RendererComponent> pRenderer;
+    shared_ptr<TransformComponent> pTransform;
+    shared_ptr<RigidbodyComponent> pRigidbody;
+    shared_ptr<ColliderComponent> pCollider;
 
     std::string type;
 
@@ -37,7 +43,7 @@ public:
     inline Vector2Int pxPos() { return pTransform->pxPos; }
     inline Vector2 dims() { return pTransform->dims; }
     inline Vector2Int pxDims() { return pTransform->pxDims; }
-    inline ColliderComponent *getCollider() { return pCollider; }
+    inline shared_ptr<ColliderComponent> getCollider() { return pCollider; }
 };
 
 #endif

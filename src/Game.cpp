@@ -25,8 +25,10 @@ Game *Game::_pInstance;
 int main()
 {
     Game *pGame = Game::getInstance();
-    if (pGame->gameInit())
+    if (pGame->init())
+    {
         return EXIT_FAILURE;
+    }
 
     pGame->start();
 
@@ -40,7 +42,7 @@ Game::Game()
 Game::~Game()
 {
     delete pKeyboardHandler;
-    delete pContentManager;
+    // delete pContentManager;
     delete pUIManager;
     delete pMouseHandler;
     delete pObjectManager;
@@ -58,7 +60,7 @@ Game *Game::getInstance()
     return _pInstance;
 }
 
-int Game::gameInit()
+int Game::init()
 {
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS);
 

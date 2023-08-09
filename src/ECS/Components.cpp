@@ -4,15 +4,15 @@
 #include "../../include/game/ECS/Registry.hpp"
 
 /* COMPONENT */
-Component::Component()
+Component::Component() : game(*Game::getInstance())
 {
-    pGame = Game::getInstance();
+    // pGame = Game::getInstance();
 }
 
 /* RENDERER COMPONENT */
-RendererComponent::RendererComponent() : Component()
+RendererComponent::RendererComponent() : Component(), contentManager(*game.pContentManager)
 {
-    pContentManager = pGame->pContentManager;
+    // pContentManager = pGame->pContentManager;
 }
 
 RendererComponent::~RendererComponent()
@@ -20,9 +20,9 @@ RendererComponent::~RendererComponent()
     SDL_DestroyTexture(pTexture);
 }
 
-bool RendererComponent::init(std::string objType, TransformComponent *pTransform)
+bool RendererComponent::init(std::string objType, shared_ptr<TransformComponent> pTransform)
 {
-    pTexture = pContentManager->getTextureFromType(objType);
+    pTexture = contentManager.getTextureFromType(objType);
     this->pTransform = pTransform;
 
     return true;
@@ -30,7 +30,7 @@ bool RendererComponent::init(std::string objType, TransformComponent *pTransform
 
 void RendererComponent::update(float time)
 {
-    isEnabled = pGame->isTransformOnScreen(*pTransform);
+    isEnabled = game.isTransformOnScreen(*pTransform);
 }
 
 void RendererComponent::draw(SDL_Renderer *pRenderer)
@@ -45,7 +45,7 @@ void RendererComponent::draw(SDL_Renderer *pRenderer)
 
 bool RendererComponent::setTexture(std::string textureName)
 {
-    pTexture = pContentManager->getTexture(textureName);
+    pTexture = contentManager.getTexture(textureName);
 
     return true;
 }
@@ -59,16 +59,16 @@ bool TransformComponent::init(Vector2 pos, Vector2 dims)
 {
     this->pos = pos;
     this->dims = dims;
-    pxDims = (Vector2Int)(dims * pGame->ppm);
-    pxPos = pGame->worldToPixel(pos) - Vector2Int(0, pxDims.y);
+    pxDims = (Vector2Int)(dims * game.ppm);
+    pxPos = game.worldToPixel(pos) - Vector2Int(0, pxDims.y);
 
     return true;
 }
 
 void TransformComponent::update(float time)
 {
-    pxDims = (Vector2Int)(dims * pGame->ppm);
-    pxPos = pGame->worldToPixel(pos) - Vector2Int(0, pxDims.y);
+    pxDims = (Vector2Int)(dims * game.ppm);
+    pxPos = game.worldToPixel(pos) - Vector2Int(0, pxDims.y);
 }
 
 /* COLLIDER COMPONENT */
@@ -76,7 +76,7 @@ ColliderComponent::ColliderComponent()
 {
 }
 
-bool ColliderComponent::init(Vector2 start, Vector2 end, TransformComponent *pTransform, RigidbodyComponent *pRigidbody, bool doCollisions)
+bool ColliderComponent::init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions)
 {
     this->start = start;
     this->end = end;
@@ -84,6 +84,8 @@ bool ColliderComponent::init(Vector2 start, Vector2 end, TransformComponent *pTr
     this->pRigidbody = pRigidbody;
 
     this->doCollisions = doCollisions;
+
+    return true;
 }
 
 void ColliderComponent::update(float time)
@@ -99,7 +101,7 @@ RigidbodyComponent::RigidbodyComponent()
 {
 }
 
-bool RigidbodyComponent::init(TransformComponent *pTransform, ColliderComponent *pCollider, bool isStatic)
+bool RigidbodyComponent::init(shared_ptr<TransformComponent> pTransform, shared_ptr<ColliderComponent> pCollider, bool isStatic)
 {
     this->pTransform = pTransform;
     this->pCollider = pCollider;

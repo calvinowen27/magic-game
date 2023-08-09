@@ -14,6 +14,7 @@
 #include "../SDL2/SDL.h"
 #include "../SDL2/SDL_image.h"
 #include "../SDL2/SDL_ttf.h"
+
 #include "Vector2.hpp"
 
 class Object;
@@ -69,7 +70,7 @@ public:
     static Game *getInstance();
     Game();
     ~Game();
-    int gameInit();
+    int init();
     void start();
     void runPhysics();
     void pollEvents();

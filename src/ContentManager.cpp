@@ -2,9 +2,9 @@
 #include "../include/game/Game.hpp"
 #include <filesystem>
 
-ContentManager::ContentManager()
+ContentManager::ContentManager() : _game(*Game::getInstance())
 {
-    _pGame = Game::getInstance();
+    // _game = Game::getInstance();
 }
 
 ContentManager::~ContentManager()
@@ -36,7 +36,7 @@ void ContentManager::loadTextures()
             return;
         }
 
-        pTexture = SDL_CreateTextureFromSurface(_pGame->pRenderer, pSurface);
+        pTexture = SDL_CreateTextureFromSurface(_game.pRenderer, pSurface);
         if(pTexture == NULL)
         {
             std::cerr << "ContentManager loadTextures(): Failed to load texture from surface: " << IMG_GetError() << std::endl;

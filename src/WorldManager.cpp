@@ -11,9 +11,9 @@
 
 WorldManager *WorldManager::_pInstance;
 
-WorldManager::WorldManager()
+WorldManager::WorldManager() : _game(*Game::getInstance())
 {
-    _pGame = Game::getInstance();
+    // _pGame = Game::getInstance();
 }
 
 WorldManager *WorldManager::getInstance()
@@ -68,7 +68,7 @@ void WorldManager::loadWorld()
                 _worldMap[x][y] = new Grass(pos);
                 break;
             case '@':
-                _pGame->pPlayer = new Player(pos);
+                _game.pPlayer = new Player(pos);
                 break;
             }
         }
