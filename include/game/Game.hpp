@@ -47,6 +47,8 @@ private:
     std::mutex _mutex;
 
 public:
+    const int TEXTURE_PPM = 16; // texture pixels per meter
+
     ContentManager *pContentManager;
     KeyboardHandler *pKeyboardHandler;
     MouseHandler *pMouseHandler;
@@ -60,10 +62,10 @@ public:
     shared_ptr<Player> pPlayer;
 
     int winWidth = 1500, winHeight = 1000;
-    int ppm = 64; // pixels per meter, 128 by default
-    int maxPPM = 128;
-    int minPPM = 32;
-    int zoomStep = 8;
+    int ppm = 64; // screen pixels per meter, 64 by default
+    int maxPPM = 512;
+    int minPPM = 8;
+    float zoomScale = 1.15;
     SDL_Window *pWindow;
     SDL_Renderer *pRenderer;
 
@@ -87,12 +89,20 @@ public:
     bool objOnScreen(Object &obj);
     bool isTransformOnScreen(TransformComponent &transform);
 
-    friend bool operator==(const Game &a, const Game &b);
-
     inline int getFPS() { return _fps; }
     inline int getUPS() { return _ups; }
-    inline void zoomIn() { ppm += ppm < maxPPM ? zoomStep : 0; }
-    inline void zoomOut() { ppm -= ppm > minPPM ? zoomStep : 0; }
+    inline void zoomIn()
+    {
+        ppm *= ppm * zoomScale <= maxPPM ? zoomScale : 1;
+        if (ppm > maxPPM)
+            ppm = maxPPM;
+    }
+    inline void zoomOut()
+    {
+        ppm /= ppm / zoomScale >= minPPM ? zoomScale : 1;
+        if (ppm < minPPM)
+            ppm = minPPM;
+    }
 };
 
 #endif

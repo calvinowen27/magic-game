@@ -2,13 +2,19 @@
 #define GRASS_INCLUDE
 
 #include "Vector2.hpp"
-#include "OBject.hpp"
+#include "Object.hpp"
 
 class Grass : public Object
 {
 public:
-    Grass() : Object()
+    Grass() : Object("Grass")
     {
+    }
+
+    bool init(Vector2 pos) override
+    {
+        Object::init(pos);
+        pCollider->doCollisions = false;
     }
 };
 

@@ -45,6 +45,7 @@ public:
     void update(float time);
     void draw(SDL_Renderer *pRenderer);
     bool setTexture(std::string textureName); // returns true if successful
+    void refreshDimensions();
 };
 
 class TransformComponent : public Component
@@ -56,8 +57,11 @@ public:
     Vector2Int pxDims; // pixels
 
     TransformComponent();
-    bool init(Vector2 pos, Vector2 dims); // returns true if successful
+    bool init(Vector2 pos, Vector2 dims = Vector2(1, 1)); // returns true if successful
     void update(float time);
+
+    void setDims(Vector2 newDims); // set new dimensions
+    void setPxDims(Vector2Int newPxDims); // set new px dims
 };
 
 class ColliderComponent : public Component

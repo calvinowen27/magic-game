@@ -19,6 +19,7 @@ public:
     void draw(SDL_Renderer *pRenderer);
     void update(float time);
     void addSpell(Spell *spell);
+    void removeSpell(Spell *spell);
 };
 
 #endif

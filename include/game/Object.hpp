@@ -19,7 +19,6 @@ class Registry;
 class Object
 {
 protected:
-    // Game *pGame;
     Game &game;
     ObjectManager &objectManager;
     ContentManager &contentManager;
@@ -33,8 +32,8 @@ protected:
     string type;
 
 public:
-    Object();
-    virtual void init(string objType, Vector2 pos, Vector2 dims, bool doCollisions = true);
+    Object(string objType);
+    virtual bool init(Vector2 pos);
     virtual void update(float time);
 
     inline std::string getType() { return type; }

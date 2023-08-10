@@ -2,6 +2,8 @@
 #define OBJECT_MANAGER_INCLUDE
 
 #include "../SDL2/SDL.h"
+#include "../nlohmann_json/json.hpp"
+#include "Vector2.hpp"
 
 #include <vector>
 #include <string>
@@ -11,9 +13,11 @@
 class Game;
 class Object;
 
+using std::string;
 using std::vector;
 using std::shared_ptr;
 using std::make_shared;
+using json = nlohmann::json;
 
 class ObjectManager
 {
@@ -22,8 +26,10 @@ private:
 
     Game &_game;
 
-    // vector<Object *> _objs;
     vector<shared_ptr<Object>> _objects;
+
+    string _colliderDataPath = "./data/colliders.json";
+    json _colliderData;
 
 public:
     ObjectManager();
@@ -32,8 +38,7 @@ public:
     void init();
     void update(float time);
 
-    // inline void addObject(Object *obj) { _objs.push_back(obj); }
-    // inline std::vector<Object *> &getObjs() { return _objs; }
+    vector<Vector2> getCollider(string objType);
 
     template <typename T>
     shared_ptr<T> newObj()

@@ -27,6 +27,7 @@ class UIManager
         TextElement *_pPosDisplay;
         TextElement *_pVelDisplay;
         TextElement *_pAccDisplay;
+        TextElement *_pPPMDisplay;
 
     public:
         UIManager();

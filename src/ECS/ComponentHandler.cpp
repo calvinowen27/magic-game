@@ -12,11 +12,13 @@ void ComponentHandler::draw(SDL_Renderer *pRenderer)
     auto renderers = _registry.getComponents<RendererComponent>();
 
     // y value render order
+    float yDiff;
     for(float y = (WorldManager::WORLD_SIZE / 2) - 1; y > -(WorldManager::WORLD_SIZE / 2); y -= 0.5f)
     {
         for (auto renderer : renderers)
         {
-            if((float)((int)(renderer->pTransform->pos.y*4))/2.f == y)
+            yDiff = renderer->pTransform->pos.round(1).y - y;
+            if(yDiff > 0 && yDiff <= 0.5f)
                 renderer->draw(pRenderer);
         }
     }

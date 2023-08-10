@@ -48,6 +48,15 @@ bool RendererComponent::setTexture(std::string textureName)
     return true;
 }
 
+void RendererComponent::refreshDimensions()
+{
+    // change dimensions of 
+    Vector2Int newPxDims;
+    SDL_QueryTexture(pTexture, NULL, NULL, &newPxDims.x, &newPxDims.y);
+    newPxDims = newPxDims * (float)(game.ppm / game.TEXTURE_PPM);
+    pTransform->setPxDims(newPxDims);
+}
+
 /* TRANSFORM COMPONENT */
 TransformComponent::TransformComponent() : Component()
 {
@@ -67,6 +76,18 @@ void TransformComponent::update(float time)
 {
     pxDims = (Vector2Int)(dims * game.ppm);
     pxPos = game.worldToPixel(pos) - Vector2Int(0, pxDims.y);
+}
+
+void TransformComponent::setDims(Vector2 newDims)
+{
+    dims = newDims;
+    pxDims = (Vector2Int)(dims * game.ppm);
+}
+
+void TransformComponent::setPxDims(Vector2Int newPxDims)
+{
+    pxDims = newPxDims;
+    dims = (Vector2)pxDims / game.ppm;
 }
 
 /* COLLIDER COMPONENT */

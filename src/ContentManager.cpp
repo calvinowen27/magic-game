@@ -48,9 +48,9 @@ void ContentManager::loadTextures()
         SDL_FreeSurface(pSurface);
     }
 
-    _typeTextures["wall"] = _textures["wall.png"];
-    _typeTextures["player"] = _textures["player.png"];
-    _typeTextures["grass"] = _textures["grass.png"];
+    _typeTextures["Wall"] = _textures["wall.png"];
+    _typeTextures["Player"] = _textures["player.png"];
+    _typeTextures["Grass"] = _textures["grass.png"];
     _typeTextures["ice_spell"] = _textures["ice_spell.png"];
 }
 

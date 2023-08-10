@@ -4,7 +4,7 @@
 
 std::map<SDL_Scancode, bool> inputState;
 
-Player::Player() : Object()
+Player::Player() : Object("Player")
 {
     _pKeyboardHandler = game.pKeyboardHandler;
 }

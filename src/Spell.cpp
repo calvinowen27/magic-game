@@ -60,6 +60,7 @@ void Spell::update(float time)
             }
 
             _alive = false;
+            // _pSpellManager->removeSpell(this);
         }
     }
 }

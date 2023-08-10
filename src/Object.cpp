@@ -7,25 +7,29 @@
 #include "../include/SDL2/SDL.h"
 #include "../include/SDL2/SDL_image.h"
 
-Object::Object() : game(*Game::getInstance()), objectManager(*game.pObjectManager), contentManager(*game.pContentManager), registry(*game.pRegistry)
+using std::vector;
+
+Object::Object(string objType) : game(*Game::getInstance()), objectManager(*game.pObjectManager), contentManager(*game.pContentManager), registry(*game.pRegistry)
 {
+    type = objType;
+
     pRenderer = registry.newComponent<RendererComponent>();
     pTransform = registry.newComponent<TransformComponent>();
     pRigidbody = registry.newComponent<RigidbodyComponent>();
     pCollider = registry.newComponent<ColliderComponent>();
 }
 
-void Object::init(string objType, Vector2 pos, Vector2 dims, bool doCollisions)
+bool Object::init(Vector2 pos)
 {
-    type = objType;
-    
-    pRenderer->init(objType, pTransform);
-    pTransform->init(pos, dims);
+    pRenderer->init(type, pTransform);
+    pTransform->init(pos);
+    pRenderer->refreshDimensions();
     pRigidbody->init(pTransform, pCollider);
 
-    // std::vector<Vector2> colliderEndpoints = game.pColliderHandler->getEndsOfType(type);
-    pCollider->init(Vector2::zero, Vector2(1, 1), pTransform, pRigidbody);
-    pCollider->doCollisions = doCollisions;
+    vector<Vector2> colliderEndpoints = objectManager.getCollider(type);
+    pCollider->init(colliderEndpoints[0], colliderEndpoints[1], pTransform, pRigidbody);
+
+    return true;
 }
 
 void Object::update(float time)

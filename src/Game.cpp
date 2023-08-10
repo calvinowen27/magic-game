@@ -79,7 +79,7 @@ int Game::init()
     ppm *= ddpi / 96.f;
     minPPM *= ddpi / 96.f;
     maxPPM *= ddpi / 96.f;
-    zoomStep *= ddpi / 96.f;
+    zoomScale *= ddpi / 96.f;
 
     Uint64 windowFlags = SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE;
 
@@ -197,7 +197,7 @@ void Game::pollEvents()
         {
             if (event.button.button == SDL_BUTTON_LEFT)
             {
-                new Spell("ice_spell", pPlayer->pos(), ((Vector2)(pMouseHandler->getMousePxPos() - pPlayer->pxPos())).normalized() * Vector2(1, -1), SpellElement::Ice, std::vector<SpellType>{SpellType::Projectile, SpellType::Exploding, SpellType::Radial});
+                new Spell("ice_spell", pPlayer->pos(), ((Vector2)(pMouseHandler->getMousePxPos() - pPlayer->pxPos())).normalized() * Vector2(1, -1), SpellElement::Ice, std::vector<SpellType>{SpellType::Projectile, SpellType::Radial, SpellType::Radial, SpellType::Radial, SpellType::Radial, SpellType::Radial});
             }
         }
     }
