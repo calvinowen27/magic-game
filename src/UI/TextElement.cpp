@@ -1,6 +1,6 @@
-#include "../include/game/TextElement.hpp"
-#include "../include/game/Game.hpp"
-#include "../include/game/ContentManager.hpp"
+#include "../../include/game/UI/TextElement.hpp"
+#include "../../include/game/Game.hpp"
+#include "../../include/game/ContentManager.hpp"
 
 TextElement::TextElement(std::string textureName, std::string text, std::string fontName, SDL_Color color, Vector2 relativePos, Vector2 relativeDims, bool displayOutline, bool centerText) : UIElement(textureName, relativePos, relativeDims)
 {

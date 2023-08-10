@@ -2,7 +2,7 @@
 #define TEXT_ELEMENT_INCLUDE
 
 #include "UIElement.hpp"
-#include "../SDL2/SDL_ttf.h"
+#include "../../SDL2/SDL_ttf.h"
 
 class TextElement : public UIElement
 {

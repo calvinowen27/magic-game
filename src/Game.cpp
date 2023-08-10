@@ -1,11 +1,11 @@
 #define SDL_MAIN_HANDLED
 
 #include "../include/game/Game.hpp"
-#include "../include/game/TextElement.hpp"
+#include "../include/game/UI/TextElement.hpp"
 #include "../include/game/Object.hpp"
 #include "../include/game/Player.hpp"
-#include "../include/game/UIElement.hpp"
-#include "../include/game/UIManager.hpp"
+#include "../include/game/UI/UIElement.hpp"
+#include "../include/game/UI/UIManager.hpp"
 #include "../include/game/MouseHandler.hpp"
 #include "../include/game/KeyboardHandler.hpp"
 #include "../include/game/ContentManager.hpp"

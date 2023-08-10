@@ -3,11 +3,11 @@
 
 #include <string>
 
-#include "../SDL2/SDL.h"
-#include "../SDL2/SDL_image.h"
-#include "../SDL2/SDL_ttf.h"
+#include "../../SDL2/SDL.h"
+#include "../../SDL2/SDL_image.h"
+#include "../../SDL2/SDL_ttf.h"
 
-#include "Vector2.hpp"
+#include "../Vector2.hpp"
 
 class Game;
 class UIManager;

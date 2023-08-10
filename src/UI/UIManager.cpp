@@ -1,8 +1,9 @@
-#include "../include/game/UIManager.hpp"
-#include "../include/game/Player.hpp"
-#include "../include/game/Button.hpp"
-#include "../include/game/Game.hpp"
-#include "cmath"
+#include "../../include/game/UI/UIManager.hpp"
+#include "../../include/game/Player.hpp"
+#include "../../include/game/Game.hpp"
+#include "../../include/game/UI/Button.hpp"
+
+#include <cmath>
 
 UIManager* UIManager::_pInstance;
 

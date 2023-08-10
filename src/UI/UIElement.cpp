@@ -1,7 +1,7 @@
-#include "../include/game/UIElement.hpp"
-#include "../include/game/UIManager.hpp"
-#include "../include/game/Game.hpp"
-#include "../include/game/ContentManager.hpp"
+#include "../../include/game/UI/UIElement.hpp"
+#include "../../include/game/UI/UIManager.hpp"
+#include "../../include/game/Game.hpp"
+#include "../../include/game/ContentManager.hpp"
 
 UIElement::UIElement(std::string textureName, Vector2 relativePos, Vector2 relativeDims) : _game(*Game::getInstance()), _contentManager(*_game.pContentManager)
 {
