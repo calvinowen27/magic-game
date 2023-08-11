@@ -1,16 +1,21 @@
 #include "../include/game/Spell.hpp"
 #include "../include/game/SpellManager.hpp"
 
-Spell::Spell(std::string type, Vector2 pos, Vector2 dir, SpellElement element, std::vector<SpellType> types) : Particle(type, pos, Vector2(1, 1), 2)
+Spell::Spell() : Particle(), _spellManager(*SpellManager::getInstance())
 {
-    _pSpellManager = SpellManager::getInstance();
+}
+
+bool Spell::init(string type, Vector2 pos, Vector2 dir, SpellElement element, vector<SpellType> types)
+{
+    Particle::init(type, pos, Vector2(1, 1), 2);
+
     _element = element;
     _types = types;
     _dir = dir;
     _cast = true;
     _alive = true;
 
-    _pSpellManager->spells.push_back(this);
+    return true;
 }
 
 void Spell::update(float time)
@@ -38,29 +43,28 @@ void Spell::update(float time)
                 if(_types[1] == SpellType::Exploding)
                 {
                     std::cout << "EXPLODE!" << std::endl;
-                    new Spell(type, pTransform->pos, _dir, _element, newTypes);
+                    _spellManager.newSpell()->init(type, pTransform->pos, _dir, _element, newTypes);
                 }
 
                 if(_types[1] == SpellType::Projectile)
                 {
-                    new Spell(type, pTransform->pos, _dir, _element, newTypes);
+                    _spellManager.newSpell()->init(type, pTransform->pos, _dir, _element, newTypes);
                 }
 
                 if(_types[1] == SpellType::Radial)
                 {
-                    new Spell(type, pTransform->pos, Vector2(0, 1), _element, newTypes);
-                    new Spell(type, pTransform->pos, Vector2(1, 1).normalized(), _element, newTypes);
-                    new Spell(type, pTransform->pos, Vector2(1, 0), _element, newTypes);
-                    new Spell(type, pTransform->pos, Vector2(1, -1).normalized(), _element, newTypes);
-                    new Spell(type, pTransform->pos, Vector2(0, -1), _element, newTypes);
-                    new Spell(type, pTransform->pos, Vector2(-1, -1).normalized(), _element, newTypes);
-                    new Spell(type, pTransform->pos, Vector2(-1, 0), _element, newTypes);
-                    new Spell(type, pTransform->pos, Vector2(-1, 1).normalized(), _element, newTypes);
+                    _spellManager.newSpell()->init(type, pTransform->pos, Vector2(0, 1), _element, newTypes);
+                    _spellManager.newSpell()->init(type, pTransform->pos, Vector2(1, 1).normalized(), _element, newTypes);
+                    _spellManager.newSpell()->init(type, pTransform->pos, Vector2(1, 0), _element, newTypes);
+                    _spellManager.newSpell()->init(type, pTransform->pos, Vector2(1, -1).normalized(), _element, newTypes);
+                    _spellManager.newSpell()->init(type, pTransform->pos, Vector2(0, -1), _element, newTypes);
+                    _spellManager.newSpell()->init(type, pTransform->pos, Vector2(-1, -1).normalized(), _element, newTypes);
+                    _spellManager.newSpell()->init(type, pTransform->pos, Vector2(-1, 0), _element, newTypes);
+                    _spellManager.newSpell()->init(type, pTransform->pos, Vector2(-1, 1).normalized(), _element, newTypes);
                 }
             }
 
-            _alive = false;
-            // _pSpellManager->removeSpell(this);
+            kill();
         }
     }
 }
@@ -68,4 +72,10 @@ void Spell::update(float time)
 void Spell::cast()
 {
     _cast = true;
+}
+
+void Spell::kill()
+{
+    _alive = false;
+    Particle::kill();
 }

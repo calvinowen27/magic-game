@@ -15,6 +15,7 @@ public:
     {
         Object::init(pos);
         pCollider->doCollisions = false;
+        return true;
     }
 };
 

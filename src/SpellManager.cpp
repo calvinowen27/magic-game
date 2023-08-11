@@ -1,18 +1,12 @@
 #include "../include/game/SpellManager.hpp"
 #include <algorithm>
 
+using std::make_shared;
+
 SpellManager *SpellManager::_pInstance;
 
 SpellManager::SpellManager()
 {
-}
-
-SpellManager::~SpellManager()
-{
-    for (Spell *spell : spells)
-    {
-        delete spell;
-    }
 }
 
 SpellManager *SpellManager::getInstance()
@@ -25,40 +19,25 @@ SpellManager *SpellManager::getInstance()
     return _pInstance;
 }
 
-void SpellManager::draw(SDL_Renderer *pRenderer)
-{
-    int size = spells.size();
-    // for (Spell *spell : spells)
-    for (int i = 0; i < size; i++)
-    {
-        if (spells[i]->isAlive())
-            spells[i]->draw(pRenderer);
-    }
-}
-
 void SpellManager::update(float time)
 {
-    // for (Spell *spell : spells)
+    vector<int> removeIdxs;
     int size = spells.size();
     for (int i = 0; i < size; i++)
     {
         if (spells[i]->isAlive())
             spells[i]->update(time);
-        else
-        {
-            spells.erase(spells.begin() + i);
-            i--;
-            size--;
-        }
+        // else
+        //     removeIdxs.push_back(i);
     }
+
+    // for(auto i : removeIdxs)
+    //     spells.erase(spells.begin() + i);
 }
 
-void SpellManager::addSpell(Spell *spell)
+shared_ptr<Spell> SpellManager::newSpell()
 {
+    auto spell = make_shared<Spell>();
     spells.push_back(spell);
-}
-
-void SpellManager::removeSpell(Spell *spell)
-{
-    spells.erase(std::remove(spells.begin(), spells.end(), spell), spells.end());
+    return spell;
 }

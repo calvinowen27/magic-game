@@ -4,6 +4,9 @@
 #include "Spell.hpp"
 
 #include <vector>
+#include <memory>
+
+using std::shared_ptr;
 
 class SpellManager
 {
@@ -11,15 +14,13 @@ private:
     static SpellManager *_pInstance;
 
 public:
-    std::vector<Spell *> spells;
+    std::vector<shared_ptr<Spell>> spells;
 
     SpellManager();
-    ~SpellManager();
     static SpellManager *getInstance();
-    void draw(SDL_Renderer *pRenderer);
     void update(float time);
-    void addSpell(Spell *spell);
-    void removeSpell(Spell *spell);
+
+    shared_ptr<Spell> newSpell();
 };
 
 #endif

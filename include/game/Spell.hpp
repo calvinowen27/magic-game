@@ -7,6 +7,9 @@
 #include <string>
 #include <vector>
 
+using std::string;
+using std::vector;
+
 enum class SpellType
 {
     Projectile,
@@ -34,7 +37,7 @@ class SpellManager;
 class Spell : public Particle
 {
 private:
-    SpellManager *_pSpellManager;
+    SpellManager &_spellManager;
 
     SpellElement _element;
     std::vector<SpellType> _types;
@@ -49,7 +52,8 @@ private:
     float _speed = 2; // m/s
 
 public:
-    Spell(std::string type, Vector2 pos, Vector2 dir, SpellElement element, std::vector<SpellType> types);
+    Spell();
+    bool init(string type, Vector2 pos, Vector2 dir, SpellElement element, vector<SpellType> types);
     void update(float time);
 
     inline void addType(SpellType type)
@@ -63,6 +67,7 @@ public:
     }
 
     void cast();
+    void kill();
 
     inline bool isAlive() { return _alive; }
 };
