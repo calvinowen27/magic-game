@@ -197,7 +197,7 @@ void Game::pollEvents()
         {
             if (event.button.button == SDL_BUTTON_LEFT)
             {
-                pSpellManager->newSpell()->init("ice_spell", pPlayer->pos(), ((Vector2)(pMouseHandler->getMousePxPos() - pPlayer->pxPos())).normalized() * Vector2(1, -1), SpellElement::Ice, std::vector<SpellType>{SpellType::Projectile, SpellType::Radial, SpellType::Radial, SpellType::Radial, SpellType::Radial, SpellType::Radial});
+                pSpellManager->newSpell()->init("ice_spell", pPlayer->pos(), ((Vector2)(pMouseHandler->getMousePxPos() - pPlayer->pxPos())).normalized() * Vector2(1, -1), SpellElement::Ice, std::vector<SpellType>{SpellType::Projectile, SpellType::Radial, SpellType::Radial, SpellType::Radial});
             }
         }
     }

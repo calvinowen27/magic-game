@@ -14,12 +14,16 @@ bool Spell::init(string type, Vector2 pos, Vector2 dir, SpellElement element, ve
     _dir = dir;
     _cast = true;
     _alive = true;
+    _aliveTime = 0;
 
     return true;
 }
 
 void Spell::update(float time)
 {
+    if(!enabled)
+        return;
+    
     Particle::update(time);
 
     if(_cast && _alive)
@@ -72,6 +76,12 @@ void Spell::update(float time)
 void Spell::cast()
 {
     _cast = true;
+}
+
+void Spell::disable()
+{
+    _alive = false;
+    Particle::disable();
 }
 
 void Spell::kill()

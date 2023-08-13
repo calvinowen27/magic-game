@@ -21,6 +21,8 @@ protected:
     ContentManager &contentManager;
     Registry &registry;
 
+    bool enabled;
+
     shared_ptr<TransformComponent> pTransform;
     shared_ptr<RendererComponent> pRenderer;
 
@@ -30,6 +32,7 @@ public:
     Particle();
     bool init(string type, Vector2 pos, Vector2 dims, float lifeDur);
     void update(float time);
+    virtual void disable();
     void kill();
 };
 

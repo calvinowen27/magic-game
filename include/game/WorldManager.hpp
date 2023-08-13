@@ -14,7 +14,7 @@ class ObjectManager;
 class WorldManager
 {
 public:
-    static const int WORLD_SIZE = 50;
+    static const int WORLD_SIZE = 100;
 
 private:
     static WorldManager *_pInstance;

@@ -9,6 +9,8 @@ Particle::Particle() : game(*Game::getInstance()), contentManager(*game.pContent
 
 bool Particle::init(string type, Vector2 pos, Vector2 dims, float lifeDur)
 {
+    enabled = true;
+
     pTransform = registry.newComponent<TransformComponent>();
     pTransform->init(pos, dims);
 
@@ -20,6 +22,13 @@ bool Particle::init(string type, Vector2 pos, Vector2 dims, float lifeDur)
 
 void Particle::update(float time)
 {
+}
+
+void Particle::disable()
+{
+    enabled = false;
+    pTransform->disable();
+    pRenderer->disable();
 }
 
 void Particle::kill()

@@ -21,8 +21,13 @@ class Component
 protected:
     Game &game;
 
+    bool enabled;
+
 public:
     Component();
+    bool init();
+    void enable() { enabled = true; }
+    void disable() { enabled = false; }
 };
 
 class RendererComponent : public Component
@@ -37,7 +42,6 @@ public:
 
     float spriteAngle = 0; // sprite rotation angle, degrees
     bool isFlipped = false; // over y axis
-    bool isEnabled = true; // whether or not to render
 
     RendererComponent();
     ~RendererComponent();

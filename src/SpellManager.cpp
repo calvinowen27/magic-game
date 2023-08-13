@@ -1,7 +1,7 @@
 #include "../include/game/SpellManager.hpp"
 #include <algorithm>
 
-using std::make_shared;
+using std::shared_ptr, std::make_shared, std::vector;
 
 SpellManager *SpellManager::_pInstance;
 
@@ -21,23 +21,34 @@ SpellManager *SpellManager::getInstance()
 
 void SpellManager::update(float time)
 {
-    vector<int> removeIdxs;
-    int size = spells.size();
-    for (int i = 0; i < size; i++)
+    auto spells = TypePool<Spell>::getInstance()->getAlive();
+    vector<shared_ptr<Spell>> deadSpells;
+
+    for(auto spell : spells)
     {
-        if (spells[i]->isAlive())
-            spells[i]->update(time);
-        // else
-        //     removeIdxs.push_back(i);
+        if(spell->isAlive())
+            spell->update(time);
+        else
+            deadSpells.push_back(spell);
     }
 
-    // for(auto i : removeIdxs)
-    //     spells.erase(spells.begin() + i);
+    releaseSpells(deadSpells);
+
 }
 
 shared_ptr<Spell> SpellManager::newSpell()
 {
-    auto spell = make_shared<Spell>();
-    spells.push_back(spell);
-    return spell;
+    return TypePool<Spell>::getInstance()->instantiate();
+}
+
+void SpellManager::releaseSpell(shared_ptr<Spell> spell)
+{
+    TypePool<Spell>::getInstance()->release(spell);
+}
+
+void SpellManager::releaseSpells(vector<shared_ptr<Spell>> spells)
+{
+    auto pool = TypePool<Spell>::getInstance();
+    for(auto spell : spells)
+        pool->release(spell);
 }

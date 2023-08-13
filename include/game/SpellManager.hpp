@@ -2,11 +2,10 @@
 #define SPELL_MANAGER_INCLUDE
 
 #include "Spell.hpp"
+#include "ECS/Registry.hpp"
 
 #include <vector>
 #include <memory>
-
-using std::shared_ptr;
 
 class SpellManager
 {
@@ -14,13 +13,15 @@ private:
     static SpellManager *_pInstance;
 
 public:
-    std::vector<shared_ptr<Spell>> spells;
+    std::vector<std::shared_ptr<Spell>> spells;
 
     SpellManager();
     static SpellManager *getInstance();
     void update(float time);
 
-    shared_ptr<Spell> newSpell();
+    std::shared_ptr<Spell> newSpell();
+    void releaseSpell(std::shared_ptr<Spell> spell);
+    void releaseSpells(std::vector<std::shared_ptr<Spell>> spells);
 };
 
 #endif

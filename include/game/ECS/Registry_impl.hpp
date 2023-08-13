@@ -153,7 +153,7 @@ shared_ptr<T> TypePool<T>::instantiate()
     }
     else
     {
-        expandPool(1);
+        expandPool(10);
         return instantiate();
     }
 }

@@ -67,6 +67,7 @@ public:
     }
 
     void cast();
+    void disable() override;
     void kill();
 
     inline bool isAlive() { return _alive; }

@@ -8,6 +8,12 @@ Component::Component() : game(*Game::getInstance())
 {
 }
 
+bool Component::init()
+{
+    enable();
+    return true;
+}
+
 /* RENDERER COMPONENT */
 RendererComponent::RendererComponent() : Component(), contentManager(*game.pContentManager)
 {
@@ -20,6 +26,7 @@ RendererComponent::~RendererComponent()
 
 bool RendererComponent::init(string objType, shared_ptr<TransformComponent> pTransform)
 {
+    Component::init();
     pTexture = contentManager.getTextureFromType(objType);
     this->pTransform = pTransform;
 
@@ -28,12 +35,12 @@ bool RendererComponent::init(string objType, shared_ptr<TransformComponent> pTra
 
 void RendererComponent::update(float time)
 {
-    isEnabled = game.isTransformOnScreen(*pTransform);
+    enabled = game.isTransformOnScreen(*pTransform);
 }
 
 void RendererComponent::draw(SDL_Renderer *pRenderer)
 {
-    if (!isEnabled)
+    if (!enabled)
         return;
 
     spriteRect = SDL_Rect{pTransform->pxPos.x, pTransform->pxPos.y, pTransform->pxDims.x, pTransform->pxDims.y};
@@ -64,6 +71,7 @@ TransformComponent::TransformComponent() : Component()
 
 bool TransformComponent::init(Vector2 pos, Vector2 dims)
 {
+    Component::init();
     this->pos = pos;
     this->dims = dims;
     pxDims = (Vector2Int)(dims * game.ppm);
@@ -74,6 +82,9 @@ bool TransformComponent::init(Vector2 pos, Vector2 dims)
 
 void TransformComponent::update(float time)
 {
+    if(!enabled)
+        return;
+    
     pxDims = (Vector2Int)(dims * game.ppm);
     pxPos = game.worldToPixel(pos) - Vector2Int(0, pxDims.y);
 }
@@ -97,6 +108,7 @@ ColliderComponent::ColliderComponent()
 
 bool ColliderComponent::init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions)
 {
+    Component::init();
     this->start = start;
     this->end = end;
     this->pTransform = pTransform;
@@ -109,6 +121,9 @@ bool ColliderComponent::init(Vector2 start, Vector2 end, shared_ptr<TransformCom
 
 void ColliderComponent::update(float time)
 {
+    if(!enabled)
+        return;
+    
     leftX = pTransform->pos.x + (start.x * pTransform->dims.x);
     rightX = pTransform->pos.x + (end.x * pTransform->dims.x);
     bottomY = pTransform->pos.y + (start.y * pTransform->dims.y);
@@ -122,6 +137,7 @@ RigidbodyComponent::RigidbodyComponent()
 
 bool RigidbodyComponent::init(shared_ptr<TransformComponent> pTransform, shared_ptr<ColliderComponent> pCollider, bool isStatic)
 {
+    Component::init();
     this->pTransform = pTransform;
     this->pCollider = pCollider;
 
@@ -132,7 +148,7 @@ bool RigidbodyComponent::init(shared_ptr<TransformComponent> pTransform, shared_
 
 void RigidbodyComponent::update(float time)
 {
-    if (isStatic)
+    if (isStatic || !enabled)
         return;
 
     if (SDL_fabsf(velocity.x) < 0.0625)
