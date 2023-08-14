@@ -3,8 +3,13 @@
 
 #include "../../SDL2/SDL.h"
 
+#include <vector>
+#include <memory>
+#include <mutex>
+
 class Game;
 class Registry;
+class RendererComponent;
 
 class ComponentHandler
 {
@@ -19,5 +24,7 @@ public:
     void updateTransforms(float time);
     void updateColliders(float time);
 };
+
+bool rendererComparator(std::shared_ptr<RendererComponent> a, std::shared_ptr<RendererComponent> b);
 
 #endif

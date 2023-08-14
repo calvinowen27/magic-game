@@ -38,7 +38,7 @@ public:
     SDL_Texture *pTexture;
     SDL_Rect spriteRect;
 
-    shared_ptr<TransformComponent> pTransform;
+    std::shared_ptr<TransformComponent> pTransform;
 
     float spriteAngle = 0; // sprite rotation angle, degrees
     bool isFlipped = false; // over y axis

@@ -2,6 +2,9 @@
 #include "../../include/game/ECS/Registry.hpp"
 #include "../../include/game/Game.hpp"
 #include "../../include/game/WorldManager.hpp"
+#include "../../include/game/ECS/Components.hpp"
+
+#include <algorithm>
 
 ComponentHandler::ComponentHandler() : _game(*Game::getInstance()), _registry(*_game.pRegistry)
 {
@@ -9,17 +12,12 @@ ComponentHandler::ComponentHandler() : _game(*Game::getInstance()), _registry(*_
 
 void ComponentHandler::draw(SDL_Renderer *pRenderer)
 {
-    auto renderers = _registry.getComponents<RendererComponent>();
+    auto rendererSet = _registry.getComponents<RendererComponent>();
+    auto renderers = std::vector<shared_ptr<RendererComponent>>(rendererSet.begin(), rendererSet.end());
+    std::sort(renderers.begin(), renderers.end(), rendererComparator);
 
-    // y value render order
-    for(float y = (WorldManager::WORLD_SIZE / 2) - 1; y > -(WorldManager::WORLD_SIZE / 2); y -= 0.5f)
-    {
-        for (auto renderer : renderers)
-        {
-            if((float)((int)(renderer->pTransform->pos.y * 4) / 2.f) == y)
-                renderer->draw(pRenderer);
-        }
-    }
+    for(auto renderer : renderers)
+        renderer->draw(pRenderer);
 }
 
 void ComponentHandler::update(float time)
@@ -90,4 +88,9 @@ void ComponentHandler::updateColliders(float time)
 
         pCol->pTransform->pos = nextPos;
     }
+}
+
+bool rendererComparator(shared_ptr<RendererComponent> a, shared_ptr<RendererComponent> b)
+{
+    return a->pTransform->pos.y > b->pTransform->pos.y;
 }

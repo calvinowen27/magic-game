@@ -42,7 +42,7 @@ Game::Game()
 Game::~Game()
 {
     delete pKeyboardHandler;
-    // delete pContentManager;
+    delete pContentManager;
     delete pUIManager;
     delete pMouseHandler;
     delete pObjectManager;

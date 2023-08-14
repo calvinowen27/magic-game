@@ -61,11 +61,11 @@ public:
 
     shared_ptr<Player> pPlayer;
 
-    int winWidth = 1500, winHeight = 1000;
+    int winWidth = 1250, winHeight = 835;
     int ppm = 64; // screen pixels per meter, 64 by default
     int maxPPM = 512;
     int minPPM = 8;
-    float zoomScale = 1.15;
+    float zoomScale = 1.125;
     SDL_Window *pWindow;
     SDL_Renderer *pRenderer;
 
