@@ -25,7 +25,7 @@ LDFLAGS = -L./lib -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lUser32
 
 EXECUTABLE = magic
 
-debug: make_dirs refresh_content $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS)
+debug: make_dirs refresh_content refresh_data refresh_world $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS)
 	$(CC) $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(LDFLAGS) -o $(BUILD_DIR)/$(EXECUTABLE)
 
 # create source objects
@@ -53,3 +53,13 @@ refresh_content:
 	rm -rf $(BUILD_DIR)/content
 	mkdir -p $(BUILD_DIR)/content
 	cp -r content $(BUILD_DIR)
+
+refresh_world:
+	rm -rf $(BUILD_DIR)/world
+	mkdir -p $(BUILD_DIR)/world
+	cp -r world $(BUILD_DIR)
+
+refresh_data:
+	rm -rf $(BUILD_DIR)/data
+	mkdir -p $(BUILD_DIR)/data
+	cp -r data $(BUILD_DIR)
