@@ -3,6 +3,7 @@
 #include "../include/game/Wall.hpp"
 #include "../include/game/Grass.hpp"
 #include "../include/game/Player.hpp"
+#include "../include/game/Enemy.hpp"
 #include "../include/game/Game.hpp"
 #include "../include/game/ObjectManager.hpp"
 
@@ -77,6 +78,8 @@ void WorldManager::loadWorld()
                 _game.pPlayer = _objectManager.newObj<Player>();
                 _game.pPlayer->init(pos);
                 break;
+            case '!':
+                _objectManager.newObj<Enemy>()->init(pos);
             }
         }
 

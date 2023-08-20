@@ -50,6 +50,7 @@ void ContentManager::loadTextures()
 
     _typeTextures["Wall"] = _textures["wall.png"];
     _typeTextures["Player"] = _textures["player.png"];
+    _typeTextures["Enemy"] = _textures["enemy.png"];
     _typeTextures["Grass"] = _textures["grass.png"];
     _typeTextures["ice_spell"] = _textures["ice_spell.png"];
     _typeTextures["red_bar"] = _textures["red_bar.png"];
