@@ -13,6 +13,8 @@ private:
     KeyboardHandler *_pKeyboardHandler;
 
 public:
+    std::shared_ptr<HealthComponent> pHealth;
+
     Player();
     void update(float time) override;
 };

@@ -48,6 +48,7 @@ Game::~Game()
     delete pObjectManager;
     delete pSpellManager;
     delete pRegistry;
+    delete pComponentHandler;
 }
 
 Game *Game::getInstance()
@@ -176,6 +177,12 @@ void Game::pollEvents()
             pKeyboardHandler->pushEvent(event);
         }
 
+        if(event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_F)
+            pPlayer->pHealth->damage(1);
+        
+        if(event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_G)
+            pPlayer->pHealth->heal(1);
+
         if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED)
         {
             SDL_Window *win = SDL_GetWindowFromID(event.window.windowID);
@@ -197,7 +204,7 @@ void Game::pollEvents()
         {
             if (event.button.button == SDL_BUTTON_LEFT)
             {
-                pSpellManager->newSpell()->init("ice_spell", pPlayer->pos(), ((Vector2)(pMouseHandler->getMousePxPos() - pPlayer->pxPos())).normalized() * Vector2(1, -1), SpellElement::Ice, std::vector<SpellType>{SpellType::Projectile, SpellType::Radial, SpellType::Radial, SpellType::Radial});
+                pSpellManager->newSpell()->init("ice_spell", pPlayer->pos(), ((Vector2)(pMouseHandler->getMousePxPos() - pPlayer->pxPos())).normalized() * Vector2(1, -1), SpellElement::Ice, std::vector<SpellType>{SpellType::Projectile, SpellType::Radial, SpellType::Radial});
             }
         }
     }

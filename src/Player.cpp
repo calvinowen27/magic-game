@@ -1,12 +1,16 @@
 #include "../include/game/Player.hpp"
 #include "../include/game/Game.hpp"
 #include "../include/game/KeyboardHandler.hpp"
+#include "../include/game/ECS/Registry.hpp"
 
 std::map<SDL_Scancode, bool> inputState;
 
 Player::Player() : Object("Player")
 {
     _pKeyboardHandler = game.pKeyboardHandler;
+    
+    pHealth = registry.newComponent<HealthComponent>();
+    pHealth->init(10);
 }
 
 void Player::update(float time)
@@ -31,6 +35,9 @@ void Player::update(float time)
 
     if(_pKeyboardHandler->getInputState(InputKey::Sprint)) // sprint
         pRigidbody->velocity *= 2.5;
+
+    pHealth->pGreenRenderer->pTransform->pos = pTransform->pos + Vector2(0, pTransform->dims.y);
+    pHealth->pRedRenderer->pTransform->pos = pHealth->pGreenRenderer->pTransform->pos;
 
     Object::update(time);
 }

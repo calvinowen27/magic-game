@@ -10,6 +10,10 @@ ComponentHandler::ComponentHandler() : _game(*Game::getInstance()), _registry(*_
 {
 }
 
+ComponentHandler::~ComponentHandler()
+{
+}
+
 void ComponentHandler::draw(SDL_Renderer *pRenderer)
 {
     auto rendererSet = _registry.getComponents<RendererComponent>();
@@ -92,5 +96,8 @@ void ComponentHandler::updateColliders(float time)
 
 bool rendererComparator(shared_ptr<RendererComponent> a, shared_ptr<RendererComponent> b)
 {
+    if(a->renderOrder != b->renderOrder)
+        return a->renderOrder > b->renderOrder;
+
     return a->pTransform->pos.y > b->pTransform->pos.y;
 }

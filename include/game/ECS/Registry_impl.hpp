@@ -119,7 +119,7 @@ std::shared_ptr<TypePool<T>> TypePool<T>::_pInstance;
 template <typename T>
 TypePool<T>::TypePool()
 {
-    expandPool(10);
+    expandPool(100000);
 }
 
 template <typename T>
@@ -150,7 +150,7 @@ std::shared_ptr<T> TypePool<T>::instantiate()
     }
     else
     {
-        expandPool(10);
+        expandPool(1000);
         return instantiate();
     }
 }

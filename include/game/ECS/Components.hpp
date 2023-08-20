@@ -15,11 +15,13 @@ class Game;
 class ContentManager;
 class TransformComponent;
 class RigidbodyComponent;
+class Registry;
 
 class Component
 {
 protected:
     Game &game;
+    Registry &registry;
 
     bool enabled;
 
@@ -40,12 +42,14 @@ public:
 
     std::shared_ptr<TransformComponent> pTransform;
 
-    float spriteAngle = 0; // sprite rotation angle, degrees
+    float spriteAngle = 0;  // sprite rotation angle, degrees
     bool isFlipped = false; // over y axis
+
+    int renderOrder = 0;
 
     RendererComponent();
     ~RendererComponent();
-    bool init(string objType, shared_ptr<TransformComponent> pTransform); // returns true if successful
+    RendererComponent *init(string objType, shared_ptr<TransformComponent> pTransform, int renderOrder = 0); // returns true if successful
     void update(float time);
     void draw(SDL_Renderer *pRenderer);
     bool setTexture(std::string textureName); // returns true if successful
@@ -55,16 +59,16 @@ public:
 class TransformComponent : public Component
 {
 public:
-    Vector2 pos; // meters
-    Vector2Int pxPos; // pixels
-    Vector2 dims; // meters
+    Vector2 pos;       // meters
+    Vector2Int pxPos;  // pixels
+    Vector2 dims;      // meters
     Vector2Int pxDims; // pixels
 
     TransformComponent();
-    bool init(Vector2 pos, Vector2 dims = Vector2(1, 1)); // returns true if successful
+    TransformComponent *init(Vector2 pos, Vector2 dims = Vector2(1, 1)); // returns true if successful
     void update(float time);
 
-    void setDims(Vector2 newDims); // set new dimensions
+    void setDims(Vector2 newDims);        // set new dimensions
     void setPxDims(Vector2Int newPxDims); // set new px dims
 };
 
@@ -72,7 +76,7 @@ class ColliderComponent : public Component
 {
 public:
     Vector2 start; // scalar of dims, relative to bottom left of object
-    Vector2 end; // scalar of dims, relative to top right of object
+    Vector2 end;   // scalar of dims, relative to top right of object
 
     shared_ptr<TransformComponent> pTransform;
     shared_ptr<RigidbodyComponent> pRigidbody;
@@ -88,7 +92,7 @@ public:
     bool doCollisions = true;
 
     ColliderComponent();
-    bool init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions = true); // returns true if successful
+    ColliderComponent *init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions = true); // returns true if successful
     void update(float time);
 };
 
@@ -97,14 +101,29 @@ class RigidbodyComponent : public Component
 public:
     bool isStatic = false; // doesn't move if static
 
-    Vector2 velocity; // meter/sec
+    Vector2 velocity; // meters/sec
 
     shared_ptr<TransformComponent> pTransform;
     shared_ptr<ColliderComponent> pCollider;
 
     RigidbodyComponent();
-    bool init(shared_ptr<TransformComponent> pTransform, shared_ptr<ColliderComponent> pCollider, bool isStatic = false); // returns true if successful
+    RigidbodyComponent *init(shared_ptr<TransformComponent> pTransform, shared_ptr<ColliderComponent> pCollider, bool isStatic = false); // returns true if successful
     void update(float time);
+};
+
+class HealthComponent : public Component
+{
+public:
+    float baseHealth;
+    float health;
+
+    shared_ptr<RendererComponent> pRedRenderer;
+    shared_ptr<RendererComponent> pGreenRenderer;
+
+    HealthComponent();
+    HealthComponent *init(float baseHealth);
+    void heal(float healAmount);
+    bool damage(float dmgAmount); // returns true if dead after damage dealt
 };
 
 #endif

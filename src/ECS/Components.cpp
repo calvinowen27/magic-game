@@ -4,7 +4,7 @@
 #include "../../include/game/ECS/Registry.hpp"
 
 /* COMPONENT */
-Component::Component() : game(*Game::getInstance())
+Component::Component() : game(*Game::getInstance()), registry(*game.pRegistry)
 {
 }
 
@@ -24,13 +24,14 @@ RendererComponent::~RendererComponent()
     SDL_DestroyTexture(pTexture);
 }
 
-bool RendererComponent::init(string objType, shared_ptr<TransformComponent> pTransform)
+RendererComponent *RendererComponent::init(string objType, shared_ptr<TransformComponent> pTransform, int renderOrder)
 {
     Component::init();
     pTexture = contentManager.getTextureFromType(objType);
     this->pTransform = pTransform;
+    this->renderOrder = renderOrder;
 
-    return true;
+    return this;
 }
 
 void RendererComponent::update(float time)
@@ -57,7 +58,7 @@ bool RendererComponent::setTexture(std::string textureName)
 
 void RendererComponent::refreshDimensions()
 {
-    // change dimensions of 
+    // change dimensions of
     Vector2Int newPxDims;
     SDL_QueryTexture(pTexture, NULL, NULL, &newPxDims.x, &newPxDims.y);
     newPxDims = newPxDims * (float)(game.ppm / game.TEXTURE_PPM);
@@ -69,7 +70,7 @@ TransformComponent::TransformComponent() : Component()
 {
 }
 
-bool TransformComponent::init(Vector2 pos, Vector2 dims)
+TransformComponent *TransformComponent::init(Vector2 pos, Vector2 dims)
 {
     Component::init();
     this->pos = pos;
@@ -77,14 +78,14 @@ bool TransformComponent::init(Vector2 pos, Vector2 dims)
     pxDims = (Vector2Int)(dims * game.ppm);
     pxPos = game.worldToPixel(pos) - Vector2Int(0, pxDims.y);
 
-    return true;
+    return this;
 }
 
 void TransformComponent::update(float time)
 {
-    if(!enabled)
+    if (!enabled)
         return;
-    
+
     pxDims = (Vector2Int)(dims * game.ppm);
     pxPos = game.worldToPixel(pos) - Vector2Int(0, pxDims.y);
 }
@@ -102,11 +103,11 @@ void TransformComponent::setPxDims(Vector2Int newPxDims)
 }
 
 /* COLLIDER COMPONENT */
-ColliderComponent::ColliderComponent()
+ColliderComponent::ColliderComponent() : Component()
 {
 }
 
-bool ColliderComponent::init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions)
+ColliderComponent *ColliderComponent::init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions)
 {
     Component::init();
     this->start = start;
@@ -116,14 +117,14 @@ bool ColliderComponent::init(Vector2 start, Vector2 end, shared_ptr<TransformCom
 
     this->doCollisions = doCollisions;
 
-    return true;
+    return this;
 }
 
 void ColliderComponent::update(float time)
 {
-    if(!enabled)
+    if (!enabled)
         return;
-    
+
     leftX = pTransform->pos.x + (start.x * pTransform->dims.x);
     rightX = pTransform->pos.x + (end.x * pTransform->dims.x);
     bottomY = pTransform->pos.y + (start.y * pTransform->dims.y);
@@ -131,11 +132,11 @@ void ColliderComponent::update(float time)
 }
 
 /* RIGIDBODY COMPONENT */
-RigidbodyComponent::RigidbodyComponent()
+RigidbodyComponent::RigidbodyComponent() : Component()
 {
 }
 
-bool RigidbodyComponent::init(shared_ptr<TransformComponent> pTransform, shared_ptr<ColliderComponent> pCollider, bool isStatic)
+RigidbodyComponent *RigidbodyComponent::init(shared_ptr<TransformComponent> pTransform, shared_ptr<ColliderComponent> pCollider, bool isStatic)
 {
     Component::init();
     this->pTransform = pTransform;
@@ -143,7 +144,7 @@ bool RigidbodyComponent::init(shared_ptr<TransformComponent> pTransform, shared_
 
     this->isStatic = isStatic;
 
-    return true;
+    return this;
 }
 
 void RigidbodyComponent::update(float time)
@@ -157,4 +158,53 @@ void RigidbodyComponent::update(float time)
         velocity.y = 0;
 
     pTransform->pos += velocity * time;
+}
+
+/* HEALTH COMPONENT */
+HealthComponent::HealthComponent() : Component()
+{
+}
+
+HealthComponent *HealthComponent::init(float baseHealth)
+{
+    this->baseHealth = baseHealth;
+    health = baseHealth;
+
+    auto pRedTransform = registry.newComponent<TransformComponent>();
+    pRedTransform->init(Vector2::zero);
+
+    auto pGreenTransform = registry.newComponent<TransformComponent>();
+    pGreenTransform->init(Vector2::zero);
+
+    pRedRenderer = registry.newComponent<RendererComponent>();
+    pRedRenderer->init("red_bar", pRedTransform, -1);
+
+    pGreenRenderer = registry.newComponent<RendererComponent>();
+    pGreenRenderer->init("green_bar", pGreenTransform, -2);
+
+    return this;
+}
+
+void HealthComponent::heal(float healAmount)
+{
+    health += healAmount;
+    if (health > baseHealth)
+        health = baseHealth;
+
+    pGreenRenderer->pTransform->dims.x = health / baseHealth;
+}
+
+bool HealthComponent::damage(float dmgAmount)
+{
+    health -= dmgAmount;
+    if (health <= 0)
+    {
+        health = 0;
+        pGreenRenderer->pTransform->dims.x = 0;
+        return true;
+    }
+
+    pGreenRenderer->pTransform->dims.x = health / baseHealth;
+
+    return false;
 }

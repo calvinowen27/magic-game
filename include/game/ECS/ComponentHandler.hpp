@@ -19,6 +19,7 @@ private:
 
 public:
     ComponentHandler();
+    ~ComponentHandler();
     void draw(SDL_Renderer *pRenderer);
     void update(float time);
     void updateTransforms(float time);
