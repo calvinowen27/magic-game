@@ -24,53 +24,20 @@ void Spell::update(float time)
     if(!enabled)
         return;
     
-    Particle::update(time);
-
     if(_cast && _alive)
     {
         if(_aliveTime < _lifeDur)
         {
             _aliveTime += time;
-
-            pTransform->pos += _dir * _speed * time;
+            pRigidbody->velocity = _dir * _speed;
         }
         else
         {
-            if(_types.size() > 1)
-            {
-                std::vector<SpellType> newTypes;
-                for(int i = 1; i < _types.size(); i++)
-                {
-                    newTypes.push_back(_types[i]);
-                }
-
-                if(_types[1] == SpellType::Exploding)
-                {
-                    std::cout << "EXPLODE!" << std::endl;
-                    _spellManager.newSpell()->init(type, pTransform->pos, _dir, _element, newTypes);
-                }
-
-                if(_types[1] == SpellType::Projectile)
-                {
-                    _spellManager.newSpell()->init(type, pTransform->pos, _dir, _element, newTypes);
-                }
-
-                if(_types[1] == SpellType::Radial)
-                {
-                    _spellManager.newSpell()->init(type, pTransform->pos, Vector2(0, 1), _element, newTypes);
-                    _spellManager.newSpell()->init(type, pTransform->pos, Vector2(1, 1).normalized(), _element, newTypes);
-                    _spellManager.newSpell()->init(type, pTransform->pos, Vector2(1, 0), _element, newTypes);
-                    _spellManager.newSpell()->init(type, pTransform->pos, Vector2(1, -1).normalized(), _element, newTypes);
-                    _spellManager.newSpell()->init(type, pTransform->pos, Vector2(0, -1), _element, newTypes);
-                    _spellManager.newSpell()->init(type, pTransform->pos, Vector2(-1, -1).normalized(), _element, newTypes);
-                    _spellManager.newSpell()->init(type, pTransform->pos, Vector2(-1, 0), _element, newTypes);
-                    _spellManager.newSpell()->init(type, pTransform->pos, Vector2(-1, 1).normalized(), _element, newTypes);
-                }
-            }
-
             kill();
         }
     }
+
+    Particle::update(time);
 }
 
 void Spell::cast()

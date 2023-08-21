@@ -25,6 +25,8 @@ protected:
 
     shared_ptr<TransformComponent> pTransform;
     shared_ptr<RendererComponent> pRenderer;
+    shared_ptr<RigidbodyComponent> pRigidbody;
+    shared_ptr<ColliderComponent> pCollider;
 
     string type;
 

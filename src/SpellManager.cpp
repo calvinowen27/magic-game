@@ -33,7 +33,6 @@ void SpellManager::update(float time)
     }
 
     releaseSpells(deadSpells);
-
 }
 
 shared_ptr<Spell> SpellManager::newSpell()

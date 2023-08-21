@@ -17,6 +17,12 @@ bool Particle::init(string type, Vector2 pos, Vector2 dims, float lifeDur)
     pRenderer = registry.newComponent<RendererComponent>();
     pRenderer->init(type, pTransform);
 
+    pCollider = registry.newComponent<ColliderComponent>();
+    pRigidbody = registry.newComponent<RigidbodyComponent>();
+
+    pCollider->init(Vector2::zero, Vector2(1, 0.5), pTransform, pRigidbody);
+    pRigidbody->init(pTransform, pCollider);
+
     this->type = type;
 }
 
@@ -35,4 +41,6 @@ void Particle::kill()
 {
     registry.killComponent(pTransform);
     registry.killComponent(pRenderer);
+    registry.killComponent(pRigidbody);
+    registry.killComponent(pCollider);
 }

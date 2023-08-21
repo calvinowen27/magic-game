@@ -84,7 +84,7 @@ int Game::init()
 
     Uint64 windowFlags = SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE;
 
-    pWindow = SDL_CreateWindow("hovercraft", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+    pWindow = SDL_CreateWindow("magic", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                                winWidth, winHeight, windowFlags);
 
     // SDL_DisplayMode DM;
