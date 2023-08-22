@@ -26,12 +26,15 @@ void Player::update(float time)
     if(_pKeyboardHandler->getInputState(InputKey::Down)) // move down
         moveDir.y -= 0.5f;
 
-    if(_pKeyboardHandler->getInputState(InputKey::ZoomIn)) // zoom out
+    if(_pKeyboardHandler->getInputState(InputKey::ZoomIn)) // zoom in
         game.zoomIn();
-    if(_pKeyboardHandler->getInputState(InputKey::ZoomOut)) // zoom in
+    if(_pKeyboardHandler->getInputState(InputKey::ZoomOut)) // zoom out
         game.zoomOut();
 
-    pRigidbody->velocity = moveDir.normalized() * 2;
+    if(moveDir.x != 0)
+        pRigidbody->velocity = moveDir.normalized() * 2;
+    else
+        pRigidbody->velocity = moveDir * 2;
 
     if(_pKeyboardHandler->getInputState(InputKey::Sprint)) // sprint
         pRigidbody->velocity *= 2.5;
