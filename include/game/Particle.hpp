@@ -25,16 +25,14 @@ protected:
 
     shared_ptr<TransformComponent> pTransform;
     shared_ptr<RendererComponent> pRenderer;
-    shared_ptr<RigidbodyComponent> pRigidbody;
-    shared_ptr<ColliderComponent> pCollider;
 
     string type;
 
 public:
     Particle();
-    bool init(string type, Vector2 pos, Vector2 dims, float lifeDur);
+    bool init(string type, float lifeDur);
     void update(float time);
-    virtual void disable();
+    void disable();
     void kill();
 };
 

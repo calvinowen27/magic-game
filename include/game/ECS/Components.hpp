@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 
 #include "../../SDL2/SDL.h"
 
@@ -16,6 +17,8 @@ class ContentManager;
 class TransformComponent;
 class RigidbodyComponent;
 class Registry;
+class Object;
+class Entity;
 
 class Component
 {
@@ -81,19 +84,28 @@ public:
     shared_ptr<TransformComponent> pTransform;
     shared_ptr<RigidbodyComponent> pRigidbody;
 
+    Entity *pEntity;
+
     // positions of each border of collider
     float leftX;
     float rightX;
     float topY;
     float bottomY;
 
+    // colliders that are touching this on
+    // std::vector<ColliderComponent> collidersTouching;
+
     int borderEnabled[4]{1, 1, 1, 1}; // left right bottom top
 
     bool doCollisions = true;
 
     ColliderComponent();
-    ColliderComponent *init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions = true); // returns true if successful
+    ColliderComponent *init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, Entity *pEntity, bool doCollisions = true); // returns true if successful
     void update(float time);
+    // void onCollisionEnter(ColliderComponent &other);
+    // void onCollisionExit(ColliderComponent &other);
+    // void whileTouching(ColliderComponent &other);
+
 };
 
 class RigidbodyComponent : public Component

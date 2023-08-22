@@ -5,11 +5,6 @@
 
 MouseHandler::MouseHandler() : _game(*Game::getInstance())
 {
-    // _pGame = Game::getInstance();
-    // _prevMousePos = Vector2::zero;
-    // _pxPrevMousePos = Vector2Int(0, 0);
-    // _mousePos = Vector2::zero;
-    // _pxMousePos = Vector2Int(0, 0);
 }
 
 void MouseHandler::update()

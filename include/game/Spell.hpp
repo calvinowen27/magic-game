@@ -2,7 +2,7 @@
 #define SPELL_INCLUDE
 
 #include "Vector2.hpp"
-#include "Particle.hpp"
+#include "ECS/Entity.hpp"
 
 #include <string>
 #include <vector>
@@ -33,44 +33,49 @@ enum class SpellAttribute
 };
 
 class SpellManager;
+class Game;
 
-class Spell : public Particle
+class Spell : public Entity
 {
-private:
-    SpellManager &_spellManager;
+protected:
+    Game &game;
+    SpellManager &spellManager;
+    Registry &registry;
 
-    SpellElement _element;
-    std::vector<SpellType> _types;
-    std::vector<SpellAttribute> _attributes;
-    Vector2 _dir;
-    bool _cast = false;
-    bool _alive = false;
+    shared_ptr<RigidbodyComponent> pRigidbody;
+    shared_ptr<ColliderComponent> pCollider;
 
-    float _lifeDur = 2; // seconds
-    float _aliveTime = 0;
+    SpellElement element;
+    std::vector<SpellType> types;
+    std::vector<SpellAttribute> attributes;
+    Vector2 dir;
+    bool isCast = false;
+    bool alive = false;
 
-    float _speed = 2; // m/s
+    float lifeDur = 2; // seconds
+    float aliveTime = 0;
+
+    float speed = 2; // m/s
 
 public:
     Spell();
-    bool init(string type, Vector2 pos, Vector2 dir, SpellElement element, vector<SpellType> types);
+    bool init(Vector2 pos, Vector2 dir, SpellElement element, vector<SpellType> types);
     void update(float time);
+    void kill();
 
     inline void addType(SpellType type)
     {
-        _types.push_back(type);
+        types.push_back(type);
     }
 
     inline void addAttribute(SpellAttribute attribute)
     {
-        _attributes.push_back(attribute);
+        attributes.push_back(attribute);
     }
 
     void cast();
-    void disable() override;
-    void kill();
 
-    inline bool isAlive() { return _alive; }
+    inline bool isAlive() { return alive; }
 };
 
 #endif

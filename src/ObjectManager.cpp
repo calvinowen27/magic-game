@@ -46,7 +46,7 @@ vector<Vector2> ObjectManager::getCollider(string objType)
 {
     if(!_colliderData["colliders"].contains(objType))
     {
-        std::cerr << "Invalid objType '" << objType << "'. Returning {Vector2(0, 0), Vector2(1, 1)}." << std::endl;
+        std::cerr << "Invalid objType '" << objType << "'. Returning {Vector2(0, 0), Vector2(1, 0.5)}." << std::endl;
         return vector<Vector2>{Vector2::zero, Vector2(1, 0.5)};
     }
     auto endpoints = _colliderData["colliders"][objType];

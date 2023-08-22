@@ -1,58 +1,56 @@
 #include "../include/game/Spell.hpp"
 #include "../include/game/SpellManager.hpp"
+#include "../include/game/Game.hpp"
 
-Spell::Spell() : Particle(), _spellManager(*SpellManager::getInstance())
+Spell::Spell() : Entity("Spell"), spellManager(*SpellManager::getInstance()), game(*Game::getInstance()), registry(*game.pRegistry)
 {
 }
 
-bool Spell::init(string type, Vector2 pos, Vector2 dir, SpellElement element, vector<SpellType> types)
+bool Spell::init(Vector2 pos, Vector2 dir, SpellElement element, vector<SpellType> types)
 {
-    Particle::init(type, pos, Vector2(1, 1), 2);
+    Entity::init(pos);
 
-    _element = element;
-    _types = types;
-    _dir = dir;
-    _cast = true;
-    _alive = true;
-    _aliveTime = 0;
+    this->element = element;
+    this->types = types;
+    this->dir = dir;
+    this->isCast = true;
+    this->alive = true;
+    aliveTime = 0;
+
+    pCollider = registry.newComponent<ColliderComponent>();
+    pRigidbody = registry.newComponent<RigidbodyComponent>();
+
+    pCollider->init(Vector2::zero, Vector2(1, 0.5f), pTransform, pRigidbody, this);
+    pRigidbody->init(pTransform, pCollider);
 
     return true;
 }
 
 void Spell::update(float time)
 {
-    if(!enabled)
-        return;
-    
-    if(_cast && _alive)
+    if(isCast && alive)
     {
-        if(_aliveTime < _lifeDur)
+        if(aliveTime < lifeDur)
         {
-            _aliveTime += time;
-            pRigidbody->velocity = _dir * _speed;
+            aliveTime += time;
+            pRigidbody->velocity = dir * speed;
         }
         else
         {
             kill();
         }
     }
-
-    Particle::update(time);
-}
-
-void Spell::cast()
-{
-    _cast = true;
-}
-
-void Spell::disable()
-{
-    _alive = false;
-    Particle::disable();
 }
 
 void Spell::kill()
 {
-    _alive = false;
-    Particle::kill();
+    registry.killComponent(pTransform);
+    registry.killComponent(pRenderer);
+    registry.killComponent(pRigidbody);
+    registry.killComponent(pCollider);
+}
+
+void Spell::cast()
+{
+    isCast = true;
 }

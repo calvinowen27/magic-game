@@ -2,6 +2,9 @@
 #include "../../include/game/Game.hpp"
 #include "../../include/game/ContentManager.hpp"
 #include "../../include/game/ECS/Registry.hpp"
+#include "../../include/game/Object.hpp"
+
+#include <algorithm>
 
 /* COMPONENT */
 Component::Component() : game(*Game::getInstance()), registry(*game.pRegistry)
@@ -30,6 +33,8 @@ RendererComponent *RendererComponent::init(string objType, shared_ptr<TransformC
     pTexture = contentManager.getTextureFromType(objType);
     this->pTransform = pTransform;
     this->renderOrder = renderOrder;
+
+    refreshDimensions();
 
     return this;
 }
@@ -107,13 +112,14 @@ ColliderComponent::ColliderComponent() : Component()
 {
 }
 
-ColliderComponent *ColliderComponent::init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions)
+ColliderComponent *ColliderComponent::init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, Entity *pEntity, bool doCollisions)
 {
     Component::init();
     this->start = start;
     this->end = end;
     this->pTransform = pTransform;
     this->pRigidbody = pRigidbody;
+    this->pEntity = pEntity;
 
     this->doCollisions = doCollisions;
 
@@ -130,6 +136,21 @@ void ColliderComponent::update(float time)
     bottomY = pTransform->pos.y + (start.y * pTransform->dims.y);
     topY = pTransform->pos.y + (end.y * pTransform->dims.y);
 }
+
+// void ColliderComponent::onCollisionEnter(ColliderComponent &other)
+// {
+//     collidersTouching.push_back(other);
+// }
+
+// void ColliderComponent::onCollisionExit(ColliderComponent &other)
+// {
+//     // collidersTouching.erase(std::remove(collidersTouching.begin(), collidersTouching.end(), other), collidersTouching.end());
+// }
+
+// void ColliderComponent::whileTouching(ColliderComponent &other)
+// {
+
+// }
 
 /* RIGIDBODY COMPONENT */
 RigidbodyComponent::RigidbodyComponent() : Component()

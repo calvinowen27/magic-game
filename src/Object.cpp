@@ -7,27 +7,20 @@
 #include "../include/SDL2/SDL.h"
 #include "../include/SDL2/SDL_image.h"
 
-using std::vector;
-
-Object::Object(string objType) : game(*Game::getInstance()), objectManager(*game.pObjectManager), contentManager(*game.pContentManager), registry(*game.pRegistry)
+Object::Object(std::string objType) : Entity(objType), objectManager(*game.pObjectManager)
 {
-    type = objType;
-
-    pRenderer = registry.newComponent<RendererComponent>();
-    pTransform = registry.newComponent<TransformComponent>();
     pRigidbody = registry.newComponent<RigidbodyComponent>();
     pCollider = registry.newComponent<ColliderComponent>();
 }
 
 bool Object::init(Vector2 pos)
 {
-    pRenderer->init(type, pTransform);
-    pTransform->init(pos);
-    pRenderer->refreshDimensions();
+    Entity::init(pos);
+
     pRigidbody->init(pTransform, pCollider);
 
-    vector<Vector2> colliderEndpoints = objectManager.getCollider(type);
-    pCollider->init(colliderEndpoints[0], colliderEndpoints[1], pTransform, pRigidbody);
+    std::vector<Vector2> colliderEndpoints = objectManager.getCollider(type);
+    pCollider->init(colliderEndpoints[0], colliderEndpoints[1], pTransform, pRigidbody, this);
 
     return true;
 }

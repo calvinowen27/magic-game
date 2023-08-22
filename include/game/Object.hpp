@@ -5,36 +5,28 @@
 
 #include "../SDL2/SDL.h"
 
-#include "Vector2.hpp"
-#include "ECS/Components.hpp"
-
-using std::string;
-using std::shared_ptr;
+#include "ECS/Entity.hpp"
 
 class Game;
 class ObjectManager;
 class ContentManager;
-class Registry;
 
-class Object
+class Object : public Entity
 {
 protected:
-    Game &game;
     ObjectManager &objectManager;
-    ContentManager &contentManager;
-    Registry &registry;
 
-    shared_ptr<RendererComponent> pRenderer;
-    shared_ptr<TransformComponent> pTransform;
-    shared_ptr<RigidbodyComponent> pRigidbody;
-    shared_ptr<ColliderComponent> pCollider;
-
-    string type;
+    std::shared_ptr<RigidbodyComponent> pRigidbody;
+    std::shared_ptr<ColliderComponent> pCollider;
 
 public:
-    Object(string objType);
-    virtual bool init(Vector2 pos);
+    Object(std::string objType);
+    bool init(Vector2 pos) override;
     virtual void update(float time);
+
+    // virtual void onCollisionEnter(Object &other);
+    // virtual void onCollisionExit(Object &other);
+    // virtual void whileTouching(Object &other);
 
     inline std::string getType() { return type; }
     inline Vector2 getVelocity() { return pRigidbody->velocity; }
@@ -42,7 +34,7 @@ public:
     inline Vector2Int pxPos() { return pTransform->pxPos; }
     inline Vector2 dims() { return pTransform->dims; }
     inline Vector2Int pxDims() { return pTransform->pxDims; }
-    inline shared_ptr<ColliderComponent> getCollider() { return pCollider; }
+    inline std::shared_ptr<ColliderComponent> getCollider() { return pCollider; }
 };
 
 #endif
