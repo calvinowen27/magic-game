@@ -25,6 +25,11 @@ protected:
 public:
     Entity(std::string type);
     virtual bool init(Vector2 pos);
+
+    virtual void onCollisionEnter(Entity *pOther);
+    virtual void onCollisionExit(Entity *pOther);
+    virtual void whileTouching(Entity *pOther);
+
     inline std::string getType() { return type; }
 };
 

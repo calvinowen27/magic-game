@@ -24,10 +24,6 @@ public:
     bool init(Vector2 pos) override;
     virtual void update(float time);
 
-    // virtual void onCollisionEnter(Object &other);
-    // virtual void onCollisionExit(Object &other);
-    // virtual void whileTouching(Object &other);
-
     inline std::string getType() { return type; }
     inline Vector2 getVelocity() { return pRigidbody->velocity; }
     inline Vector2 pos() { return pTransform->pos; }

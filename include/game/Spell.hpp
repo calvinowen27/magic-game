@@ -52,10 +52,12 @@ protected:
     bool isCast = false;
     bool alive = false;
 
-    float lifeDur = 2; // seconds
+    float lifeDur = 5; // seconds
     float aliveTime = 0;
 
     float speed = 2; // m/s
+
+    float damage = 4;
 
 public:
     Spell();
@@ -74,6 +76,8 @@ public:
     }
 
     void cast();
+
+    void onCollisionEnter(Entity *pOther) override;
 
     inline bool isAlive() { return alive; }
 };

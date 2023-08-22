@@ -9,14 +9,11 @@
 #include <string>
 #include <map>
 #include <memory>
+#include <set>
 
 class Game;
 class Object;
 
-using std::string;
-using std::vector;
-using std::shared_ptr;
-using std::make_shared;
 using json = nlohmann::json;
 
 class ObjectManager
@@ -26,9 +23,9 @@ private:
 
     Game &_game;
 
-    vector<shared_ptr<Object>> _objects;
+    std::vector<std::shared_ptr<Object>> _objects;
 
-    string _colliderDataPath = "./data/colliders.json";
+    std::string _colliderDataPath = "./data/colliders.json";
     json _colliderData;
 
 public:
@@ -38,13 +35,14 @@ public:
     void init();
     void update(float time);
 
-    vector<Vector2> getCollider(string objType);
+    std::vector<Vector2> getCollider(std::string objType);
 
     template <typename T>
-    shared_ptr<T> newObj()
+    std::shared_ptr<T> newObj()
     {
-        auto obj = make_shared<T>();
-        _objects.push_back(obj);
+        auto obj = std::make_shared<T>();
+        // _objects.push_back(obj);
+        _objects.emplace(obj);
         return obj;
     }
 };

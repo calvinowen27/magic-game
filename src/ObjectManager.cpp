@@ -42,13 +42,13 @@ void ObjectManager::update(float time)
     }
 }
 
-vector<Vector2> ObjectManager::getCollider(string objType)
+std::vector<Vector2> ObjectManager::getCollider(std::string objType)
 {
     if(!_colliderData["colliders"].contains(objType))
     {
         std::cerr << "Invalid objType '" << objType << "'. Returning {Vector2(0, 0), Vector2(1, 0.5)}." << std::endl;
-        return vector<Vector2>{Vector2::zero, Vector2(1, 0.5)};
+        return std::vector<Vector2>{Vector2::zero, Vector2(1, 0.5)};
     }
     auto endpoints = _colliderData["colliders"][objType];
-    return vector<Vector2>{Vector2((float)endpoints["start"][0], (float)endpoints["start"][1]), Vector2((float)endpoints["end"][0], (float)endpoints["end"][1])};
+    return std::vector<Vector2>{Vector2((float)endpoints["start"][0], (float)endpoints["start"][1]), Vector2((float)endpoints["end"][0], (float)endpoints["end"][1])};
 }

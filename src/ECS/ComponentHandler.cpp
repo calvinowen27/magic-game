@@ -20,7 +20,7 @@ void ComponentHandler::draw(SDL_Renderer *pRenderer)
     auto renderers = std::vector<shared_ptr<RendererComponent>>(rendererSet.begin(), rendererSet.end());
     std::sort(renderers.begin(), renderers.end(), rendererComparator);
 
-    for(auto renderer : renderers)
+    for (auto renderer : renderers)
         renderer->draw(pRenderer);
 }
 
@@ -57,36 +57,59 @@ void ComponentHandler::updateColliders(float time)
                 continue;
 
             // skip if not touching
-            if (pCol->leftX + deltaPos.x >= pOther->rightX || pCol->rightX + deltaPos.x <= pOther->leftX ||
-                pCol->bottomY + deltaPos.y >= pOther->topY || pCol->topY + deltaPos.y <= pOther->bottomY)
+            if (pCol->leftX + deltaPos.x > pOther->rightX || pCol->rightX + deltaPos.x < pOther->leftX ||
+                pCol->bottomY + deltaPos.y > pOther->topY || pCol->topY + deltaPos.y < pOther->bottomY)
+            {
+                if (pCol->isTouching(pOther) || pOther->isTouching(pCol))
+                {
+                    pCol->onCollisionExit(pOther);
+                    pOther->onCollisionExit(pCol);
+                }
                 continue;
+            }
 
             // this left and other right
             if (pCol->borderEnabled[0] && pOther->borderEnabled[1])
             {
                 if (pCol->leftX >= pOther->rightX && pCol->leftX + deltaPos.x < pOther->rightX)
+                {
                     nextPos.x = pOther->rightX - (pCol->start.x * pCol->pTransform->dims.x);
+                    pCol->onCollisionEnter(pOther);
+                    pOther->onCollisionEnter(pCol);
+                }
             }
 
             // this right and other left
             if (pCol->borderEnabled[1] && pOther->borderEnabled[0])
             {
                 if (pCol->rightX <= pOther->leftX && pCol->rightX + deltaPos.x > pOther->leftX)
+                {
                     nextPos.x = pOther->leftX - (pCol->end.x * pCol->pTransform->dims.x);
+                    pCol->onCollisionEnter(pOther);
+                    pOther->onCollisionEnter(pCol);
+                }
             }
 
             // this bottom and other top
             if (pCol->borderEnabled[2] && pOther->borderEnabled[3])
             {
                 if (pCol->bottomY >= pOther->topY && pCol->bottomY + deltaPos.y < pOther->topY)
+                {
                     nextPos.y = pOther->topY - (pCol->start.y * pCol->pTransform->dims.y);
+                    pCol->onCollisionEnter(pOther);
+                    pOther->onCollisionEnter(pCol);
+                }
             }
 
             // this top and other bottom
             if (pCol->borderEnabled[3] && pOther->borderEnabled[2])
             {
                 if (pCol->topY <= pOther->bottomY && pCol->topY + deltaPos.y > pOther->bottomY)
+                {
                     nextPos.y = pOther->bottomY - (pCol->end.y * pCol->pTransform->dims.y);
+                    pCol->onCollisionEnter(pOther);
+                    pOther->onCollisionEnter(pCol);
+                }
             }
         }
 
@@ -96,7 +119,7 @@ void ComponentHandler::updateColliders(float time)
 
 bool rendererComparator(shared_ptr<RendererComponent> a, shared_ptr<RendererComponent> b)
 {
-    if(a->renderOrder != b->renderOrder)
+    if (a->renderOrder != b->renderOrder)
         return a->renderOrder > b->renderOrder;
 
     return a->pTransform->pos.y > b->pTransform->pos.y;

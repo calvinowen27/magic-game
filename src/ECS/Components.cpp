@@ -131,26 +131,44 @@ void ColliderComponent::update(float time)
     if (!enabled)
         return;
 
+    for(auto other : collidersTouching)
+        whileTouching(other);
+
     leftX = pTransform->pos.x + (start.x * pTransform->dims.x);
     rightX = pTransform->pos.x + (end.x * pTransform->dims.x);
     bottomY = pTransform->pos.y + (start.y * pTransform->dims.y);
     topY = pTransform->pos.y + (end.y * pTransform->dims.y);
 }
 
-// void ColliderComponent::onCollisionEnter(ColliderComponent &other)
-// {
-//     collidersTouching.push_back(other);
-// }
+void ColliderComponent::onCollisionEnter(std::shared_ptr<ColliderComponent> other)
+{
+    // collidersTouching.push_back(other);
+    collidersTouching.emplace(other);
 
-// void ColliderComponent::onCollisionExit(ColliderComponent &other)
-// {
-//     // collidersTouching.erase(std::remove(collidersTouching.begin(), collidersTouching.end(), other), collidersTouching.end());
-// }
+    if(pEntity != nullptr && other->pEntity != nullptr)
+        pEntity->onCollisionEnter(other->pEntity);
+}
 
-// void ColliderComponent::whileTouching(ColliderComponent &other)
-// {
+void ColliderComponent::onCollisionExit(std::shared_ptr<ColliderComponent> other)
+{
+    // collidersTouching.erase(std::remove(collidersTouching.begin(), collidersTouching.end(), other), collidersTouching.end());
 
-// }
+    collidersTouching.erase(other);
+
+    if(pEntity != nullptr && other->pEntity != nullptr)
+        pEntity->onCollisionExit(other->pEntity);
+}
+
+void ColliderComponent::whileTouching(std::shared_ptr<ColliderComponent> other)
+{
+    if(pEntity != nullptr && other->pEntity != nullptr)
+        pEntity->whileTouching(other->pEntity);
+}
+
+bool ColliderComponent::isTouching(std::shared_ptr<ColliderComponent> other)
+{
+    return collidersTouching.find(other) != collidersTouching.end();
+}
 
 /* RIGIDBODY COMPONENT */
 RigidbodyComponent::RigidbodyComponent() : Component()

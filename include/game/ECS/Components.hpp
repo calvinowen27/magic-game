@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <set>
 
 #include "../../SDL2/SDL.h"
 
@@ -93,7 +94,7 @@ public:
     float bottomY;
 
     // colliders that are touching this on
-    // std::vector<ColliderComponent> collidersTouching;
+    std::set<std::shared_ptr<ColliderComponent>> collidersTouching;
 
     int borderEnabled[4]{1, 1, 1, 1}; // left right bottom top
 
@@ -102,10 +103,10 @@ public:
     ColliderComponent();
     ColliderComponent *init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, Entity *pEntity, bool doCollisions = true); // returns true if successful
     void update(float time);
-    // void onCollisionEnter(ColliderComponent &other);
-    // void onCollisionExit(ColliderComponent &other);
-    // void whileTouching(ColliderComponent &other);
-
+    void onCollisionEnter(std::shared_ptr<ColliderComponent> other);
+    void onCollisionExit(std::shared_ptr<ColliderComponent> other);
+    void whileTouching(std::shared_ptr<ColliderComponent> other);
+    bool isTouching(std::shared_ptr<ColliderComponent> other);
 };
 
 class RigidbodyComponent : public Component

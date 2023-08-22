@@ -18,3 +18,15 @@ bool Entity::init(Vector2 pos)
 
     return true;
 }
+
+void Entity::onCollisionEnter(Entity *pOther)
+{
+}
+
+void Entity::onCollisionExit(Entity *pOther)
+{
+}
+
+void Entity::whileTouching(Entity *pOther)
+{
+}
