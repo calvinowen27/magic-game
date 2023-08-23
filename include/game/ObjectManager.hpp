@@ -4,6 +4,7 @@
 #include "../SDL2/SDL.h"
 #include "../nlohmann_json/json.hpp"
 #include "Vector2.hpp"
+#include "ECS/Registry.hpp"
 
 #include <vector>
 #include <string>
@@ -41,9 +42,27 @@ public:
     std::shared_ptr<T> newObj()
     {
         auto obj = std::make_shared<T>();
-        // _objects.push_back(obj);
-        _objects.emplace(obj);
+        _objects.push_back(obj);
+        // _objects.emplace(obj);
         return obj;
+    }
+
+    template <typename T>
+    std::shared_ptr<T> newEntity()
+    {
+        // do not use entity creation function if type is not a entity
+        if (!std::is_base_of<Entity, T>::value)
+        {
+            throw new std::invalid_argument("ObjectManager::newEntity<Type>() : Type must be derived from Entity class.");
+        }
+
+        return TypePool<T>::getInstance()->instantiate();
+    }
+
+    template <typename T>
+    void killEntity(std::shared_ptr<T> pEntity)
+    {
+        TypePool<T>::getInstance()->release(pEntity);
     }
 };
 

@@ -33,14 +33,11 @@ enum class SpellAttribute
 };
 
 class SpellManager;
-class Game;
 
 class Spell : public Entity
 {
 protected:
-    Game &game;
     SpellManager &spellManager;
-    Registry &registry;
 
     shared_ptr<RigidbodyComponent> pRigidbody;
     shared_ptr<ColliderComponent> pCollider;
@@ -50,7 +47,6 @@ protected:
     std::vector<SpellAttribute> attributes;
     Vector2 dir;
     bool isCast = false;
-    bool alive = false;
 
     float lifeDur = 5; // seconds
     float aliveTime = 0;
@@ -63,7 +59,7 @@ public:
     Spell();
     bool init(Vector2 pos, Vector2 dir, SpellElement element, vector<SpellType> types);
     void update(float time);
-    void kill();
+    void kill() override;
 
     inline void addType(SpellType type)
     {
@@ -78,8 +74,6 @@ public:
     void cast();
 
     void onCollisionEnter(Entity *pOther) override;
-
-    inline bool isAlive() { return alive; }
 };
 
 #endif

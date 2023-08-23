@@ -34,6 +34,7 @@ public:
     bool init();
     void enable() { enabled = true; }
     void disable() { enabled = false; }
+    virtual void kill();
 };
 
 class RendererComponent : public Component
@@ -99,9 +100,10 @@ public:
     int borderEnabled[4]{1, 1, 1, 1}; // left right bottom top
 
     bool doCollisions = true;
+    bool isTrigger = false;
 
     ColliderComponent();
-    ColliderComponent *init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, Entity *pEntity, bool doCollisions = true); // returns true if successful
+    ColliderComponent *init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, Entity *pEntity, bool doCollisions = true, bool isTrigger = false); // returns true if successful
     void update(float time);
     void onCollisionEnter(std::shared_ptr<ColliderComponent> other);
     void onCollisionExit(std::shared_ptr<ColliderComponent> other);
@@ -137,6 +139,7 @@ public:
     HealthComponent *init(float baseHealth);
     void heal(float healAmount);
     bool damage(float dmgAmount); // returns true if dead after damage dealt
+    void kill() override;
 };
 
 #endif

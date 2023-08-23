@@ -17,6 +17,10 @@ bool Component::init()
     return true;
 }
 
+void Component::kill()
+{
+}
+
 /* RENDERER COMPONENT */
 RendererComponent::RendererComponent() : Component(), contentManager(*game.pContentManager)
 {
@@ -112,7 +116,7 @@ ColliderComponent::ColliderComponent() : Component()
 {
 }
 
-ColliderComponent *ColliderComponent::init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, Entity *pEntity, bool doCollisions)
+ColliderComponent *ColliderComponent::init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, Entity *pEntity, bool doCollisions, bool isTrigger = false)
 {
     Component::init();
     this->start = start;
@@ -122,6 +126,7 @@ ColliderComponent *ColliderComponent::init(Vector2 start, Vector2 end, shared_pt
     this->pEntity = pEntity;
 
     this->doCollisions = doCollisions;
+    this->isTrigger = isTrigger;
 
     return this;
 }
@@ -246,4 +251,12 @@ bool HealthComponent::damage(float dmgAmount)
     pGreenRenderer->pTransform->dims.x = health / baseHealth;
 
     return false;
+}
+
+void HealthComponent::kill()
+{
+    registry.killComponent(pGreenRenderer);
+    registry.killComponent(pRedRenderer);
+
+    Component::kill();
 }

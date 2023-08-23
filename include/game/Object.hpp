@@ -14,8 +14,6 @@ class ContentManager;
 class Object : public Entity
 {
 protected:
-    ObjectManager &objectManager;
-
     std::shared_ptr<RigidbodyComponent> pRigidbody;
     std::shared_ptr<ColliderComponent> pCollider;
 

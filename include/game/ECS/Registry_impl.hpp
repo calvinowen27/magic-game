@@ -112,14 +112,14 @@ size_t TypeSet<T>::erase(std::shared_ptr<T> component)
     return _set.erase(component);
 }
 
-/* COMPONENT POOL */
+/* TYPE POOL */
 template <typename T>
 std::shared_ptr<TypePool<T>> TypePool<T>::_pInstance;
 
 template <typename T>
 TypePool<T>::TypePool()
 {
-    expandPool(100000);
+    expandPool(100);
 }
 
 template <typename T>
@@ -150,7 +150,7 @@ std::shared_ptr<T> TypePool<T>::instantiate()
     }
     else
     {
-        expandPool(1000);
+        expandPool(100);
         return instantiate();
     }
 }
@@ -202,6 +202,13 @@ std::shared_ptr<T> Registry::newComponent()
 template <typename T>
 void Registry::killComponent(std::shared_ptr<T> component)
 {
+    // do not use component kill function if type is not a component
+    if (!std::is_base_of<Component, T>::value)
+    {
+        throw new std::invalid_argument("Registry::killComponent<Type>() : Type must be derived from Component class.");
+    }
+
+    std::dynamic_pointer_cast<Component>(component)->kill();
     auto pool = TypePool<T>::getInstance();
     pool->release(component);
 }

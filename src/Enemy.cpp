@@ -9,6 +9,9 @@ Enemy::Enemy() : Object("Enemy")
 
 void Enemy::update(float time)
 {
+    if(!alive)
+        return;
+
     if (_timeSincePathFind > _pathFindTime)
     {
         _dir = -_dir;
@@ -24,4 +27,13 @@ void Enemy::update(float time)
     pHealth->pRedRenderer->pTransform->pos = pHealth->pGreenRenderer->pTransform->pos;
 
     Object::update(time);
+}
+
+void Enemy::kill()
+{
+    registry.killComponent(pRigidbody);
+    registry.killComponent(pCollider);
+    registry.killComponent(pHealth);
+
+    Entity::kill();
 }

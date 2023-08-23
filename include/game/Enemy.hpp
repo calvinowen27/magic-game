@@ -15,6 +15,7 @@ public:
 
     Enemy();
     void update(float time) override;
+    void kill() override;
 };
 
 #endif

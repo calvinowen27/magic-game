@@ -2,10 +2,11 @@
 #include "../include/game/SpellManager.hpp"
 #include "../include/game/Game.hpp"
 #include "../include/game/Enemy.hpp"
+#include "../include/game/ObjectManager.hpp"
 
 #include <type_traits>
 
-Spell::Spell() : Entity("Spell"), spellManager(*SpellManager::getInstance()), game(*Game::getInstance()), registry(*game.pRegistry)
+Spell::Spell() : Entity("Spell"), spellManager(*game.pSpellManager)
 {
 }
 
@@ -23,7 +24,7 @@ bool Spell::init(Vector2 pos, Vector2 dir, SpellElement element, vector<SpellTyp
     pCollider = registry.newComponent<ColliderComponent>();
     pRigidbody = registry.newComponent<RigidbodyComponent>();
 
-    pCollider->init(Vector2::zero, Vector2(1, 0.5f), pTransform, pRigidbody, this);
+    pCollider->init(Vector2::zero, Vector2(1, 0.5f), pTransform, pRigidbody, this, true, true);
     pRigidbody->init(pTransform, pCollider);
 
     return true;
@@ -50,10 +51,10 @@ void Spell::kill()
     alive = false;
     isCast = false;
     
-    registry.killComponent(pTransform);
-    registry.killComponent(pRenderer);
     registry.killComponent(pRigidbody);
     registry.killComponent(pCollider);
+
+    Entity::kill();
 }
 
 void Spell::cast()
@@ -68,8 +69,17 @@ void Spell::onCollisionEnter(Entity *pOther)
         Enemy *enemy = dynamic_cast<Enemy *>(pOther);
         if(enemy)
         {
-            enemy->pHealth->damage(damage);
+            // enemy->pHealth->damage(damage);
+
+            if(enemy->pHealth->damage(damage))
+            {
+                enemy->kill();
+                // std::shared_ptr<Enemy> sharedEnemy(enemy);
+                // objectManager.killEntity(sharedEnemy);
+            }
+
             kill();
+            
         }
         else
         {

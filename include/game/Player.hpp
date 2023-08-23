@@ -17,6 +17,7 @@ public:
 
     Player();
     void update(float time) override;
+    void kill() override;
 };
 
 #endif

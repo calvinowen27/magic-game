@@ -15,6 +15,9 @@ Player::Player() : Object("Player")
 
 void Player::update(float time)
 {
+    if(!alive)
+        return;
+
     Vector2 moveDir;
 
     if(_pKeyboardHandler->getInputState(InputKey::Right)) // move right
@@ -43,4 +46,13 @@ void Player::update(float time)
     pHealth->pRedRenderer->pTransform->pos = pHealth->pGreenRenderer->pTransform->pos;
 
     Object::update(time);
+}
+
+void Player::kill()
+{
+    registry.killComponent(pRigidbody);
+    registry.killComponent(pCollider);
+    registry.killComponent(pHealth);
+
+    Entity::kill();
 }

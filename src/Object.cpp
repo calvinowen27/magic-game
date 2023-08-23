@@ -1,13 +1,10 @@
 #include "../include/game/Object.hpp"
-#include "../include/game/Game.hpp"
 #include "../include/game/ObjectManager.hpp"
-#include "../include/game/ContentManager.hpp"
-#include "../include/game/ECS/Registry.hpp"
 
 #include "../include/SDL2/SDL.h"
 #include "../include/SDL2/SDL_image.h"
 
-Object::Object(std::string objType) : Entity(objType), objectManager(*game.pObjectManager)
+Object::Object(std::string objType) : Entity(objType)
 {
     pRigidbody = registry.newComponent<RigidbodyComponent>();
     pCollider = registry.newComponent<ColliderComponent>();

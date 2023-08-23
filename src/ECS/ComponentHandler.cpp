@@ -73,7 +73,9 @@ void ComponentHandler::updateColliders(float time)
             {
                 if (pCol->leftX >= pOther->rightX && pCol->leftX + deltaPos.x < pOther->rightX)
                 {
-                    nextPos.x = pOther->rightX - (pCol->start.x * pCol->pTransform->dims.x);
+                    if(!(pCol->isTrigger || pOther->isTrigger))
+                        nextPos.x = pOther->rightX - (pCol->start.x * pCol->pTransform->dims.x);
+                    
                     pCol->onCollisionEnter(pOther);
                     pOther->onCollisionEnter(pCol);
                 }
@@ -84,7 +86,9 @@ void ComponentHandler::updateColliders(float time)
             {
                 if (pCol->rightX <= pOther->leftX && pCol->rightX + deltaPos.x > pOther->leftX)
                 {
-                    nextPos.x = pOther->leftX - (pCol->end.x * pCol->pTransform->dims.x);
+                    if(!(pCol->isTrigger || pOther->isTrigger))
+                        nextPos.x = pOther->leftX - (pCol->end.x * pCol->pTransform->dims.x);
+                    
                     pCol->onCollisionEnter(pOther);
                     pOther->onCollisionEnter(pCol);
                 }
@@ -95,7 +99,9 @@ void ComponentHandler::updateColliders(float time)
             {
                 if (pCol->bottomY >= pOther->topY && pCol->bottomY + deltaPos.y < pOther->topY)
                 {
-                    nextPos.y = pOther->topY - (pCol->start.y * pCol->pTransform->dims.y);
+                    if(!(pCol->isTrigger || pOther->isTrigger))
+                        nextPos.y = pOther->topY - (pCol->start.y * pCol->pTransform->dims.y);
+                    
                     pCol->onCollisionEnter(pOther);
                     pOther->onCollisionEnter(pCol);
                 }
@@ -106,7 +112,9 @@ void ComponentHandler::updateColliders(float time)
             {
                 if (pCol->topY <= pOther->bottomY && pCol->topY + deltaPos.y > pOther->bottomY)
                 {
-                    nextPos.y = pOther->bottomY - (pCol->end.y * pCol->pTransform->dims.y);
+                    if(!(pCol->isTrigger || pOther->isTrigger))
+                        nextPos.y = pOther->bottomY - (pCol->end.y * pCol->pTransform->dims.y);
+
                     pCol->onCollisionEnter(pOther);
                     pOther->onCollisionEnter(pCol);
                 }
