@@ -2,6 +2,8 @@
 #include "../include/game/ECS/Registry.hpp"
 #include "../include/game/ObjectManager.hpp"
 #include "../include/game/Spell.hpp"
+#include "../include/game/Player.hpp"
+#include "../include/game/Game.hpp"
 
 Enemy::Enemy() : Object()
 {
@@ -17,17 +19,22 @@ void Enemy::update(float time)
 
     if (_timeSincePathFind > _pathFindTime)
     {
-        _dir = -_dir;
+        _dir = (game.pPlayer->pos() - pTransform->pos).normalized();
         _timeSincePathFind = 0;
     }
     else
     {
         _timeSincePathFind += time;
-        pRigidbody->velocity = Vector2(2 * _dir, 0);
+        pRigidbody->velocity = _dir * _speed;
     }
 
     pHealth->pGreenRenderer->pTransform->pos = pTransform->pos + Vector2(0, pTransform->dims.y);
     pHealth->pRedRenderer->pTransform->pos = pHealth->pGreenRenderer->pTransform->pos;
+
+    if(_timeSinceHit < _hitCooldown)
+    {
+        _timeSinceHit += time;
+    }
 
     Object::update(time);
 }
@@ -37,4 +44,14 @@ void Enemy::kill()
     Object::kill();
 
     registry.killComponent(pHealth);
+}
+
+void Enemy::onCollisionEnter(Entity *pOther)
+{
+    if(pOther && pOther->getType() == "Player" && _timeSinceHit >= _hitCooldown)
+    {
+        Player *player = dynamic_cast<Player *>(pOther);
+        player->pHealth->damage(2);
+        _timeSinceHit = 0;
+    }
 }

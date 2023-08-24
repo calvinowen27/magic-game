@@ -47,7 +47,7 @@ protected:
     float lifeDur = 5; // seconds
     float aliveTime = 0;
 
-    float speed = 2; // m/s
+    float speed = 5; // m/s
 
     float damage = 4;
 

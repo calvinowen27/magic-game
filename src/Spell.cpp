@@ -69,11 +69,12 @@ void Spell::onCollisionEnter(Entity *pOther)
         if(Enemy *enemy = dynamic_cast<Enemy *>(pOther))
         {
             enemy->pHealth->damage(damage);
-            kill();
         }
         else
         {
             std::cerr << "Spell::onCollisionEnter() : failed to cast entity as enemy, incorrect type?\n";
         }
     }
+
+    kill();
 }
