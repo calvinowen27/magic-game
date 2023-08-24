@@ -27,7 +27,6 @@ class ContentManager;
 class KeyboardHandler;
 class MouseHandler;
 class WorldManager;
-class SpellManager;
 class Registry;
 class ComponentHandler;
 class TransformComponent;
@@ -55,7 +54,6 @@ public:
     UIManager *pUIManager;
     WorldManager *pWorldManager;
     ObjectManager *pObjectManager;
-    SpellManager *pSpellManager;
     Registry *pRegistry;
     ComponentHandler *pComponentHandler;
 

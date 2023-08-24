@@ -4,22 +4,26 @@
 #include "../../include/game/ECS/Registry.hpp"
 #include "../../include/game/ObjectManager.hpp"
 
-Entity::Entity(std::string type) : game(*Game::getInstance()), registry(*game.pRegistry), contentManager(*game.pContentManager), objectManager(*game.pObjectManager)
+Entity::Entity() : game(*Game::getInstance()), registry(*game.pRegistry), contentManager(*game.pContentManager), objectManager(*game.pObjectManager)
 {
-    this->type = type;
 }
 
-bool Entity::init(Vector2 pos)
+bool Entity::init(std::string type, Vector2 pos)
 {
+    this->type = type;
     alive = true;
 
     pTransform = registry.newComponent<TransformComponent>();
-    pTransform->init(pos);
-
     pRenderer = registry.newComponent<RendererComponent>();
+
+    pTransform->init(pos);
     pRenderer->init(type, pTransform);
 
     return true;
+}
+
+void Entity::update(float time)
+{
 }
 
 void Entity::kill()
@@ -28,9 +32,6 @@ void Entity::kill()
 
     registry.killComponent(pTransform);
     registry.killComponent(pRenderer);
-
-    // std::shared_ptr<Entity> thisEntity(this);
-    // objectManager.killEntity(thisEntity);
 }
 
 void Entity::onCollisionEnter(Entity *pOther)

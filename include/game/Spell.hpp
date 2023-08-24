@@ -32,13 +32,9 @@ enum class SpellAttribute
     Chain
 };
 
-class SpellManager;
-
 class Spell : public Entity
 {
 protected:
-    SpellManager &spellManager;
-
     shared_ptr<RigidbodyComponent> pRigidbody;
     shared_ptr<ColliderComponent> pCollider;
 

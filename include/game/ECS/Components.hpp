@@ -27,14 +27,18 @@ protected:
     Game &game;
     Registry &registry;
 
+    Entity *pEntity;
+
     bool enabled;
 
 public:
     Component();
     bool init();
+    virtual void kill();
+    void setEntity(Entity *pEntity);
     void enable() { enabled = true; }
     void disable() { enabled = false; }
-    virtual void kill();
+    bool isEnabled() { return enabled; }
 };
 
 class RendererComponent : public Component
@@ -86,8 +90,6 @@ public:
     shared_ptr<TransformComponent> pTransform;
     shared_ptr<RigidbodyComponent> pRigidbody;
 
-    Entity *pEntity;
-
     // positions of each border of collider
     float leftX;
     float rightX;
@@ -103,8 +105,9 @@ public:
     bool isTrigger = false;
 
     ColliderComponent();
-    ColliderComponent *init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, Entity *pEntity, bool doCollisions = true, bool isTrigger = false); // returns true if successful
+    ColliderComponent *init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions = true, bool isTrigger = false); // returns true if successful
     void update(float time);
+    void kill() override;
     void onCollisionEnter(std::shared_ptr<ColliderComponent> other);
     void onCollisionExit(std::shared_ptr<ColliderComponent> other);
     void whileTouching(std::shared_ptr<ColliderComponent> other);

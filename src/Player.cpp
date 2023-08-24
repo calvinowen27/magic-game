@@ -5,12 +5,13 @@
 
 std::map<SDL_Scancode, bool> inputState;
 
-Player::Player() : Object("Player")
+Player::Player() : Object()
 {
     _pKeyboardHandler = game.pKeyboardHandler;
     
     pHealth = registry.newComponent<HealthComponent>();
     pHealth->init(10);
+    pHealth->setEntity(this);
 }
 
 void Player::update(float time)
@@ -50,9 +51,7 @@ void Player::update(float time)
 
 void Player::kill()
 {
-    registry.killComponent(pRigidbody);
-    registry.killComponent(pCollider);
-    registry.killComponent(pHealth);
+    Object::kill();
 
-    Entity::kill();
+    registry.killComponent(pHealth);
 }

@@ -19,6 +19,12 @@ bool Component::init()
 
 void Component::kill()
 {
+    disable();
+}
+
+void Component::setEntity(Entity *pEntity)
+{
+    this->pEntity = pEntity;
 }
 
 /* RENDERER COMPONENT */
@@ -34,6 +40,7 @@ RendererComponent::~RendererComponent()
 RendererComponent *RendererComponent::init(string objType, shared_ptr<TransformComponent> pTransform, int renderOrder)
 {
     Component::init();
+
     pTexture = contentManager.getTextureFromType(objType);
     this->pTransform = pTransform;
     this->renderOrder = renderOrder;
@@ -82,6 +89,7 @@ TransformComponent::TransformComponent() : Component()
 TransformComponent *TransformComponent::init(Vector2 pos, Vector2 dims)
 {
     Component::init();
+
     this->pos = pos;
     this->dims = dims;
     pxDims = (Vector2Int)(dims * game.ppm);
@@ -116,14 +124,14 @@ ColliderComponent::ColliderComponent() : Component()
 {
 }
 
-ColliderComponent *ColliderComponent::init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, Entity *pEntity, bool doCollisions, bool isTrigger = false)
+ColliderComponent *ColliderComponent::init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions, bool isTrigger)
 {
     Component::init();
+
     this->start = start;
     this->end = end;
     this->pTransform = pTransform;
     this->pRigidbody = pRigidbody;
-    this->pEntity = pEntity;
 
     this->doCollisions = doCollisions;
     this->isTrigger = isTrigger;
@@ -131,12 +139,17 @@ ColliderComponent *ColliderComponent::init(Vector2 start, Vector2 end, shared_pt
     return this;
 }
 
+void ColliderComponent::kill()
+{
+    this->pEntity = nullptr;
+}
+
 void ColliderComponent::update(float time)
 {
     if (!enabled)
         return;
 
-    for(auto other : collidersTouching)
+    for (auto other : collidersTouching)
         whileTouching(other);
 
     leftX = pTransform->pos.x + (start.x * pTransform->dims.x);
@@ -147,26 +160,24 @@ void ColliderComponent::update(float time)
 
 void ColliderComponent::onCollisionEnter(std::shared_ptr<ColliderComponent> other)
 {
-    // collidersTouching.push_back(other);
-    collidersTouching.emplace(other);
-
-    if(pEntity != nullptr && other->pEntity != nullptr)
+    if (pEntity && other->pEntity)
         pEntity->onCollisionEnter(other->pEntity);
+
+    if (enabled && other->enabled)
+        collidersTouching.emplace(other);
 }
 
 void ColliderComponent::onCollisionExit(std::shared_ptr<ColliderComponent> other)
 {
-    // collidersTouching.erase(std::remove(collidersTouching.begin(), collidersTouching.end(), other), collidersTouching.end());
-
     collidersTouching.erase(other);
 
-    if(pEntity != nullptr && other->pEntity != nullptr)
+    if (pEntity && other->pEntity)
         pEntity->onCollisionExit(other->pEntity);
 }
 
 void ColliderComponent::whileTouching(std::shared_ptr<ColliderComponent> other)
 {
-    if(pEntity != nullptr && other->pEntity != nullptr)
+    if (pEntity && other->pEntity)
         pEntity->whileTouching(other->pEntity);
 }
 
@@ -183,6 +194,7 @@ RigidbodyComponent::RigidbodyComponent() : Component()
 RigidbodyComponent *RigidbodyComponent::init(shared_ptr<TransformComponent> pTransform, shared_ptr<ColliderComponent> pCollider, bool isStatic)
 {
     Component::init();
+
     this->pTransform = pTransform;
     this->pCollider = pCollider;
 
@@ -211,6 +223,8 @@ HealthComponent::HealthComponent() : Component()
 
 HealthComponent *HealthComponent::init(float baseHealth)
 {
+    Component::init();
+
     this->baseHealth = baseHealth;
     health = baseHealth;
 
@@ -245,6 +259,9 @@ bool HealthComponent::damage(float dmgAmount)
     {
         health = 0;
         pGreenRenderer->pTransform->dims.x = 0;
+        if(pEntity)
+            pEntity->kill();
+
         return true;
     }
 

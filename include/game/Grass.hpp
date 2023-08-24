@@ -7,13 +7,13 @@
 class Grass : public Object
 {
 public:
-    Grass() : Object("Grass")
+    Grass() : Object()
     {
     }
 
-    bool init(Vector2 pos) override
+    bool init(std::string type, Vector2 pos) override
     {
-        Object::init(pos);
+        Object::init(type, pos);
         pCollider->doCollisions = false;
         return true;
     }

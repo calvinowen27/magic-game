@@ -1,10 +1,13 @@
 #include "../include/game/Enemy.hpp"
 #include "../include/game/ECS/Registry.hpp"
+#include "../include/game/ObjectManager.hpp"
+#include "../include/game/Spell.hpp"
 
-Enemy::Enemy() : Object("Enemy")
+Enemy::Enemy() : Object()
 {
     pHealth = registry.newComponent<HealthComponent>();
     pHealth->init(10);
+    pHealth->setEntity(this);
 }
 
 void Enemy::update(float time)
@@ -31,9 +34,7 @@ void Enemy::update(float time)
 
 void Enemy::kill()
 {
-    registry.killComponent(pRigidbody);
-    registry.killComponent(pCollider);
-    registry.killComponent(pHealth);
+    Object::kill();
 
-    Entity::kill();
+    registry.killComponent(pHealth);
 }

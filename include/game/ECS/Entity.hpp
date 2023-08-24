@@ -27,8 +27,9 @@ protected:
     bool alive;
 
 public:
-    Entity(std::string type);
-    virtual bool init(Vector2 pos);
+    Entity();
+    virtual bool init(std::string type, Vector2 pos);
+    virtual void update(float time);
     virtual void kill();
 
     virtual void onCollisionEnter(Entity *pOther);

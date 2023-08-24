@@ -43,6 +43,9 @@ void ComponentHandler::updateColliders(float time)
     auto colliders = _registry.getComponents<ColliderComponent>();
     for (auto pCol : colliders)
     {
+        if(!pCol->isEnabled())
+            continue;
+
         pCol->update(time);
 
         Vector2 deltaPos = pCol->pRigidbody->velocity * time;
@@ -50,6 +53,9 @@ void ComponentHandler::updateColliders(float time)
 
         for (auto pOther : colliders)
         {
+            if(!pOther->isEnabled())
+                continue;
+
             if (pCol == pOther)
                 continue;
 
@@ -58,7 +64,8 @@ void ComponentHandler::updateColliders(float time)
 
             // skip if not touching
             if (pCol->leftX + deltaPos.x > pOther->rightX || pCol->rightX + deltaPos.x < pOther->leftX ||
-                pCol->bottomY + deltaPos.y > pOther->topY || pCol->topY + deltaPos.y < pOther->bottomY)
+                pCol->bottomY + deltaPos.y > pOther->topY || pCol->topY + deltaPos.y < pOther->bottomY ||
+                !pCol->isEnabled() || !pOther->isEnabled())
             {
                 if (pCol->isTouching(pOther) || pOther->isTouching(pCol))
                 {
@@ -73,9 +80,9 @@ void ComponentHandler::updateColliders(float time)
             {
                 if (pCol->leftX >= pOther->rightX && pCol->leftX + deltaPos.x < pOther->rightX)
                 {
-                    if(!(pCol->isTrigger || pOther->isTrigger))
+                    if (!(pCol->isTrigger || pOther->isTrigger))
                         nextPos.x = pOther->rightX - (pCol->start.x * pCol->pTransform->dims.x);
-                    
+
                     pCol->onCollisionEnter(pOther);
                     pOther->onCollisionEnter(pCol);
                 }
@@ -86,9 +93,9 @@ void ComponentHandler::updateColliders(float time)
             {
                 if (pCol->rightX <= pOther->leftX && pCol->rightX + deltaPos.x > pOther->leftX)
                 {
-                    if(!(pCol->isTrigger || pOther->isTrigger))
+                    if (!(pCol->isTrigger || pOther->isTrigger))
                         nextPos.x = pOther->leftX - (pCol->end.x * pCol->pTransform->dims.x);
-                    
+
                     pCol->onCollisionEnter(pOther);
                     pOther->onCollisionEnter(pCol);
                 }
@@ -99,20 +106,20 @@ void ComponentHandler::updateColliders(float time)
             {
                 if (pCol->bottomY >= pOther->topY && pCol->bottomY + deltaPos.y < pOther->topY)
                 {
-                    if(!(pCol->isTrigger || pOther->isTrigger))
+                    if (!(pCol->isTrigger || pOther->isTrigger))
                         nextPos.y = pOther->topY - (pCol->start.y * pCol->pTransform->dims.y);
-                    
+
                     pCol->onCollisionEnter(pOther);
                     pOther->onCollisionEnter(pCol);
                 }
             }
-
+            
             // this top and other bottom
             if (pCol->borderEnabled[3] && pOther->borderEnabled[2])
             {
                 if (pCol->topY <= pOther->bottomY && pCol->topY + deltaPos.y > pOther->bottomY)
                 {
-                    if(!(pCol->isTrigger || pOther->isTrigger))
+                    if (!(pCol->isTrigger || pOther->isTrigger))
                         nextPos.y = pOther->bottomY - (pCol->end.y * pCol->pTransform->dims.y);
 
                     pCol->onCollisionEnter(pOther);

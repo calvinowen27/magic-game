@@ -12,7 +12,6 @@
 #include "../include/game/WorldManager.hpp"
 #include "../include/game/ObjectManager.hpp"
 #include "../include/game/Spell.hpp"
-#include "../include/game/SpellManager.hpp"
 #include "../include/game/ECS/Registry.hpp"
 #include "../include/game/ECS/Components.hpp"
 #include "../include/game/ECS/ComponentHandler.hpp"
@@ -46,7 +45,6 @@ Game::~Game()
     delete pUIManager;
     delete pMouseHandler;
     delete pObjectManager;
-    delete pSpellManager;
     delete pRegistry;
     delete pComponentHandler;
 }
@@ -127,8 +125,6 @@ int Game::init()
     pWorldManager = WorldManager::getInstance();
     pWorldManager->loadWorld();
 
-    pSpellManager = SpellManager::getInstance();
-
     // pPlayer = new Player(Vector2(0, 1));
 
     return 0;
@@ -177,10 +173,10 @@ void Game::pollEvents()
             pKeyboardHandler->pushEvent(event);
         }
 
-        if(event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_F)
+        if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_F)
             pPlayer->pHealth->damage(1);
-        
-        if(event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_G)
+
+        if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_G)
             pPlayer->pHealth->heal(1);
 
         if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED)
@@ -204,7 +200,7 @@ void Game::pollEvents()
         {
             if (event.button.button == SDL_BUTTON_LEFT)
             {
-                pSpellManager->newSpell()->init(pPlayer->pos(), ((Vector2)(pMouseHandler->getMousePxPos() - pPlayer->pxPos())).normalized() * Vector2(1, -1), SpellElement::Ice, std::vector<SpellType>{SpellType::Projectile, SpellType::Radial, SpellType::Radial});
+                pObjectManager->newEntity<Spell>()->init(pPlayer->pos(), ((Vector2)(pMouseHandler->getMousePxPos() - pPlayer->pxPos())).normalized() * Vector2(1, -1), SpellElement::Ice, std::vector<SpellType>{SpellType::Projectile, SpellType::Radial, SpellType::Radial});
             }
         }
     }
@@ -260,9 +256,8 @@ void Game::physicsUpdate()
 
     pObjectManager->update(updateTime);
 
-    pSpellManager->update(updateTime);
-
-    cameraPos = pPlayer->pos() + Vector2(pPlayer->dims().x / 2, pPlayer->dims().y / 2);
+    if (pPlayer != nullptr && pPlayer->isAlive())
+        cameraPos = pPlayer->pos() + Vector2(pPlayer->dims().x / 2, pPlayer->dims().y / 2);
 
     execTime = duration_cast<nanoseconds>(high_resolution_clock::now() - startTime);
 

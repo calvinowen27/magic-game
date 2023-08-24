@@ -10,6 +10,7 @@ using std::string;
 class Game;
 class Object;
 class ObjectManager;
+class Entity;
 
 class WorldManager
 {
@@ -22,7 +23,7 @@ private:
     Game &_game;
     ObjectManager &_objectManager;
 
-    shared_ptr<Object> _worldMap[WORLD_SIZE][WORLD_SIZE];
+    shared_ptr<Entity> _worldMap[WORLD_SIZE][WORLD_SIZE];
 
     string _filePath = "./world/world.txt";
 

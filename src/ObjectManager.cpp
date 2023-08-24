@@ -36,15 +36,23 @@ void ObjectManager::init()
 void ObjectManager::update(float time)
 {
     // obj.update();
-    for (auto obj : _pInstance->_objects)
+    std::vector<shared_ptr<Entity>> deadEntities;
+
+    for (auto entity : _entities)
     {
-        obj->update(time);
+        if (entity->isAlive())
+            entity->update(time);
+        else
+            deadEntities.push_back(entity);
     }
+
+    for (auto entity : deadEntities)
+        killEntity(entity);
 }
 
 std::vector<Vector2> ObjectManager::getCollider(std::string objType)
 {
-    if(!_colliderData["colliders"].contains(objType))
+    if (!_colliderData["colliders"].contains(objType))
     {
         std::cerr << "Invalid objType '" << objType << "'. Returning {Vector2(0, 0), Vector2(1, 0.5)}." << std::endl;
         return std::vector<Vector2>{Vector2::zero, Vector2(1, 0.5)};

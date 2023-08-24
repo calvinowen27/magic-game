@@ -25,6 +25,7 @@ private:
     Game &_game;
 
     std::vector<std::shared_ptr<Object>> _objects;
+    std::set<std::shared_ptr<Entity>> _entities;
 
     std::string _colliderDataPath = "./data/colliders.json";
     json _colliderData;
@@ -39,15 +40,6 @@ public:
     std::vector<Vector2> getCollider(std::string objType);
 
     template <typename T>
-    std::shared_ptr<T> newObj()
-    {
-        auto obj = std::make_shared<T>();
-        _objects.push_back(obj);
-        // _objects.emplace(obj);
-        return obj;
-    }
-
-    template <typename T>
     std::shared_ptr<T> newEntity()
     {
         // do not use entity creation function if type is not a entity
@@ -56,13 +48,23 @@ public:
             throw new std::invalid_argument("ObjectManager::newEntity<Type>() : Type must be derived from Entity class.");
         }
 
-        return TypePool<T>::getInstance()->instantiate();
+        std::shared_ptr<T> entity = TypePool<T>::getInstance()->instantiate();
+        _entities.emplace(entity);
+        return entity;
     }
 
     template <typename T>
     void killEntity(std::shared_ptr<T> pEntity)
     {
-        TypePool<T>::getInstance()->release(pEntity);
+        // do not use entity kill function if type is not a entity
+        if (!std::is_base_of<Entity, T>::value)
+        {
+            throw new std::invalid_argument("ObjectManager::killEntity<Type>() : Type must be derived from Entity class.");
+        }
+
+        _entities.erase(pEntity);
+        auto pool = TypePool<T>::getInstance();
+        pool->release(pEntity);
     }
 };
 

@@ -41,7 +41,7 @@ $(UI_DIR_O)/%.o: $(UI_DIR)/%.cpp $(INCLUDE_UI)/%.hpp
 
 .PHONY: clean
 clean:
-	rm -f $(DBG_DIR)/$(EXECUTABLE) $(SRC_OBJS) $(ECS_OBJS)
+	rm -f $(DBG_DIR)/$(EXECUTABLE) $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS)
 
 make_dirs:
 	mkdir -p $(BUILD_DIR)

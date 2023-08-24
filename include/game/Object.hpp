@@ -18,9 +18,10 @@ protected:
     std::shared_ptr<ColliderComponent> pCollider;
 
 public:
-    Object(std::string objType);
-    bool init(Vector2 pos) override;
-    virtual void update(float time);
+    Object();
+    bool init(std::string type, Vector2 pos) override;
+    void update(float time) override;
+    void kill() override;
 
     inline std::string getType() { return type; }
     inline Vector2 getVelocity() { return pRigidbody->velocity; }

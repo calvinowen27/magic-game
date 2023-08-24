@@ -6,6 +6,7 @@
 #include "../include/game/Enemy.hpp"
 #include "../include/game/Game.hpp"
 #include "../include/game/ObjectManager.hpp"
+#include "../include/game/ECS/Entity.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -64,22 +65,20 @@ void WorldManager::loadWorld()
             switch (line[i])
             {
             case '#':
-                // _worldMap[x][y] = new Wall(pos);
-                _worldMap[x][y] = _objectManager.newObj<Wall>();
-                _worldMap[x][y]->init(pos);
+                _worldMap[x][y] = _objectManager.newEntity<Wall>();
+                _worldMap[x][y]->init("Wall", pos);
                 break;
             case ',':
-                // _worldMap[x][y] = new Grass(pos);
-                _worldMap[x][y] = _objectManager.newObj<Grass>();
-                _worldMap[x][y]->init(pos);
+                _worldMap[x][y] = _objectManager.newEntity<Grass>();
+                _worldMap[x][y]->init("Grass", pos);
                 break;
             case '@':
-                // _game.pPlayer = new Player(pos);
-                _game.pPlayer = _objectManager.newObj<Player>();
-                _game.pPlayer->init(pos);
+                _game.pPlayer = _objectManager.newEntity<Player>();
+                _game.pPlayer->init("Player", pos);
                 break;
             case '!':
-                _objectManager.newObj<Enemy>()->init(pos);
+                _objectManager.newEntity<Enemy>()->init("Enemy", pos);
+                break;
             }
         }
 
@@ -87,7 +86,7 @@ void WorldManager::loadWorld()
         y++;
     }
 
-    shared_ptr<Object> obj;
+    shared_ptr<Entity> entity;
 
     for (i = 0; i < WORLD_SIZE; i++)
     {
@@ -96,21 +95,31 @@ void WorldManager::loadWorld()
             if (_worldMap[i][j] == nullptr)
                 continue;
 
-            obj = _worldMap[i][j];
+            entity = _worldMap[i][j];
 
-            if (obj->getType() == "Wall")
+            if (entity->getType() == "Wall")
             {
+                auto wall = std::static_pointer_cast<Wall>(entity);
+
                 if (i > 0 && _worldMap[i - 1][j] != nullptr && _worldMap[i - 1][j]->getType() == "Wall")
-                    obj->getCollider()->borderEnabled[0] = 0;
+                {
+                    wall->getCollider()->borderEnabled[0] = 0;
+                }
 
                 if (i < WORLD_SIZE - 1 && _worldMap[i + 1][j] != nullptr && _worldMap[i + 1][j]->getType() == "Wall")
-                    obj->getCollider()->borderEnabled[1] = 0;
+                {
+                    wall->getCollider()->borderEnabled[1] = 0;
+                }
 
                 if (j > 0 && _worldMap[i][j - 1] != nullptr && _worldMap[i][j - 1]->getType() == "Wall")
-                    obj->getCollider()->borderEnabled[2] = 0;
+                {
+                    wall->getCollider()->borderEnabled[2] = 0;
+                }
 
                 if (j < WORLD_SIZE - 1 && _worldMap[i][j + 1] != nullptr && _worldMap[i][j + 1]->getType() == "Wall")
-                    obj->getCollider()->borderEnabled[3] = 0;
+                {
+                    wall->getCollider()->borderEnabled[3] = 0;
+                }
             }
         }
     }
