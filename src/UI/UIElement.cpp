@@ -7,13 +7,9 @@ UIElement::UIElement() : _game(*Game::getInstance()), _contentManager(*_game.pCo
 {
 }
 
-UIElement::~UIElement()
-{
-    SDL_DestroyTexture(_pTexture);
-}
-
 bool UIElement::init(std::string textureName, Vector2 relativePos, Vector2 relativeDims)
 {
+    enabled = true;
     _pTexture = _contentManager.getTexture(textureName);
 
     _relativePos = relativePos;

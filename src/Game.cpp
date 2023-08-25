@@ -121,6 +121,8 @@ int Game::init()
 
     pUIManager = UIManager::getInstance();
     pUIManager->init();
+    if(pUIManager->isSpellUIEnabled())
+        pUIManager->toggleSpellUI();
 
     pObjectManager = ObjectManager::getInstance();
     pObjectManager->init();
@@ -182,6 +184,12 @@ void Game::pollEvents()
         if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_G)
             pPlayer->pHealth->heal(1);
 
+        if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_C)
+        {
+            if(pUIManager->toggleSpellUI())
+                pSpellManager->killCurrSpell();
+        }
+
         if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED)
         {
             SDL_Window *win = SDL_GetWindowFromID(event.window.windowID);
@@ -201,12 +209,13 @@ void Game::pollEvents()
 
         if (event.type == SDL_MOUSEBUTTONUP)
         {
-            if (event.button.button == SDL_BUTTON_LEFT)
+            if (event.button.button == SDL_BUTTON_LEFT && !pUIManager->isSpellUIEnabled())
             {
                 // pObjectManager->newEntity<Spell>()->init(pPlayer->getPos(), ((Vector2)(pMouseHandler->getMousePxPos() - pPlayer->getPxPos())).normalized() * Vector2(1, -1), SpellElement::Ice);
-                auto spell = pSpellManager->newSpell<RadialSpell>();
-                spell->init(pPlayer->getPos() + (pPlayer->getDims() / 2), SpellElement::Ice, 3, 1);
-                pSpellManager->getCurrSpell()->cast();
+                // auto spell = pSpellManager->newSpell<RadialSpell>();
+                // spell->init(pPlayer->getPos() + (pPlayer->getDims() / 2), SpellElement::Ice, 3, 1);
+                if (pSpellManager->getCurrSpell())
+                    pSpellManager->getCurrSpell()->cast();
             }
         }
     }

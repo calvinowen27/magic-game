@@ -19,7 +19,7 @@ class UIElement
         Game &_game;
         UIManager &_uiManager;
         ContentManager &_contentManager;
-        
+
         Vector2 _relativePos;
         Vector2 _relativeDims;
         Vector2Int _pxPos;
@@ -28,12 +28,18 @@ class UIElement
         SDL_Texture *_pTexture;
         SDL_Rect _drawRect;
 
+        bool enabled = false;
+
     public:
         UIElement();
-        ~UIElement();
         bool init(std::string textureName, Vector2 relativePos, Vector2 relativeDims);
         virtual void draw(SDL_Renderer* pRenderer);
         virtual void update();
+
+        inline void enable() { enabled = true; }
+        inline void disable() { enabled = false; }
+        inline void setEnabled(bool val) { enabled = val; }
+        inline bool isEnabled() { return enabled; }
 };
 
 #endif

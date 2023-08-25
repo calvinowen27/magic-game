@@ -26,12 +26,12 @@ public:
     template <typename T>
     std::shared_ptr<T> newSpell()
     {
-        if(!std::is_base_of<Spell, T>::value)
+        if (!std::is_base_of<Spell, T>::value)
         {
-            throw new std::invalid_argument("SpellManager::newSpell<Type>() : Type must be derived from Spell class.");       
+            throw new std::invalid_argument("SpellManager::newSpell<Type>() : Type must be derived from Spell class.");
         }
 
-        if(_pCurrSpell)
+        if (_pCurrSpell)
             _pCurrSpell->kill();
 
         std::shared_ptr<T> spell = _game.pObjectManager->newEntity<T>();
@@ -41,6 +41,11 @@ public:
     }
 
     inline std::shared_ptr<Spell> getCurrSpell() { return _pCurrSpell; }
+    inline void killCurrSpell()
+    {
+        if (_pCurrSpell)
+            _pCurrSpell->kill();
+    }
 };
 
 #endif

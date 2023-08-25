@@ -16,6 +16,8 @@ bool Enemy::init(EntityType entityType, Vector2 pos)
     pHealth = registry.newComponent<HealthComponent>();
     pHealth->init(10);
     pHealth->setEntity(this);
+
+    return true;
 }
 
 void Enemy::update(float time)

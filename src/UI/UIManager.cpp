@@ -2,6 +2,7 @@
 #include "../../include/game/Player.hpp"
 #include "../../include/game/Game.hpp"
 #include "../../include/game/UI/Button.hpp"
+#include "../../include/game/Spells/SpellManager.hpp"
 
 #include <cmath>
 
@@ -21,6 +22,13 @@ UIManager* UIManager::getInstance()
     return _pInstance;
 }
 
+void UIManager::newRadial()
+{
+    auto &game = *Game::getInstance();
+    auto spell = game.pSpellManager->newSpell<RadialSpell>();
+    spell->init(game.pPlayer->getPos() + (game.pPlayer->getDims() / 2), SpellElement::Ice, 3, 1);
+}
+
 void UIManager::init()
 {
     _pFPScounter = newUIElement<TextElement>();
@@ -37,6 +45,10 @@ void UIManager::init()
     
     _pVelDisplay = newUIElement<TextElement>();
     _pVelDisplay->init("ui_text_back", "Velocity: ", "arial", WHITE, Vector2(0.7, 0.026), Vector2(0.3, 0.025));
+
+    auto radialButton = newUIElement<Button>();
+    _spellUI.emplace(radialButton);
+    radialButton->init("radial_spell_button", "", "", WHITE, Vector2(0.5f, 0.25f), Vector2(0.05, 0.075), UIManager::newRadial);
 }
 
 void UIManager::update()
@@ -50,7 +62,8 @@ void UIManager::update()
     // el.update()
     for(auto el : _uiElements)
     {
-        el->update();
+        if(el->isEnabled())
+            el->update();
     }
 }
 
@@ -59,6 +72,7 @@ void UIManager::draw(SDL_Renderer *pRenderer)
     // el.draw();
     for(auto el : _uiElements)
     {
-        el->draw(pRenderer);
+        if(el->isEnabled())
+            el->draw(pRenderer);
     }
 }
