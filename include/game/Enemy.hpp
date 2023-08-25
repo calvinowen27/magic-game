@@ -13,6 +13,7 @@ private:
 
     float _timeSinceHit = 0;
     float _hitCooldown = 1;
+    float _damage = 2;
 
 public:
     std::shared_ptr<HealthComponent> pHealth;

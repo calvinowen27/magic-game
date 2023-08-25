@@ -53,7 +53,7 @@ void ComponentHandler::updateColliders(float time)
 
         for (auto pOther : colliders)
         {
-            if(!pOther->isEnabled())
+            if(!pOther->isEnabled() || !pCol->isEnabled())
                 continue;
 
             if (pCol == pOther)

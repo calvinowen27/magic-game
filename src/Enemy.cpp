@@ -51,7 +51,7 @@ void Enemy::onCollisionEnter(Entity *pOther)
     if(pOther && pOther->getType() == "Player" && _timeSinceHit >= _hitCooldown)
     {
         Player *player = dynamic_cast<Player *>(pOther);
-        player->pHealth->damage(2);
+        player->pHealth->damage(_damage);
         _timeSinceHit = 0;
     }
 }
