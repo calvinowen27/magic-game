@@ -1,6 +1,6 @@
 #include "../include/game/MouseHandler.hpp"
 #include "../include/game/Game.hpp"
-#include "../include/game/Spell.hpp"
+#include "../include/game/Spells/Spell.hpp"
 #include "../include/game/Player.hpp"
 
 MouseHandler::MouseHandler() : _game(*Game::getInstance())

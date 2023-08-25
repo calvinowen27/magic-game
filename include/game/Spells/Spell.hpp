@@ -1,8 +1,8 @@
 #ifndef SPELL_INCLUDE
 #define SPELL_INCLUDE
 
-#include "Vector2.hpp"
-#include "ECS/Entity.hpp"
+#include "../Vector2.hpp"
+#include "../ECS/Entity.hpp"
 
 #include <string>
 #include <vector>

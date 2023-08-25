@@ -1,4 +1,4 @@
-#include "../include/game/Spell.hpp"
+#include "../include/game/Spells/Spell.hpp"
 #include "../include/game/Game.hpp"
 #include "../include/game/Enemy.hpp"
 #include "../include/game/ObjectManager.hpp"

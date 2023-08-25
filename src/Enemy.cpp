@@ -1,7 +1,7 @@
 #include "../include/game/Enemy.hpp"
 #include "../include/game/ECS/Registry.hpp"
 #include "../include/game/ObjectManager.hpp"
-#include "../include/game/Spell.hpp"
+#include "../include/game/Spells/Spell.hpp"
 #include "../include/game/Player.hpp"
 #include "../include/game/Game.hpp"
 

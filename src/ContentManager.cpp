@@ -1,5 +1,6 @@
 #include "../include/game/ContentManager.hpp"
 #include "../include/game/Game.hpp"
+
 #include <filesystem>
 
 ContentManager::ContentManager() : _game(*Game::getInstance())
@@ -75,7 +76,7 @@ void ContentManager::loadFonts()
             return;
         }
 
-        _fonts.insert({currPath, font});
+        _fonts.insert({currPath.substr(0, currPath.length() - 4), font});
     }
 }
 

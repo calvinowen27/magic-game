@@ -1,4 +1,5 @@
 #include "../include/game/Vector2.hpp"
+
 #include <cmath>
 #include <sstream>
 

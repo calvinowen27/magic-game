@@ -11,7 +11,7 @@
 #include "../include/game/ContentManager.hpp"
 #include "../include/game/WorldManager.hpp"
 #include "../include/game/ObjectManager.hpp"
-#include "../include/game/Spell.hpp"
+#include "../include/game/Spells/Spell.hpp"
 #include "../include/game/ECS/Registry.hpp"
 #include "../include/game/ECS/Components.hpp"
 #include "../include/game/ECS/ComponentHandler.hpp"
