@@ -30,6 +30,7 @@ class WorldManager;
 class Registry;
 class ComponentHandler;
 class TransformComponent;
+class SpellManager;
 
 using std::shared_ptr;
 
@@ -56,6 +57,7 @@ public:
     ObjectManager *pObjectManager;
     Registry *pRegistry;
     ComponentHandler *pComponentHandler;
+    SpellManager *pSpellManager;
 
     shared_ptr<Player> pPlayer;
 

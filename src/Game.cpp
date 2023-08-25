@@ -16,6 +16,7 @@
 #include "../include/game/ECS/Registry.hpp"
 #include "../include/game/ECS/Components.hpp"
 #include "../include/game/ECS/ComponentHandler.hpp"
+#include "../include/game/Spells/SpellManager.hpp"
 
 #include <thread>
 #include <chrono>
@@ -48,6 +49,7 @@ Game::~Game()
     delete pObjectManager;
     delete pRegistry;
     delete pComponentHandler;
+    delete pSpellManager;
 }
 
 Game *Game::getInstance()
@@ -126,7 +128,7 @@ int Game::init()
     pWorldManager = WorldManager::getInstance();
     pWorldManager->loadWorld();
 
-    // pPlayer = new Player(Vector2(0, 1));
+    pSpellManager = new SpellManager();
 
     return 0;
 }
@@ -202,9 +204,9 @@ void Game::pollEvents()
             if (event.button.button == SDL_BUTTON_LEFT)
             {
                 // pObjectManager->newEntity<Spell>()->init(pPlayer->getPos(), ((Vector2)(pMouseHandler->getMousePxPos() - pPlayer->getPxPos())).normalized() * Vector2(1, -1), SpellElement::Ice);
-                auto spell = pObjectManager->newEntity<RadialSpell>();
+                auto spell = pSpellManager->newSpell<RadialSpell>();
                 spell->init(pPlayer->getPos() + (pPlayer->getDims() / 2), SpellElement::Ice, 3, 1);
-                spell->cast();
+                pSpellManager->getCurrSpell()->cast();
             }
         }
     }
