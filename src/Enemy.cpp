@@ -7,6 +7,12 @@
 
 Enemy::Enemy() : Object()
 {
+}
+
+bool Enemy::init(EntityType entityType, Vector2 pos)
+{
+    Object::init(entityType, pos);
+
     pHealth = registry.newComponent<HealthComponent>();
     pHealth->init(10);
     pHealth->setEntity(this);

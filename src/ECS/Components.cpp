@@ -245,7 +245,7 @@ HealthComponent *HealthComponent::init(float baseHealth)
     pRedTransform->init(Vector2::zero);
 
     auto pGreenTransform = registry.newComponent<TransformComponent>();
-    pGreenTransform->init(Vector2::zero);
+    pGreenTransform->init(Vector2(1, 1));
 
     pRedRenderer = registry.newComponent<RendererComponent>();
     pRedRenderer->init("red_bar", pRedTransform, -1);

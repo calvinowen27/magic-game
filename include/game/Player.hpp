@@ -16,6 +16,7 @@ public:
     std::shared_ptr<HealthComponent> pHealth;
 
     Player();
+    bool init(EntityType entityType, Vector2 pos) override;
     void update(float time) override;
     void kill() override;
 };
