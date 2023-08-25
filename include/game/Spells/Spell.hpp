@@ -44,17 +44,18 @@ protected:
 
     float speed = 5; // m/s
 
-    float damage = 4;
+    float damage = 2;
 
 public:
     Spell();
-    bool init(Vector2 pos, Vector2 dir, SpellElement element);
-    void update(float time);
+    virtual bool init(EntityType type, Vector2 pos, Vector2 dir, SpellElement element, float damage, float lifeDur);
+    virtual void update(float time);
+    virtual void cast();
+    virtual void hit(Entity *pEntity);
+
     void kill() override;
 
-    void cast();
-
-    void onCollisionEnter(Entity *pOther) override;
+    virtual void onCollisionEnter(Entity *pEntity) override;
 };
 
 #endif

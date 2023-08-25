@@ -12,6 +12,7 @@ enum class EntityType
     Player,
     Enemy,
     Spell,
+    RadialSpell,
     Wall,
     Grass
 };

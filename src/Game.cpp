@@ -12,6 +12,7 @@
 #include "../include/game/WorldManager.hpp"
 #include "../include/game/ObjectManager.hpp"
 #include "../include/game/Spells/Spell.hpp"
+#include "../include/game/Spells/RadialSpell.hpp"
 #include "../include/game/ECS/Registry.hpp"
 #include "../include/game/ECS/Components.hpp"
 #include "../include/game/ECS/ComponentHandler.hpp"
@@ -200,7 +201,10 @@ void Game::pollEvents()
         {
             if (event.button.button == SDL_BUTTON_LEFT)
             {
-                pObjectManager->newEntity<Spell>()->init(pPlayer->getPos(), ((Vector2)(pMouseHandler->getMousePxPos() - pPlayer->getPxPos())).normalized() * Vector2(1, -1), SpellElement::Ice);
+                // pObjectManager->newEntity<Spell>()->init(pPlayer->getPos(), ((Vector2)(pMouseHandler->getMousePxPos() - pPlayer->getPxPos())).normalized() * Vector2(1, -1), SpellElement::Ice);
+                auto spell = pObjectManager->newEntity<RadialSpell>();
+                spell->init(pPlayer->getPos() + (pPlayer->getDims() / 2), SpellElement::Ice, 3, 1);
+                spell->cast();
             }
         }
     }
@@ -210,12 +214,9 @@ void Game::frameUpdate()
 {
     using namespace std::chrono;
     float frameTime = 1 / (float)TARGET_FPS;
-    system_clock::time_point startTime;
     nanoseconds timeDiff((int)(frameTime * 1000000000));
-    nanoseconds execTime;
-    nanoseconds sleepTime;
 
-    startTime = high_resolution_clock::now();
+    auto startTime = high_resolution_clock::now();
 
     pollEvents();
 
@@ -225,10 +226,10 @@ void Game::frameUpdate()
 
     draw();
 
-    execTime = duration_cast<nanoseconds>(high_resolution_clock::now() - startTime);
+    auto execTime = duration_cast<nanoseconds>(high_resolution_clock::now() - startTime);
 
     // sleep for any extra time we have in the update
-    sleepTime = timeDiff - execTime;
+    auto sleepTime = timeDiff - execTime;
 
     std::lock_guard<std::mutex> guard(_mutex);
 
@@ -243,12 +244,9 @@ void Game::physicsUpdate()
     using namespace std::chrono;
     float updateTime = 1 / (float)TARGET_UPS; // seconds
 
-    system_clock::time_point startTime;
     nanoseconds timeDiff((int)(updateTime * 1000000000)); // convert updateTime to nanoseconds
-    nanoseconds execTime;
-    nanoseconds sleepTime;
 
-    startTime = high_resolution_clock::now();
+    auto startTime = high_resolution_clock::now();
 
     pKeyboardHandler->processInputs();
 
@@ -259,10 +257,10 @@ void Game::physicsUpdate()
     if (pPlayer != nullptr && pPlayer->isAlive())
         cameraPos = pPlayer->getPos() + Vector2(pPlayer->getDims().x / 2, pPlayer->getDims().y / 2);
 
-    execTime = duration_cast<nanoseconds>(high_resolution_clock::now() - startTime);
+    auto execTime = duration_cast<nanoseconds>(high_resolution_clock::now() - startTime);
 
     // sleep for any extra time we have in the update
-    sleepTime = timeDiff - execTime;
+    auto sleepTime = timeDiff - execTime;
 
     std::lock_guard<std::mutex> guard(_mutex);
 

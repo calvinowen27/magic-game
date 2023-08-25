@@ -9,7 +9,8 @@ std::map<EntityType, std::string> Entity::_stringFromType = {
     {EntityType::Enemy, "Enemy"},
     {EntityType::Wall, "Wall"},
     {EntityType::Grass, "Grass"},
-    {EntityType::Spell, "Spell"}
+    {EntityType::Spell, "Spell"},
+    {EntityType::RadialSpell, "RadialSpell"}
 };
 
 Entity::Entity() : game(*Game::getInstance()), registry(*game.pRegistry), contentManager(*game.pContentManager), objectManager(*game.pObjectManager)

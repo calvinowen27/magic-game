@@ -9,13 +9,14 @@ Spell::Spell() : Entity()
 {
 }
 
-bool Spell::init(Vector2 pos, Vector2 dir, SpellElement element)
+bool Spell::init(EntityType type, Vector2 pos, Vector2 dir, SpellElement element, float damage, float lifeDur)
 {
-    Entity::init(EntityType::Spell, pos);
+    Entity::init(type, pos);
 
-    this->element = element;
     this->dir = dir;
-    isCast = true;
+    this->element = element;
+    this->damage = damage;
+    this->lifeDur = lifeDur;
     aliveTime = 0;
 
     pCollider = registry.newComponent<ColliderComponent>();
@@ -23,24 +24,38 @@ bool Spell::init(Vector2 pos, Vector2 dir, SpellElement element)
 
     pCollider->init(Vector2::zero, Vector2(1, 1), pTransform, pRigidbody, true, true);
     pCollider->setEntity(this);
+    pCollider->disable();
     pRigidbody->init(pTransform, pCollider);
+    pRenderer->disable();
 
     return true;
 }
 
 void Spell::update(float time)
 {
-    if(isCast && alive)
+    if(!isCast || !alive)
+        return;
+    
+    if(aliveTime < lifeDur)
     {
-        if(aliveTime < lifeDur)
-        {
-            aliveTime += time;
-            pRigidbody->velocity = dir * speed;
-        }
-        else
-        {
-            kill();
-        }
+        aliveTime += time;
+        pRigidbody->velocity = dir * speed;
+    }
+    else
+    {
+        kill();
+    }
+}
+
+void Spell::hit(Entity *pEntity)
+{
+    if(Enemy *enemy = dynamic_cast<Enemy *>(pEntity))
+    {
+        enemy->pHealth->damage(damage);
+    }
+    else
+    {
+        std::cerr << "Spell::onCollisionEnter() : failed to cast entity as enemy, incorrect type?\n";
     }
 }
 
@@ -57,22 +72,17 @@ void Spell::kill()
 void Spell::cast()
 {
     isCast = true;
+    pCollider->enable();
+    pRenderer->enable();
 }
 
-void Spell::onCollisionEnter(Entity *pOther)
+void Spell::onCollisionEnter(Entity *pEntity)
 {
-    Entity::onCollisionEnter(pOther);
+    Entity::onCollisionEnter(pEntity);
 
-    if(pOther && pOther->getType() == EntityType::Enemy)
+    if(alive && isCast && pEntity && pEntity->getType() == EntityType::Enemy)
     {
-        if(Enemy *enemy = dynamic_cast<Enemy *>(pOther))
-        {
-            enemy->pHealth->damage(damage);
-        }
-        else
-        {
-            std::cerr << "Spell::onCollisionEnter() : failed to cast entity as enemy, incorrect type?\n";
-        }
+        hit(pEntity);
     }
 
     kill();

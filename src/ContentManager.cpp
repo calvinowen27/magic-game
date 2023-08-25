@@ -56,6 +56,7 @@ void ContentManager::loadTextures()
     _textureFromType[EntityType::Enemy] = _textureFromName["enemy"];
     _textureFromType[EntityType::Grass] = _textureFromName["grass"];
     _textureFromType[EntityType::Spell] = _textureFromName["ice_spell"];
+    _textureFromType[EntityType::RadialSpell] = _textureFromName["radial_spell"];
 }
 
 void ContentManager::loadFonts()

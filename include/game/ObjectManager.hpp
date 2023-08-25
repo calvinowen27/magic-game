@@ -36,6 +36,7 @@ public:
     static ObjectManager *getInstance();
     void init();
     void update(float time);
+    inline std::set<std::shared_ptr<Entity>> getEntities() { return _entities; }
 
     std::vector<Vector2> getCollider(EntityType entityType);
 
