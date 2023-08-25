@@ -64,8 +64,7 @@ void ComponentHandler::updateColliders(float time)
 
             // skip if not touching
             if (pCol->leftX + deltaPos.x > pOther->rightX || pCol->rightX + deltaPos.x < pOther->leftX ||
-                pCol->bottomY + deltaPos.y > pOther->topY || pCol->topY + deltaPos.y < pOther->bottomY ||
-                !pCol->isEnabled() || !pOther->isEnabled())
+                pCol->bottomY + deltaPos.y > pOther->topY || pCol->topY + deltaPos.y < pOther->bottomY)
             {
                 if (pCol->isTouching(pOther) || pOther->isTouching(pCol))
                 {
