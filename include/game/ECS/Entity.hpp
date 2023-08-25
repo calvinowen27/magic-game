@@ -5,6 +5,16 @@
 #include "../Vector2.hpp"
 
 #include <string>
+#include <map>
+
+enum class EntityType
+{
+    Player,
+    Enemy,
+    Spell,
+    Wall,
+    Grass
+};
 
 class Game;
 class ContentManager;
@@ -13,13 +23,16 @@ class ObjectManager;
 
 class Entity
 {
+private:
+    static std::map<EntityType, std::string> _stringFromType;
+
 protected:
     Game &game;
     ObjectManager &objectManager;
     ContentManager &contentManager;
     Registry &registry;
 
-    std::string type;
+    EntityType type;
 
     std::shared_ptr<RendererComponent> pRenderer;
     std::shared_ptr<TransformComponent> pTransform;
@@ -28,7 +41,7 @@ protected:
 
 public:
     Entity();
-    virtual bool init(std::string type, Vector2 pos);
+    virtual bool init(EntityType type, Vector2 pos);
     virtual void update(float time);
     virtual void kill();
 
@@ -36,8 +49,13 @@ public:
     virtual void onCollisionExit(Entity *pOther);
     virtual void whileTouching(Entity *pOther);
 
-    inline std::string getType() { return type; }
+    inline EntityType getType() { return type; }
+    inline Vector2 getPos() { return pTransform->pos; }
+    inline Vector2Int getPxPos() { return pTransform->pxPos; }
+    inline Vector2 getDims() { return pTransform->dims; }
+    inline Vector2Int getPxDims() { return pTransform->pxDims; }
     inline bool isAlive() { return alive; }
+    inline static std::string getStringFromType(EntityType entityType) { return _stringFromType[entityType]; }
 };
 
 #endif

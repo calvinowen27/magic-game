@@ -19,16 +19,11 @@ protected:
 
 public:
     Object();
-    bool init(std::string type, Vector2 pos) override;
+    bool init(EntityType entityType, Vector2 pos) override;
     void update(float time) override;
     void kill() override;
 
-    inline std::string getType() { return type; }
     inline Vector2 getVelocity() { return pRigidbody->velocity; }
-    inline Vector2 pos() { return pTransform->pos; }
-    inline Vector2Int pxPos() { return pTransform->pxPos; }
-    inline Vector2 dims() { return pTransform->dims; }
-    inline Vector2Int pxDims() { return pTransform->pxDims; }
     inline std::shared_ptr<ColliderComponent> getCollider() { return pCollider; }
 };
 

@@ -37,7 +37,7 @@ public:
     void init();
     void update(float time);
 
-    std::vector<Vector2> getCollider(std::string objType);
+    std::vector<Vector2> getCollider(EntityType entityType);
 
     template <typename T>
     std::shared_ptr<T> newEntity()

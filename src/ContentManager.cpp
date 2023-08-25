@@ -22,7 +22,7 @@ void ContentManager::loadTextures()
 {
     using recursive_directory_iterator = std::filesystem::recursive_directory_iterator;
 
-    _textures.insert({"", nullptr});
+    _textureFromName.insert({"", nullptr});
 
     SDL_Surface *pSurface;
     SDL_Texture *pTexture;
@@ -43,18 +43,18 @@ void ContentManager::loadTextures()
             return;
         }
 
-        _textures.insert({dirEntry.path().filename().string(), pTexture});
+        std::string fileName = dirEntry.path().filename().string();
+
+        _textureFromName.insert({fileName.substr(0, fileName.length() - 4), pTexture});
 
         SDL_FreeSurface(pSurface);
     }
 
-    _typeTextures["Wall"] = _textures["wall.png"];
-    _typeTextures["Player"] = _textures["player.png"];
-    _typeTextures["Enemy"] = _textures["enemy.png"];
-    _typeTextures["Grass"] = _textures["grass.png"];
-    _typeTextures["Spell"] = _textures["ice_spell.png"];
-    _typeTextures["red_bar"] = _textures["red_bar.png"];
-    _typeTextures["green_bar"] = _textures["green_bar.png"];
+    _textureFromType[EntityType::Wall] = _textureFromName["wall"];
+    _textureFromType[EntityType::Player] = _textureFromName["player"];
+    _textureFromType[EntityType::Enemy] = _textureFromName["enemy"];
+    _textureFromType[EntityType::Grass] = _textureFromName["grass"];
+    _textureFromType[EntityType::Spell] = _textureFromName["ice_spell"];
 }
 
 void ContentManager::loadFonts()
@@ -88,7 +88,7 @@ void ContentManager::destroyContent()
 void ContentManager::destroyTextures()
 {
     std::map<std::string, SDL_Texture *>::iterator it;
-    for(it = _textures.begin(); it != _textures.end(); it++)
+    for(it = _textureFromName.begin(); it != _textureFromName.end(); it++)
     {
         SDL_DestroyTexture(it->second);
     }
@@ -105,12 +105,12 @@ void ContentManager::closeFonts()
 
 SDL_Texture *ContentManager::getTexture(std::string textureName)
 {
-    return _textures[textureName];
+    return _textureFromName[textureName];
 }
 
-SDL_Texture *ContentManager::getTextureFromType(std::string type)
+SDL_Texture *ContentManager::getTextureFromType(EntityType type)
 {
-    return _typeTextures[type];
+    return _textureFromType[type];
 }
 
 TTF_Font* ContentManager::getFont(std::string fontName)

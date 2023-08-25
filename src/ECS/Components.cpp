@@ -37,11 +37,24 @@ RendererComponent::~RendererComponent()
     SDL_DestroyTexture(pTexture);
 }
 
-RendererComponent *RendererComponent::init(string objType, shared_ptr<TransformComponent> pTransform, int renderOrder)
+RendererComponent *RendererComponent::init(std::string textureName, shared_ptr<TransformComponent> pTransform, int renderOrder)
 {
     Component::init();
 
-    pTexture = contentManager.getTextureFromType(objType);
+    pTexture = contentManager.getTexture(textureName);
+    this->pTransform = pTransform;
+    this->renderOrder = renderOrder;
+
+    refreshDimensions();
+
+    return this;
+}
+
+RendererComponent *RendererComponent::init(EntityType entityType, shared_ptr<TransformComponent> pTransform, int renderOrder)
+{
+    Component::init();
+
+    pTexture = contentManager.getTextureFromType(entityType);
     this->pTransform = pTransform;
     this->renderOrder = renderOrder;
 

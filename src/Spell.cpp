@@ -9,12 +9,11 @@ Spell::Spell() : Entity()
 {
 }
 
-bool Spell::init(Vector2 pos, Vector2 dir, SpellElement element, vector<SpellType> types)
+bool Spell::init(Vector2 pos, Vector2 dir, SpellElement element)
 {
-    Entity::init("Spell", pos);
+    Entity::init(EntityType::Spell, pos);
 
     this->element = element;
-    this->types = types;
     this->dir = dir;
     isCast = true;
     aliveTime = 0;
@@ -22,7 +21,7 @@ bool Spell::init(Vector2 pos, Vector2 dir, SpellElement element, vector<SpellTyp
     pCollider = registry.newComponent<ColliderComponent>();
     pRigidbody = registry.newComponent<RigidbodyComponent>();
 
-    pCollider->init(Vector2::zero, Vector2(1, 0.5f), pTransform, pRigidbody, true, true);
+    pCollider->init(Vector2::zero, Vector2(1, 1), pTransform, pRigidbody, true, true);
     pCollider->setEntity(this);
     pRigidbody->init(pTransform, pCollider);
 
@@ -64,7 +63,7 @@ void Spell::onCollisionEnter(Entity *pOther)
 {
     Entity::onCollisionEnter(pOther);
 
-    if(pOther && pOther->getType() == "Enemy")
+    if(pOther && pOther->getType() == EntityType::Enemy)
     {
         if(Enemy *enemy = dynamic_cast<Enemy *>(pOther))
         {

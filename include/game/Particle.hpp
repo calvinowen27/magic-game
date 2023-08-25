@@ -23,14 +23,14 @@ protected:
 
     bool enabled;
 
-    shared_ptr<TransformComponent> pTransform;
-    shared_ptr<RendererComponent> pRenderer;
+    std::shared_ptr<TransformComponent> pTransform;
+    std::shared_ptr<RendererComponent> pRenderer;
 
-    string type;
+    std::string type;
 
 public:
     Particle();
-    bool init(string type, float lifeDur);
+    bool init(std::string type, float lifeDur);
     void update(float time);
     void disable();
     void kill();

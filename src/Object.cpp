@@ -8,16 +8,16 @@ Object::Object() : Entity()
 {
 }
 
-bool Object::init(std::string type, Vector2 pos)
+bool Object::init(EntityType entityType, Vector2 pos)
 {
-    Entity::init(type, pos);
+    Entity::init(entityType, pos);
 
     pRigidbody = registry.newComponent<RigidbodyComponent>();
     pCollider = registry.newComponent<ColliderComponent>();
 
     pRigidbody->init(pTransform, pCollider);
 
-    std::vector<Vector2> colliderEndpoints = objectManager.getCollider(type);
+    std::vector<Vector2> colliderEndpoints = objectManager.getCollider(entityType);
     pCollider->init(colliderEndpoints[0], colliderEndpoints[1], pTransform, pRigidbody);
     pCollider->setEntity(this);
 

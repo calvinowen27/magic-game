@@ -200,7 +200,7 @@ void Game::pollEvents()
         {
             if (event.button.button == SDL_BUTTON_LEFT)
             {
-                pObjectManager->newEntity<Spell>()->init(pPlayer->pos(), ((Vector2)(pMouseHandler->getMousePxPos() - pPlayer->pxPos())).normalized() * Vector2(1, -1), SpellElement::Ice, std::vector<SpellType>{SpellType::Projectile, SpellType::Radial, SpellType::Radial});
+                pObjectManager->newEntity<Spell>()->init(pPlayer->getPos(), ((Vector2)(pMouseHandler->getMousePxPos() - pPlayer->getPxPos())).normalized() * Vector2(1, -1), SpellElement::Ice);
             }
         }
     }
@@ -257,7 +257,7 @@ void Game::physicsUpdate()
     pObjectManager->update(updateTime);
 
     if (pPlayer != nullptr && pPlayer->isAlive())
-        cameraPos = pPlayer->pos() + Vector2(pPlayer->dims().x / 2, pPlayer->dims().y / 2);
+        cameraPos = pPlayer->getPos() + Vector2(pPlayer->getDims().x / 2, pPlayer->getDims().y / 2);
 
     execTime = duration_cast<nanoseconds>(high_resolution_clock::now() - startTime);
 
@@ -305,8 +305,8 @@ Vector2Int Game::worldToPixel(Vector2 pos)
 
 bool Game::objOnScreen(Object &obj)
 {
-    Vector2Int pxPos = obj.pxPos();
-    Vector2Int pxDims = obj.pxDims();
+    Vector2Int pxPos = obj.getPxPos();
+    Vector2Int pxDims = obj.getPxDims();
     return pxPos.x <= winWidth && pxPos.x + pxDims.x >= 0 && pxPos.y <= winHeight && pxPos.y + pxDims.y >= 0;
 }
 

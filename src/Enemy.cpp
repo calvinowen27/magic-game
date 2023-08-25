@@ -19,7 +19,7 @@ void Enemy::update(float time)
 
     if (_timeSincePathFind > _pathFindTime)
     {
-        _dir = (game.pPlayer->pos() - pTransform->pos).normalized();
+        _dir = (game.pPlayer->getPos() - pTransform->pos).normalized();
         _timeSincePathFind = 0;
     }
     else
@@ -48,7 +48,7 @@ void Enemy::kill()
 
 void Enemy::onCollisionEnter(Entity *pOther)
 {
-    if(pOther && pOther->getType() == "Player" && _timeSinceHit >= _hitCooldown)
+    if(pOther && pOther->getType() == EntityType::Player && _timeSinceHit >= _hitCooldown)
     {
         Player *player = dynamic_cast<Player *>(pOther);
         player->pHealth->damage(_damage);

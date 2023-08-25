@@ -10,9 +10,6 @@
 
 #include "../Vector2.hpp"
 
-using std::shared_ptr;
-using std::string;
-
 class Game;
 class ContentManager;
 class TransformComponent;
@@ -20,6 +17,7 @@ class RigidbodyComponent;
 class Registry;
 class Object;
 class Entity;
+enum class EntityType;
 
 class Component
 {
@@ -58,7 +56,8 @@ public:
 
     RendererComponent();
     ~RendererComponent();
-    RendererComponent *init(string objType, shared_ptr<TransformComponent> pTransform, int renderOrder = 0); // returns true if successful
+    RendererComponent *init(std::string textureName, std::shared_ptr<TransformComponent> pTransform, int renderOrder = 0); // returns true if successful
+    RendererComponent *init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, int renderOrder = 0); // returns true if successful
     void update(float time);
     void draw(SDL_Renderer *pRenderer);
     bool setTexture(std::string textureName); // returns true if successful
@@ -87,8 +86,8 @@ public:
     Vector2 start; // scalar of dims, relative to bottom left of object
     Vector2 end;   // scalar of dims, relative to top right of object
 
-    shared_ptr<TransformComponent> pTransform;
-    shared_ptr<RigidbodyComponent> pRigidbody;
+    std::shared_ptr<TransformComponent> pTransform;
+    std::shared_ptr<RigidbodyComponent> pRigidbody;
 
     // positions of each border of collider
     float leftX;
@@ -105,7 +104,7 @@ public:
     bool isTrigger = false;
 
     ColliderComponent();
-    ColliderComponent *init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions = true, bool isTrigger = false); // returns true if successful
+    ColliderComponent *init(Vector2 start, Vector2 end, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions = true, bool isTrigger = false); // returns true if successful
     void update(float time);
     void kill() override;
     void onCollisionEnter(std::shared_ptr<ColliderComponent> other);
@@ -121,11 +120,11 @@ public:
 
     Vector2 velocity; // meters/sec
 
-    shared_ptr<TransformComponent> pTransform;
-    shared_ptr<ColliderComponent> pCollider;
+    std::shared_ptr<TransformComponent> pTransform;
+    std::shared_ptr<ColliderComponent> pCollider;
 
     RigidbodyComponent();
-    RigidbodyComponent *init(shared_ptr<TransformComponent> pTransform, shared_ptr<ColliderComponent> pCollider, bool isStatic = false); // returns true if successful
+    RigidbodyComponent *init(std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<ColliderComponent> pCollider, bool isStatic = false); // returns true if successful
     void update(float time);
 };
 
@@ -135,8 +134,8 @@ public:
     float baseHealth;
     float health;
 
-    shared_ptr<RendererComponent> pRedRenderer;
-    shared_ptr<RendererComponent> pGreenRenderer;
+    std::shared_ptr<RendererComponent> pRedRenderer;
+    std::shared_ptr<RendererComponent> pGreenRenderer;
 
     HealthComponent();
     HealthComponent *init(float baseHealth);

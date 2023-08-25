@@ -4,11 +4,19 @@
 #include "../../include/game/ECS/Registry.hpp"
 #include "../../include/game/ObjectManager.hpp"
 
+std::map<EntityType, std::string> Entity::_stringFromType = {
+    {EntityType::Player, "Player"},
+    {EntityType::Enemy, "Enemy"},
+    {EntityType::Wall, "Wall"},
+    {EntityType::Grass, "Grass"},
+    {EntityType::Spell, "Spell"}
+};
+
 Entity::Entity() : game(*Game::getInstance()), registry(*game.pRegistry), contentManager(*game.pContentManager), objectManager(*game.pObjectManager)
 {
 }
 
-bool Entity::init(std::string type, Vector2 pos)
+bool Entity::init(EntityType type, Vector2 pos)
 {
     this->type = type;
     alive = true;

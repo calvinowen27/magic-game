@@ -7,7 +7,7 @@ Particle::Particle() : game(*Game::getInstance()), contentManager(*game.pContent
 {
 }
 
-bool Particle::init(string type, float lifeDur)
+bool Particle::init(std::string type, float lifeDur)
 {
     enabled = true;
 

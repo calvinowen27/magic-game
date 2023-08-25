@@ -7,9 +7,6 @@
 #include <string>
 #include <vector>
 
-using std::string;
-using std::vector;
-
 enum class SpellType
 {
     Projectile,
@@ -35,12 +32,10 @@ enum class SpellAttribute
 class Spell : public Entity
 {
 protected:
-    shared_ptr<RigidbodyComponent> pRigidbody;
-    shared_ptr<ColliderComponent> pCollider;
+    std::shared_ptr<RigidbodyComponent> pRigidbody;
+    std::shared_ptr<ColliderComponent> pCollider;
 
     SpellElement element;
-    std::vector<SpellType> types;
-    std::vector<SpellAttribute> attributes;
     Vector2 dir;
     bool isCast = false;
 
@@ -53,19 +48,9 @@ protected:
 
 public:
     Spell();
-    bool init(Vector2 pos, Vector2 dir, SpellElement element, vector<SpellType> types);
+    bool init(Vector2 pos, Vector2 dir, SpellElement element);
     void update(float time);
     void kill() override;
-
-    inline void addType(SpellType type)
-    {
-        types.push_back(type);
-    }
-
-    inline void addAttribute(SpellAttribute attribute)
-    {
-        attributes.push_back(attribute);
-    }
 
     void cast();
 

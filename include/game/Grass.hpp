@@ -11,9 +11,9 @@ public:
     {
     }
 
-    bool init(std::string type, Vector2 pos) override
+    bool init(EntityType entityType, Vector2 pos) override
     {
-        Object::init(type, pos);
+        Object::init(entityType, pos);
         pCollider->doCollisions = false;
         return true;
     }

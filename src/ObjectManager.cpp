@@ -50,13 +50,14 @@ void ObjectManager::update(float time)
         killEntity(entity);
 }
 
-std::vector<Vector2> ObjectManager::getCollider(std::string objType)
+std::vector<Vector2> ObjectManager::getCollider(EntityType entityType)
 {
-    if (!_colliderData["colliders"].contains(objType))
+    std::string typeString = Entity::getStringFromType(entityType);
+    if (!_colliderData["colliders"].contains(typeString))
     {
-        std::cerr << "Invalid objType '" << objType << "'. Returning {Vector2(0, 0), Vector2(1, 0.5)}." << std::endl;
+        std::cerr << "Invalid objType '" << typeString << "'. Returning {Vector2(0, 0), Vector2(1, 0.5)}." << std::endl;
         return std::vector<Vector2>{Vector2::zero, Vector2(1, 0.5)};
     }
-    auto endpoints = _colliderData["colliders"][objType];
+    auto endpoints = _colliderData["colliders"][typeString];
     return std::vector<Vector2>{Vector2((float)endpoints["start"][0], (float)endpoints["start"][1]), Vector2((float)endpoints["end"][0], (float)endpoints["end"][1])};
 }

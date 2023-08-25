@@ -74,7 +74,7 @@ std::shared_ptr<T> TypeQueue<T>::pop()
 }
 
 template <typename T>
-void TypeQueue<T>::push(shared_ptr<T> component)
+void TypeQueue<T>::push(std::shared_ptr<T> component)
 {
     _queue.push(component);
 }

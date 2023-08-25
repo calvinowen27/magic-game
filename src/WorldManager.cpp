@@ -66,18 +66,18 @@ void WorldManager::loadWorld()
             {
             case '#':
                 _worldMap[x][y] = _objectManager.newEntity<Wall>();
-                _worldMap[x][y]->init("Wall", pos);
+                _worldMap[x][y]->init(EntityType::Wall, pos);
                 break;
             case ',':
                 _worldMap[x][y] = _objectManager.newEntity<Grass>();
-                _worldMap[x][y]->init("Grass", pos);
+                _worldMap[x][y]->init(EntityType::Grass, pos);
                 break;
             case '@':
                 _game.pPlayer = _objectManager.newEntity<Player>();
-                _game.pPlayer->init("Player", pos);
+                _game.pPlayer->init(EntityType::Player, pos);
                 break;
             case '!':
-                _objectManager.newEntity<Enemy>()->init("Enemy", pos);
+                _objectManager.newEntity<Enemy>()->init(EntityType::Enemy, pos);
                 break;
             }
         }
@@ -97,26 +97,26 @@ void WorldManager::loadWorld()
 
             entity = _worldMap[i][j];
 
-            if (entity->getType() == "Wall")
+            if (entity->getType() == EntityType::Wall)
             {
                 auto wall = std::static_pointer_cast<Wall>(entity);
 
-                if (i > 0 && _worldMap[i - 1][j] != nullptr && _worldMap[i - 1][j]->getType() == "Wall")
+                if (i > 0 && _worldMap[i - 1][j] != nullptr && _worldMap[i - 1][j]->getType() == EntityType::Wall)
                 {
                     wall->getCollider()->borderEnabled[0] = 0;
                 }
 
-                if (i < WORLD_SIZE - 1 && _worldMap[i + 1][j] != nullptr && _worldMap[i + 1][j]->getType() == "Wall")
+                if (i < WORLD_SIZE - 1 && _worldMap[i + 1][j] != nullptr && _worldMap[i + 1][j]->getType() == EntityType::Wall)
                 {
                     wall->getCollider()->borderEnabled[1] = 0;
                 }
 
-                if (j > 0 && _worldMap[i][j - 1] != nullptr && _worldMap[i][j - 1]->getType() == "Wall")
+                if (j > 0 && _worldMap[i][j - 1] != nullptr && _worldMap[i][j - 1]->getType() == EntityType::Wall)
                 {
                     wall->getCollider()->borderEnabled[2] = 0;
                 }
 
-                if (j < WORLD_SIZE - 1 && _worldMap[i][j + 1] != nullptr && _worldMap[i][j + 1]->getType() == "Wall")
+                if (j < WORLD_SIZE - 1 && _worldMap[i][j + 1] != nullptr && _worldMap[i][j + 1]->getType() == EntityType::Wall)
                 {
                     wall->getCollider()->borderEnabled[3] = 0;
                 }
