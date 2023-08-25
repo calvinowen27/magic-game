@@ -8,9 +8,14 @@
 #define GREEN SDL_Color{0, 255, 0, 255}
 #define BLUE SDL_Color{0, 0, 255, 255}
 
-#include <vector>
 #include "UIElement.hpp"
 #include "TextElement.hpp"
+#include "Button.hpp"
+
+#include <vector>
+#include <set>
+#include <memory>
+#include <type_traits>
 
 class Player;
 
@@ -18,25 +23,39 @@ class UIManager
 {
     private:
         static UIManager *_pInstance;
-        Game &_game;
-        Player *_pPlayer;
-        std::vector<UIElement *> _uiElements;
 
-        TextElement *_pFPScounter;
-        TextElement *_pUPScounter;
-        TextElement *_pPosDisplay;
-        TextElement *_pVelDisplay;
-        TextElement *_pAccDisplay;
-        TextElement *_pPPMDisplay;
+        Game &_game;
+
+        std::set<std::shared_ptr<UIElement>> _uiElements;
+
+        std::set<std::shared_ptr<UIElement>> _spellUI;
+
+        std::shared_ptr<TextElement> _pFPScounter;
+        std::shared_ptr<TextElement> _pUPScounter;
+        std::shared_ptr<TextElement> _pPosDisplay;
+        std::shared_ptr<TextElement> _pVelDisplay;
+        std::shared_ptr<TextElement> _pAccDisplay;
+        std::shared_ptr<TextElement> _pPPMDisplay;
 
     public:
         UIManager();
-        ~UIManager();
         static UIManager* getInstance();
         void init();
         void update();
         void draw(SDL_Renderer *pRenderer);
-        void addElement(UIElement *pEl);
+        
+        template <typename T>
+        std::shared_ptr<T> newUIElement()
+        {
+            if(!std::is_base_of<UIElement, T>::value)
+            {
+                throw new std::invalid_argument("UIManager::newUIElement<Type>() : Type must be derived from UIElement class.");
+            }
+
+            std::shared_ptr<T> element = std::make_shared<T>();
+            _uiElements.emplace(element);
+            return element;
+        }
 };
 
 #endif

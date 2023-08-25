@@ -2,20 +2,28 @@
 #include "../../include/game/Game.hpp"
 #include "../../include/game/ContentManager.hpp"
 
-TextElement::TextElement(std::string textureName, std::string text, std::string fontName, SDL_Color color, Vector2 relativePos, Vector2 relativeDims, bool displayOutline, bool centerText) : UIElement(textureName, relativePos, relativeDims)
+TextElement::TextElement() : UIElement()
 {
-    _pxTextWidth = _pxDims.x;
-    _color = color;
-    _displayOutline = displayOutline;
-    _centerText = centerText;
-    setFont(fontName);
-    setText(text);
 }
 
 TextElement::~TextElement()
 {
     SDL_DestroyTexture(_texture);
     SDL_FreeSurface(_surface);
+}
+
+bool TextElement::init(std::string textureName, std::string text, std::string fontName, SDL_Color color, Vector2 relativePos, Vector2 relativeDims, bool displayOutline, bool centerText)
+{
+    UIElement::init(textureName, relativePos, relativeDims);
+
+    _pxTextWidth = _pxDims.x;
+    _color = color;
+    _displayOutline = displayOutline;
+    _centerText = centerText;
+    setFont(fontName);
+    setText(text);
+
+    return true;
 }
 
 void TextElement::draw(SDL_Renderer *pRenderer)

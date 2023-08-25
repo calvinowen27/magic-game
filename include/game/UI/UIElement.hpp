@@ -17,8 +17,9 @@ class UIElement
 {
     protected:
         Game &_game;
+        UIManager &_uiManager;
         ContentManager &_contentManager;
-        UIManager *_pUIManager;
+        
         Vector2 _relativePos;
         Vector2 _relativeDims;
         Vector2Int _pxPos;
@@ -28,8 +29,9 @@ class UIElement
         SDL_Rect _drawRect;
 
     public:
-        UIElement(std::string textureName, Vector2 relativePos, Vector2 relativeDims);
+        UIElement();
         ~UIElement();
+        bool init(std::string textureName, Vector2 relativePos, Vector2 relativeDims);
         virtual void draw(SDL_Renderer* pRenderer);
         virtual void update();
 };

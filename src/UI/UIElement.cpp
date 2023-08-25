@@ -3,12 +3,17 @@
 #include "../../include/game/Game.hpp"
 #include "../../include/game/ContentManager.hpp"
 
-UIElement::UIElement(std::string textureName, Vector2 relativePos, Vector2 relativeDims) : _game(*Game::getInstance()), _contentManager(*_game.pContentManager)
+UIElement::UIElement() : _game(*Game::getInstance()), _contentManager(*_game.pContentManager), _uiManager(*_game.pUIManager)
 {
-    _pUIManager = UIManager::getInstance();
-    // _pGame = Game::getInstance();
-    // _pContentManager = _pGame->pContentManager;
+}
 
+UIElement::~UIElement()
+{
+    SDL_DestroyTexture(_pTexture);
+}
+
+bool UIElement::init(std::string textureName, Vector2 relativePos, Vector2 relativeDims)
+{
     _pTexture = _contentManager.getTexture(textureName);
 
     _relativePos = relativePos;
@@ -18,12 +23,7 @@ UIElement::UIElement(std::string textureName, Vector2 relativePos, Vector2 relat
 
     _drawRect = SDL_Rect{_pxPos.x, _pxPos.y, _pxDims.x, _pxDims.y};
 
-    _pUIManager->addElement(this);
-}
-
-UIElement::~UIElement()
-{
-    SDL_DestroyTexture(_pTexture);
+    return true;
 }
 
 void UIElement::update()
