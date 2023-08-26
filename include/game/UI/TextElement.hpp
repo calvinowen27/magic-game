@@ -22,7 +22,7 @@ class TextElement : public UIElement
     public:
         TextElement();
         ~TextElement();
-        bool init(std::string textureName, std::string text, std::string fontName, SDL_Color color, Vector2 relativePos, Vector2 relativeDims, bool displayOutline = true, bool centerText = false);
+        bool init(std::string textureName, std::string text, std::string fontName, SDL_Color color, Vector2 relativePos, Vector2 relativeDims, bool displayOutline = true, bool centerText = false, bool enabled = true);
         void draw(SDL_Renderer *pRenderer) override;
         void update() override;
         void setText(std::string newText);

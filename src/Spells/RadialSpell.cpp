@@ -2,11 +2,9 @@
 #include "../../include/game/ObjectManager.hpp"
 #include "../../include/game/Enemy.hpp"
 
-bool RadialSpell::init(Vector2 pos, SpellElement element, float damage, float lifeDur)
+bool RadialSpell::init(SpellElement element, float damage, float lifeDur)
 {
-    Spell::init(EntityType::RadialSpell, pos, Vector2::zero, element, damage, lifeDur);
-
-    _startPos = pos;
+    Spell::init(EntityType::RadialSpell, Vector2::zero, element, damage, lifeDur);
 
     return true;
 }
@@ -61,9 +59,10 @@ void RadialSpell::update(float time)
     }
 }
 
-void RadialSpell::cast()
+void RadialSpell::cast(Vector2 pos)
 {
     isCast = true;
+    _startPos = pos;
     pRenderer->enable();
 }
 

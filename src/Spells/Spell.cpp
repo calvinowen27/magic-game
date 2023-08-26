@@ -9,9 +9,9 @@ Spell::Spell() : Entity()
 {
 }
 
-bool Spell::init(EntityType type, Vector2 pos, Vector2 dir, SpellElement element, float damage, float lifeDur)
+bool Spell::init(EntityType type, Vector2 dir, SpellElement element, float damage, float lifeDur)
 {
-    Entity::init(type, pos);
+    Entity::init(type, Vector2::zero);
 
     this->dir = dir;
     this->element = element;
@@ -69,11 +69,12 @@ void Spell::kill()
     registry.killComponent(pCollider);
 }
 
-void Spell::cast()
+void Spell::cast(Vector2 pos)
 {
     isCast = true;
     pCollider->enable();
     pRenderer->enable();
+    pTransform->pos = pos;
 }
 
 void Spell::onCollisionEnter(Entity *pEntity)

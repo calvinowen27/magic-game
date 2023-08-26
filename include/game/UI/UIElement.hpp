@@ -32,7 +32,7 @@ class UIElement
 
     public:
         UIElement();
-        bool init(std::string textureName, Vector2 relativePos, Vector2 relativeDims);
+        bool init(std::string textureName, Vector2 relativePos, Vector2 relativeDims, bool enabled = true);
         virtual void draw(SDL_Renderer* pRenderer);
         virtual void update();
 

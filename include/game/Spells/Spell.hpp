@@ -48,9 +48,9 @@ protected:
 
 public:
     Spell();
-    virtual bool init(EntityType type, Vector2 pos, Vector2 dir, SpellElement element, float damage, float lifeDur);
+    virtual bool init(EntityType type, Vector2 dir, SpellElement element, float damage, float lifeDur);
     virtual void update(float time);
-    virtual void cast();
+    virtual void cast(Vector2 pos);
     virtual void hit(Entity *pEntity);
 
     void kill() override;

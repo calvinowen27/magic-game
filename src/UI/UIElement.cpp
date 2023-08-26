@@ -7,9 +7,9 @@ UIElement::UIElement() : _game(*Game::getInstance()), _contentManager(*_game.pCo
 {
 }
 
-bool UIElement::init(std::string textureName, Vector2 relativePos, Vector2 relativeDims)
+bool UIElement::init(std::string textureName, Vector2 relativePos, Vector2 relativeDims, bool enabled)
 {
-    enabled = true;
+    this->enabled = enabled;
     _pTexture = _contentManager.getTexture(textureName);
 
     _relativePos = relativePos;

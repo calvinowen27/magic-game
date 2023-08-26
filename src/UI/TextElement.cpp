@@ -12,9 +12,9 @@ TextElement::~TextElement()
     SDL_FreeSurface(_surface);
 }
 
-bool TextElement::init(std::string textureName, std::string text, std::string fontName, SDL_Color color, Vector2 relativePos, Vector2 relativeDims, bool displayOutline, bool centerText)
+bool TextElement::init(std::string textureName, std::string text, std::string fontName, SDL_Color color, Vector2 relativePos, Vector2 relativeDims, bool displayOutline, bool centerText, bool enabled)
 {
-    UIElement::init(textureName, relativePos, relativeDims);
+    UIElement::init(textureName, relativePos, relativeDims, enabled);
 
     _pxTextWidth = _pxDims.x;
     _color = color;

@@ -15,9 +15,9 @@ private:
     std::set<std::shared_ptr<Entity>> _entitiesHit;
 
 public:
-    bool init(Vector2 pos, SpellElement element, float damage, float lifeDur);
+    bool init(SpellElement element, float damage, float lifeDur);
     void update(float time) override;
-    void cast() override;
+    void cast(Vector2 pos) override;
     void hit(Entity *pEntity) override;
     void kill() override;
 };

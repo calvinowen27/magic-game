@@ -13,7 +13,7 @@ private:
 
 public:
     Button();
-    bool init(std::string textureName, std::string buttonText, std::string fontName, SDL_Color textColor, Vector2 relativePos, Vector2 relativeDims, void (*actionFunc)());
+    bool init(std::string textureName, std::string buttonText, std::string fontName, SDL_Color textColor, Vector2 relativePos, Vector2 relativeDims, void (*actionFunc)(), bool enabled = true);
     void update() override;
 };
 

@@ -121,8 +121,6 @@ int Game::init()
 
     pUIManager = UIManager::getInstance();
     pUIManager->init();
-    if(pUIManager->isSpellUIEnabled())
-        pUIManager->toggleSpellUI();
 
     pObjectManager = ObjectManager::getInstance();
     pObjectManager->init();
@@ -215,7 +213,7 @@ void Game::pollEvents()
                 // auto spell = pSpellManager->newSpell<RadialSpell>();
                 // spell->init(pPlayer->getPos() + (pPlayer->getDims() / 2), SpellElement::Ice, 3, 1);
                 if (pSpellManager->getCurrSpell())
-                    pSpellManager->getCurrSpell()->cast();
+                    pSpellManager->getCurrSpell()->cast(pPlayer->getPos() + (pPlayer->getDims() / 2));
             }
         }
     }
