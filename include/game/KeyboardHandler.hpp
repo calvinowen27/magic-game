@@ -14,25 +14,31 @@ enum class InputKey {
     ZoomOut,
     Sprint,
     Close,
-    Reset
+    Reset,
+    ToggleSpellUI
 };
+
+class Game;
 
 class KeyboardHandler
 {
     private:
+        Game &_game;
+
         const Uint8 *_pKeyboardState;
+        Uint8 _prevKeyboardState;
         std::queue<SDL_Event> _inputEvents;
         std::map<InputKey, SDL_Scancode> _keybinds;
-        std::map<SDL_Scancode, bool> _inputState;
+        std::map<SDL_Scancode, bool> _keyDown;
 
     public:
         KeyboardHandler();
         ~KeyboardHandler();
         void processInputs();
-        bool isPressed(SDL_Scancode scancode);
-        bool isReleased(SDL_Scancode scancode);
+        void onKeyUp(SDL_Scancode scancode);
+        void onKeyDown(SDL_Scancode scancode);
+        bool isPressed(InputKey key);
         void pushEvent(SDL_Event event);
-        bool getInputState(InputKey key);
 };
 
 #endif

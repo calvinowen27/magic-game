@@ -59,6 +59,9 @@ public:
         for(auto el : _spellUI)
             el->setEnabled(_spellUIEnabled);
 
+        if(_spellUIEnabled)
+        _game.pSpellManager->killCurrSpell();
+
         return _spellUIEnabled;
     }
 

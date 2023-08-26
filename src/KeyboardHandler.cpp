@@ -1,7 +1,11 @@
 #include "../include/game/KeyboardHandler.hpp"
+#include "../include/game/Game.hpp"
+#include "../include/game/Spells/SpellManager.hpp"
+#include"../include/game/UI/UIManager.hpp"
+
 #include <iostream>
 
-KeyboardHandler::KeyboardHandler()
+KeyboardHandler::KeyboardHandler() : _game(*Game::getInstance())
 {
     _pKeyboardState = SDL_GetKeyboardState(NULL);
 
@@ -14,7 +18,8 @@ KeyboardHandler::KeyboardHandler()
         { InputKey::Reset, SDL_SCANCODE_R },
         { InputKey::ZoomIn, SDL_SCANCODE_EQUALS },
         { InputKey::ZoomOut, SDL_SCANCODE_MINUS },
-        { InputKey::Close, SDL_SCANCODE_ESCAPE }
+        { InputKey::Close, SDL_SCANCODE_ESCAPE },
+        { InputKey::ToggleSpellUI, SDL_SCANCODE_C}
     };
 }
 
@@ -30,28 +35,40 @@ void KeyboardHandler::processInputs()
     {
         event = _inputEvents.front();
 
-        _inputState[event.key.keysym.scancode] = (event.type == SDL_KEYDOWN);
+        // on key released
+        if(event.type == SDL_KEYUP)
+            onKeyUp(event.key.keysym.scancode);
+
+        // on key pressed
+        if(event.type == SDL_KEYDOWN)
+            onKeyDown(event.key.keysym.scancode);
+
+        _keyDown[event.key.keysym.scancode] = (event.type == SDL_KEYDOWN);
 
         _inputEvents.pop();
     }
 }
 
-bool KeyboardHandler::isPressed(SDL_Scancode scancode)
+void KeyboardHandler::onKeyUp(SDL_Scancode scancode)
 {
-    return _pKeyboardState[scancode];
+    // Toggle Spell UI
+    if(scancode == _keybinds[InputKey::ToggleSpellUI])
+    {
+        _game.pUIManager->toggleSpellUI();
+    }
 }
 
-bool KeyboardHandler::isReleased(SDL_Scancode scancode)
+void KeyboardHandler::onKeyDown(SDL_Scancode scancode)
 {
-    return !_pKeyboardState[scancode];
+
+}
+
+bool KeyboardHandler::isPressed(InputKey key)
+{
+    return _keyDown[_keybinds[key]];
 }
 
 void KeyboardHandler::pushEvent(SDL_Event event)
 {
     _inputEvents.push(event);
-}
-
-bool KeyboardHandler::getInputState(InputKey key)
-{
-    return _inputState[_keybinds[key]];
 }

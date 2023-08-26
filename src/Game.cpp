@@ -166,7 +166,7 @@ void Game::pollEvents()
 
     while (SDL_PollEvent(&event))
     {
-        if (event.type == SDL_QUIT || pKeyboardHandler->getInputState(InputKey::Close))
+        if (event.type == SDL_QUIT || pKeyboardHandler->isPressed(InputKey::Close))
         {
             running = false;
         }
@@ -176,18 +176,13 @@ void Game::pollEvents()
             pKeyboardHandler->pushEvent(event);
         }
 
-        if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_F)
-            pPlayer->pHealth->damage(1);
+        // if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_F)
+        //     pPlayer->pHealth->damage(1);
 
-        if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_G)
-            pPlayer->pHealth->heal(1);
+        // if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_G)
+        //     pPlayer->pHealth->heal(1);
 
-        if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_C)
-        {
-            if(pUIManager->toggleSpellUI())
-                pSpellManager->killCurrSpell();
-        }
-
+        // resize window
         if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED)
         {
             SDL_Window *win = SDL_GetWindowFromID(event.window.windowID);

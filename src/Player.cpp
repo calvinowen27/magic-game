@@ -26,18 +26,18 @@ void Player::update(float time)
 
     Vector2 moveDir;
 
-    if(_pKeyboardHandler->getInputState(InputKey::Right)) // move right
+    if(_pKeyboardHandler->isPressed(InputKey::Right)) // move right
         moveDir.x += 1;
-    if(_pKeyboardHandler->getInputState(InputKey::Left)) // move left
+    if(_pKeyboardHandler->isPressed(InputKey::Left)) // move left
         moveDir.x -= 1;
-    if(_pKeyboardHandler->getInputState(InputKey::Up)) // move up
+    if(_pKeyboardHandler->isPressed(InputKey::Up)) // move up
         moveDir.y += 0.5f;
-    if(_pKeyboardHandler->getInputState(InputKey::Down)) // move down
+    if(_pKeyboardHandler->isPressed(InputKey::Down)) // move down
         moveDir.y -= 0.5f;
 
-    if(_pKeyboardHandler->getInputState(InputKey::ZoomIn)) // zoom in
+    if(_pKeyboardHandler->isPressed(InputKey::ZoomIn)) // zoom in
         game.zoomIn();
-    if(_pKeyboardHandler->getInputState(InputKey::ZoomOut)) // zoom out
+    if(_pKeyboardHandler->isPressed(InputKey::ZoomOut)) // zoom out
         game.zoomOut();
 
     if(moveDir.x != 0)
@@ -45,7 +45,7 @@ void Player::update(float time)
     else
         pRigidbody->velocity = moveDir * 2;
 
-    if(_pKeyboardHandler->getInputState(InputKey::Sprint)) // sprint
+    if(_pKeyboardHandler->isPressed(InputKey::Sprint)) // sprint
         pRigidbody->velocity *= 2.5;
 
     pHealth->pGreenRenderer->pTransform->pos = pTransform->pos + Vector2(0, pTransform->dims.y);

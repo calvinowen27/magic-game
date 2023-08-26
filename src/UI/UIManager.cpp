@@ -3,18 +3,19 @@
 #include "../../include/game/Game.hpp"
 #include "../../include/game/UI/Button.hpp"
 #include "../../include/game/Spells/SpellManager.hpp"
+#include "../../include/game/KeyboardHandler.hpp"
 
 #include <cmath>
 
-UIManager* UIManager::_pInstance;
+UIManager *UIManager::_pInstance;
 
 UIManager::UIManager() : _game(*Game::getInstance())
 {
 }
 
-UIManager* UIManager::getInstance()
+UIManager *UIManager::getInstance()
 {
-    if(_pInstance == nullptr)
+    if (_pInstance == nullptr)
     {
         _pInstance = new UIManager();
     }
@@ -36,13 +37,13 @@ void UIManager::init()
 
     _pUPScounter = newUIElement<TextElement>();
     _pUPScounter->init("ui_text_back", "UPS: ", "arial", WHITE, Vector2(0, 0.026), Vector2(0.1, 0.025));
-    
+
     _pPPMDisplay = newUIElement<TextElement>();
     _pPPMDisplay->init("ui_text_back", "PPM: ", "arial", WHITE, Vector2(0, 0.052), Vector2(0.1, 0.025));
-    
+
     _pPosDisplay = newUIElement<TextElement>();
     _pPosDisplay->init("ui_text_back", "Position: ", "arial", WHITE, Vector2(0.7, 0), Vector2(0.3, 0.025));
-    
+
     _pVelDisplay = newUIElement<TextElement>();
     _pVelDisplay->init("ui_text_back", "Velocity: ", "arial", WHITE, Vector2(0.7, 0.026), Vector2(0.3, 0.025));
 
@@ -60,9 +61,9 @@ void UIManager::update()
     _pVelDisplay->setText("Velocity: " + _game.pPlayer->getVelocity().round(3).to_string());
 
     // el.update()
-    for(auto el : _uiElements)
+    for (auto el : _uiElements)
     {
-        if(el->isEnabled())
+        if (el->isEnabled())
             el->update();
     }
 }
@@ -70,9 +71,9 @@ void UIManager::update()
 void UIManager::draw(SDL_Renderer *pRenderer)
 {
     // el.draw();
-    for(auto el : _uiElements)
+    for (auto el : _uiElements)
     {
-        if(el->isEnabled())
+        if (el->isEnabled())
             el->draw(pRenderer);
     }
 }
