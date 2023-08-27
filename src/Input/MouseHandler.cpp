@@ -1,9 +1,9 @@
-#include "../include/game/MouseHandler.hpp"
-#include "../include/game/Game.hpp"
-#include "../include/game/Spells/Spell.hpp"
-#include "../include/game/Player.hpp"
-#include "../include/game/UI/UIManager.hpp"
-#include "../include/game/Spells/SpellManager.hpp"
+#include "../../include/game/Input/MouseHandler.hpp"
+#include "../../include/game/Game.hpp"
+#include "../../include/game/Spells/Spell.hpp"
+#include "../../include/game/Player.hpp"
+#include "../../include/game/UI/UIManager.hpp"
+#include "../../include/game/Spells/SpellManager.hpp"
 
 MouseHandler::MouseHandler() : _game(*Game::getInstance())
 {

@@ -3,7 +3,7 @@
 #include "../../include/game/Game.hpp"
 #include "../../include/game/UI/TextButton.hpp"
 #include "../../include/game/UI/Button.hpp"
-#include "../../include/game/KeyboardHandler.hpp"
+#include "../../include/game/Input/KeyboardHandler.hpp"
 
 #include <cmath>
 

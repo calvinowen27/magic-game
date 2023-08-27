@@ -1,7 +1,7 @@
 #ifndef KEYBOARD_INCLUDE
 #define KEYBOARD_INCLUDE
 
-#include "../SDL2/SDL.h"
+#include "../../SDL2/SDL.h"
 #include <queue>
 #include <map>
 

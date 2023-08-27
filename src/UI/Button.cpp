@@ -1,5 +1,5 @@
 #include "../../include/game/UI/Button.hpp"
-#include "../../include/game/MouseHandler.hpp"
+#include "../../include/game/Input/MouseHandler.hpp"
 #include "../../include/game/Game.hpp"
 
 Button::Button() : UIElement(), _mouseHandler(*_game.pMouseHandler)

@@ -1,6 +1,6 @@
 #include "../include/game/Player.hpp"
 #include "../include/game/Game.hpp"
-#include "../include/game/KeyboardHandler.hpp"
+#include "../include/game/Input/KeyboardHandler.hpp"
 #include "../include/game/ECS/Registry.hpp"
 
 std::map<SDL_Scancode, bool> inputState;
