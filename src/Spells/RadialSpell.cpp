@@ -1,6 +1,8 @@
 #include "../../include/game/Spells/RadialSpell.hpp"
 #include "../../include/game/ObjectManager.hpp"
 #include "../../include/game/Enemy.hpp"
+#include "../../include/game/Spells/SpellManager.hpp"
+#include "../../include/game/Player.hpp"
 
 RadialSpell::RadialSpell() : Spell()
 {
@@ -69,6 +71,82 @@ void RadialSpell::cast(Vector2 pos)
 {
     isCast = true;
     _startPos = pos;
+    pTransform->pos = pos;
+
+    for(auto attribute : attributes)
+    {
+        if(attribute == SpellAttribute::Projectile)
+        {
+            std::shared_ptr<ProjectileSpell> proj = spellManager.newSpell<ProjectileSpell>();
+            proj->init();
+            proj->setSpeed(5);
+            proj->setDamage(5);
+            proj->setLifeDur(2);
+            proj->setDir(Vector2(0, 1));
+            proj->cast(pos);
+
+            proj = spellManager.newSpell<ProjectileSpell>();
+            proj->init();
+            proj->setSpeed(5);
+            proj->setDamage(5);
+            proj->setLifeDur(2);
+            proj->setDir(Vector2(0, -1));
+            proj->cast(pos);
+            
+            proj = spellManager.newSpell<ProjectileSpell>();
+            proj->init();
+            proj->setSpeed(5);
+            proj->setDamage(5);
+            proj->setLifeDur(2);
+            proj->setDir(Vector2(1, 0));
+            proj->cast(pos);
+            
+            proj = spellManager.newSpell<ProjectileSpell>();
+            proj->init();
+            proj->setSpeed(5);
+            proj->setDamage(5);
+            proj->setLifeDur(2);
+            proj->setDir(Vector2(-1, 0));
+            proj->cast(pos);
+
+            proj = spellManager.newSpell<ProjectileSpell>();
+            proj->init();
+            proj->setSpeed(5);
+            proj->setDamage(5);
+            proj->setLifeDur(2);
+            proj->setDir(Vector2(1, 1));
+            proj->cast(pos);
+
+            proj = spellManager.newSpell<ProjectileSpell>();
+            proj->init();
+            proj->setSpeed(5);
+            proj->setDamage(5);
+            proj->setLifeDur(2);
+            proj->setDir(Vector2(1, -1));
+            proj->cast(pos);
+            
+            proj = spellManager.newSpell<ProjectileSpell>();
+            proj->init();
+            proj->setSpeed(5);
+            proj->setDamage(5);
+            proj->setLifeDur(2);
+            proj->setDir(Vector2(-1, 1));
+            proj->cast(pos);
+            
+            proj = spellManager.newSpell<ProjectileSpell>();
+            proj->init();
+            proj->setSpeed(5);
+            proj->setDamage(5);
+            proj->setLifeDur(2);
+            proj->setDir(Vector2(-1, -1));
+            proj->cast(pos);
+
+            kill();
+
+            return;
+        }
+    }
+
     pRenderer->enable();
 }
 

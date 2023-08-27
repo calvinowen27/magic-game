@@ -2,10 +2,11 @@
 #include "../include/game/Game.hpp"
 #include "../include/game/Enemy.hpp"
 #include "../include/game/ObjectManager.hpp"
+#include "../include/game/Spells/SpellManager.hpp"
 
 #include <type_traits>
 
-Spell::Spell() : Entity()
+Spell::Spell() : Entity(), spellManager(*game.pSpellManager)
 {
 }
 
@@ -30,10 +31,10 @@ bool Spell::init()
 
 void Spell::update(float time)
 {
-    if(!isCast || !alive)
+    if (!isCast || !alive)
         return;
-    
-    if(aliveTime < lifeDur)
+
+    if (aliveTime < lifeDur)
     {
         aliveTime += time;
         pRigidbody->velocity = dir * speed;
@@ -46,7 +47,7 @@ void Spell::update(float time)
 
 void Spell::hit(Entity *pEntity)
 {
-    if(Enemy *enemy = dynamic_cast<Enemy *>(pEntity))
+    if (Enemy *enemy = dynamic_cast<Enemy *>(pEntity))
     {
         enemy->pHealth->damage(damage);
     }
@@ -59,11 +60,13 @@ void Spell::hit(Entity *pEntity)
 void Spell::kill()
 {
     Entity::kill();
-
-    isCast = false;
     
+    isCast = false;
+
     registry.killComponent(pRigidbody);
     registry.killComponent(pCollider);
+
+    attributes.clear();
 }
 
 void Spell::cast(Vector2 pos)
@@ -78,10 +81,13 @@ void Spell::onCollisionEnter(Entity *pEntity)
 {
     Entity::onCollisionEnter(pEntity);
 
-    if(alive && isCast && pEntity && pEntity->getType() == EntityType::Enemy)
+    if (alive && isCast && pEntity && pEntity->getType() == EntityType::Enemy)
     {
         hit(pEntity);
     }
 
-    kill();
+    if (pEntity->getType() != EntityType::Player && pEntity->getType() != EntityType::Spell)
+    {
+        kill();
+    }
 }

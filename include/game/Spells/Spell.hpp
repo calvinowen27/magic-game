@@ -6,6 +6,7 @@
 
 #include <string>
 #include <vector>
+#include <set>
 
 enum class SpellType
 {
@@ -26,16 +27,23 @@ enum class SpellElement
 
 enum class SpellAttribute
 {
-    Chain
+    Chain,
+    Projectile,
+    Radial
 };
+
+class SpellManager;
 
 class Spell : public Entity
 {
 protected:
+    SpellManager &spellManager;
+
     std::shared_ptr<RigidbodyComponent> pRigidbody;
     std::shared_ptr<ColliderComponent> pCollider;
 
     SpellElement element;
+    std::set<SpellAttribute> attributes;
     Vector2 dir;
     bool isCast = false;
 
@@ -54,6 +62,7 @@ public:
     inline void setLifeDur(float lifeDur) { this->lifeDur = lifeDur; }
     inline void setSpeed(float speed) { this->speed = speed; }
     inline void setDir(Vector2 dir) { this->dir = dir; }
+    inline void addAttribute(SpellAttribute attribute) { attributes.emplace(attribute); }
     virtual void update(float time);
     virtual void cast(Vector2 pos);
     virtual void hit(Entity *pEntity);

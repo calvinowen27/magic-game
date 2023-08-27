@@ -48,7 +48,10 @@ SpellUIGroup::SpellUIGroup() : UIGroup(), _spellManager(*game.pSpellManager)
 void SpellUIGroup::init()
 {
     _pRadialSpellButton = newUIElement<Button>();
-    _pRadialSpellButton->init("radial_spell_button", Vector2(0.5f, 0.25f), Vector2(0.05, 0.075), SpellManager::createSpell<RadialSpell>, false);
+    _pRadialSpellButton->init("radial_spell_button", Vector2(0.5f, 0.25f), Vector2(0.05, 0.075), SpellManager::createSpell<RadialSpell>);
+
+    _pProjectileSpellButton = newUIElement<Button>();
+    _pProjectileSpellButton->init("projectile_spell_button", Vector2(0.55f, 0.3f), Vector2(0.05, 0.075), SpellManager::createSpell<ProjectileSpell>);
 
     UIGroup::init();
 

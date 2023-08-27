@@ -50,6 +50,7 @@ private:
     SpellManager &_spellManager;
 
     std::shared_ptr<Button> _pRadialSpellButton;
+    std::shared_ptr<Button> _pProjectileSpellButton;
 
 public:
     SpellUIGroup();

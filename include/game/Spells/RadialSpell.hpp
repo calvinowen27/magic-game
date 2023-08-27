@@ -4,6 +4,7 @@
 #include "Spell.hpp"
 
 #include <set>
+#include <memory>
 
 class RadialSpell : public Spell
 {
