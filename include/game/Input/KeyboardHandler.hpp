@@ -15,7 +15,8 @@ enum class InputKey {
     Sprint,
     Close,
     Reset,
-    ToggleSpellUI
+    ToggleSpellUI,
+    ToggleDebugUI
 };
 
 class Game;

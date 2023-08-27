@@ -18,6 +18,7 @@
 #include "TextElement.hpp"
 #include "TextButton.hpp"
 #include "../Spells/SpellManager.hpp"
+#include "UIGroup.hpp"
 
 #include <vector>
 #include <set>
@@ -33,17 +34,10 @@ private:
 
     Game &_game;
 
-    std::set<std::shared_ptr<UIElement>> _uiElements;
+    std::set<std::shared_ptr<UIGroup>> _uiGroups;
 
-    std::set<std::shared_ptr<UIElement>> _spellUI;
-    bool _spellUIEnabled = false;
-
-    std::shared_ptr<TextElement> _pFPScounter;
-    std::shared_ptr<TextElement> _pUPScounter;
-    std::shared_ptr<TextElement> _pPosDisplay;
-    std::shared_ptr<TextElement> _pVelDisplay;
-    std::shared_ptr<TextElement> _pAccDisplay;
-    std::shared_ptr<TextElement> _pPPMDisplay;
+    std::shared_ptr<SpellUIGroup> _pSpellUI;
+    std::shared_ptr<DebugUIGroup> _pDebugUI;
 
 public:
     UIManager();
@@ -52,33 +46,21 @@ public:
     void update();
     void draw(SDL_Renderer *pRenderer);
 
-    inline bool toggleSpellUI()
-    {
-        _spellUIEnabled = !_spellUIEnabled;
-
-        for(auto el : _spellUI)
-            el->setEnabled(_spellUIEnabled);
-
-        if(_spellUIEnabled)
-        _game.pSpellManager->killCurrSpell();
-
-        return _spellUIEnabled;
-    }
-
-    inline bool isSpellUIEnabled() { return _spellUIEnabled; }
-
     template <typename T>
-    std::shared_ptr<T> newUIElement()
+    std::shared_ptr<T> newUIGroup()
     {
-        if (!std::is_base_of<UIElement, T>::value)
+        if (!std::is_base_of<UIGroup, T>::value)
         {
-            throw new std::invalid_argument("UIManager::newUIElement<Type>() : Type must be derived from UIElement class.");
+            throw new std::invalid_argument("UIManager::newUIGroup<Type>() : Type must be derived from UIGroup class.");
         }
 
-        std::shared_ptr<T> element = std::make_shared<T>();
-        _uiElements.emplace(element);
-        return element;
+        std::shared_ptr<T> group = std::make_shared<T>();
+        _uiGroups.emplace(group);
+        return group;
     }
+
+    inline std::shared_ptr<SpellUIGroup> getSpellUI() { return _pSpellUI; }
+    inline std::shared_ptr<DebugUIGroup> getDebugUI() { return _pDebugUI; }
 };
 
 #endif

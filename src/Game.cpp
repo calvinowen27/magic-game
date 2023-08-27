@@ -112,23 +112,18 @@ int Game::init()
 
     pRegistry = new Registry();
     pComponentHandler = new ComponentHandler();
-
     pKeyboardHandler = new KeyboardHandler();
     pMouseHandler = new MouseHandler();
-
     pContentManager = new ContentManager();
-    pContentManager->loadContent();
-
     pUIManager = UIManager::getInstance();
-    pUIManager->init();
-
     pObjectManager = ObjectManager::getInstance();
-    pObjectManager->init();
-
     pWorldManager = WorldManager::getInstance();
-    pWorldManager->loadWorld();
-
     pSpellManager = new SpellManager();
+
+    pContentManager->loadContent();
+    pUIManager->init();
+    pObjectManager->init();
+    pWorldManager->loadWorld();
 
     return 0;
 }

@@ -28,7 +28,7 @@ void MouseHandler::onMouseButtonUp(int button)
 {
     if(button == SDL_BUTTON_LEFT)
     {
-        if(!_game.pUIManager->isSpellUIEnabled() && _game.pSpellManager->getCurrSpell())
+        if(!_game.pUIManager->getSpellUI()->isEnabled() && _game.pSpellManager->getCurrSpell())
             _game.pSpellManager->getCurrSpell()->cast(_game.pPlayer->getPos() + (_game.pPlayer->getDims() / 2));
     }
 }

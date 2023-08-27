@@ -19,7 +19,8 @@ KeyboardHandler::KeyboardHandler() : _game(*Game::getInstance())
         { InputKey::ZoomIn, SDL_SCANCODE_EQUALS },
         { InputKey::ZoomOut, SDL_SCANCODE_MINUS },
         { InputKey::Close, SDL_SCANCODE_ESCAPE },
-        { InputKey::ToggleSpellUI, SDL_SCANCODE_C}
+        { InputKey::ToggleSpellUI, SDL_SCANCODE_C },
+        { InputKey::ToggleDebugUI, SDL_SCANCODE_B }
     };
 }
 
@@ -54,7 +55,13 @@ void KeyboardHandler::onKeyUp(SDL_Scancode scancode)
     // Toggle Spell UI
     if(scancode == _keybinds[InputKey::ToggleSpellUI])
     {
-        _game.pUIManager->toggleSpellUI();
+        _game.pUIManager->getSpellUI()->toggleEnabled();
+    }
+
+    // Toggle Debug UI
+    if(scancode == _keybinds[InputKey::ToggleDebugUI])
+    {
+        _game.pUIManager->getDebugUI()->toggleEnabled();
     }
 }
 
