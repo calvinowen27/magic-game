@@ -1,8 +1,8 @@
 #include "../../include/game/UI/UIManager.hpp"
 #include "../../include/game/Player.hpp"
 #include "../../include/game/Game.hpp"
+#include "../../include/game/UI/TextButton.hpp"
 #include "../../include/game/UI/Button.hpp"
-#include "../../include/game/Spells/SpellManager.hpp"
 #include "../../include/game/KeyboardHandler.hpp"
 
 #include <cmath>
@@ -21,13 +21,6 @@ UIManager *UIManager::getInstance()
     }
 
     return _pInstance;
-}
-
-void UIManager::newRadial()
-{
-    auto &game = *Game::getInstance();
-    auto spell = game.pSpellManager->newSpell<RadialSpell>();
-    spell->init(SpellElement::Ice, 3, 1);
 }
 
 void UIManager::init()
@@ -49,7 +42,7 @@ void UIManager::init()
 
     auto radialButton = newUIElement<Button>();
     _spellUI.emplace(radialButton);
-    radialButton->init("radial_spell_button", "", "", WHITE, Vector2(0.5f, 0.25f), Vector2(0.05, 0.075), UIManager::newRadial, false);
+    radialButton->init("radial_spell_button", Vector2(0.5f, 0.25f), Vector2(0.05, 0.075), SpellManager::createSpell<RadialSpell>, false);
 }
 
 void UIManager::update()

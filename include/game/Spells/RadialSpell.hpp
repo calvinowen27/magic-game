@@ -8,14 +8,14 @@
 class RadialSpell : public Spell
 {
 private:
-    float _expansionSpeed = 5; // meters/sec
     float _currRadius = 0;
     Vector2 _startPos;
 
     std::set<std::shared_ptr<Entity>> _entitiesHit;
 
 public:
-    bool init(SpellElement element, float damage, float lifeDur);
+    RadialSpell();
+    bool init();
     void update(float time) override;
     void cast(Vector2 pos) override;
     void hit(Entity *pEntity) override;

@@ -171,18 +171,23 @@ void Game::pollEvents()
             running = false;
         }
 
+        /* ------------- KEYBOARD INPUTS ------------------------ */
         if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
-        {
             pKeyboardHandler->pushEvent(event);
-        }
+        /* ------------------------------------------------------ */
 
-        // if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_F)
-        //     pPlayer->pHealth->damage(1);
+        /* ------------ MOUSE INPUTS ---------------------------- */
+        if (event.type == SDL_MOUSEWHEEL)
+            pMouseHandler->mouseWheel(event.wheel.y);
 
-        // if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_G)
-        //     pPlayer->pHealth->heal(1);
+        if(event.type == SDL_MOUSEBUTTONDOWN)
+            pMouseHandler->onMouseButtonDown(event.button.button);
 
-        // resize window
+        if (event.type == SDL_MOUSEBUTTONUP)
+            pMouseHandler->onMouseButtonUp(event.button.button);
+        /* ------------------------------------------------------- */
+
+        /* RESIZE WINDOW */
         if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED)
         {
             SDL_Window *win = SDL_GetWindowFromID(event.window.windowID);
@@ -192,25 +197,12 @@ void Game::pollEvents()
             }
         }
 
-        if (event.type == SDL_MOUSEWHEEL)
-        {
-            if (event.wheel.y > 0)
-                zoomIn();
-            if (event.wheel.y < 0)
-                zoomOut();
-        }
+        /* TEMP */
+        // if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_F)
+        //     pPlayer->pHealth->damage(1);
 
-        if (event.type == SDL_MOUSEBUTTONUP)
-        {
-            if (event.button.button == SDL_BUTTON_LEFT && !pUIManager->isSpellUIEnabled())
-            {
-                // pObjectManager->newEntity<Spell>()->init(pPlayer->getPos(), ((Vector2)(pMouseHandler->getMousePxPos() - pPlayer->getPxPos())).normalized() * Vector2(1, -1), SpellElement::Ice);
-                // auto spell = pSpellManager->newSpell<RadialSpell>();
-                // spell->init(pPlayer->getPos() + (pPlayer->getDims() / 2), SpellElement::Ice, 3, 1);
-                if (pSpellManager->getCurrSpell())
-                    pSpellManager->getCurrSpell()->cast(pPlayer->getPos() + (pPlayer->getDims() / 2));
-            }
-        }
+        // if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_G)
+        //     pPlayer->pHealth->heal(1);
     }
 }
 

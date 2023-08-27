@@ -2,9 +2,15 @@
 #include "../../include/game/ObjectManager.hpp"
 #include "../../include/game/Enemy.hpp"
 
-bool RadialSpell::init(SpellElement element, float damage, float lifeDur)
+RadialSpell::RadialSpell() : Spell()
 {
-    Spell::init(EntityType::RadialSpell, Vector2::zero, element, damage, lifeDur);
+}
+
+bool RadialSpell::init()
+{
+    Spell::init();
+
+    pRenderer->setTexture("radial_spell");
 
     return true;
 }
@@ -17,7 +23,7 @@ void RadialSpell::update(float time)
     if(aliveTime < lifeDur)
     {
         aliveTime += time;
-        _currRadius += _expansionSpeed * time;
+        _currRadius += speed * time;
 
         auto entities = objectManager.getEntities();
         std::shared_ptr<Enemy> enemy;

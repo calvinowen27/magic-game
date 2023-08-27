@@ -27,9 +27,14 @@ private:
 public:
     MouseHandler();
     void update();
+    void onMouseButtonDown(int button);
+    void onMouseButtonUp(int button);
     bool isButtonPressed(int button);
     bool wasButtonPressed(int button);
     bool isButtonJustPressed(int button);
+    bool isButtonJustReleased(int button);
+    void mouseWheel(int wheelY);
+
     bool mouseWithinRect(SDL_Rect rect);
     inline Vector2 getMousePos() { return _mousePos; }
     inline Vector2 getMousePrevPos() { return _prevMousePos; }

@@ -36,8 +36,17 @@ public:
 
         std::shared_ptr<T> spell = _game.pObjectManager->newEntity<T>();
         _pCurrSpell = std::dynamic_pointer_cast<Spell>(spell);
+        _pCurrSpell->init();
+        _pCurrSpell->setLifeDur(0.25f);
+        _pCurrSpell->setSpeed(20);
 
         return spell;
+    }
+
+    template <typename T>
+    static void createSpell()
+    {
+        Game::getInstance()->pSpellManager->newSpell<T>();
     }
 
     inline std::shared_ptr<Spell> getCurrSpell() { return _pCurrSpell; }

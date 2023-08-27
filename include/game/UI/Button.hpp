@@ -1,19 +1,19 @@
 #ifndef BUTTON_INCLUDE
 #define BUTTON_INCLUDE
 
-#include "TextElement.hpp"
+#include "UIElement.hpp"
 
 class MouseHandler;
 
-class Button : public TextElement
+class Button : public UIElement
 {
-private:
+    private:
     MouseHandler &_mouseHandler;
     void (*_actionFunc)();
 
 public:
     Button();
-    bool init(std::string textureName, std::string buttonText, std::string fontName, SDL_Color textColor, Vector2 relativePos, Vector2 relativeDims, void (*actionFunc)(), bool enabled = true);
+    bool init(std::string textureName, Vector2 relativePos, Vector2 relativeDims, void (*actionFunc)(), bool enabled = true);
     void update() override;
 };
 

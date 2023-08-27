@@ -48,7 +48,12 @@ protected:
 
 public:
     Spell();
-    virtual bool init(EntityType type, Vector2 dir, SpellElement element, float damage, float lifeDur);
+    virtual bool init();
+    void setElement(SpellElement element);
+    inline void setDamage(float damage) { this->damage = damage; }
+    inline void setLifeDur(float lifeDur) { this->lifeDur = lifeDur; }
+    inline void setSpeed(float speed) { this->speed = speed; }
+    inline void setDir(Vector2 dir) { this->dir = dir; }
     virtual void update(float time);
     virtual void cast(Vector2 pos);
     virtual void hit(Entity *pEntity);

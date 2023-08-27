@@ -16,7 +16,8 @@
 
 #include "UIElement.hpp"
 #include "TextElement.hpp"
-#include "Button.hpp"
+#include "TextButton.hpp"
+#include "../Spells/SpellManager.hpp"
 
 #include <vector>
 #include <set>
@@ -47,7 +48,6 @@ private:
 public:
     UIManager();
     static UIManager *getInstance();
-    static void newRadial();
     void init();
     void update();
     void draw(SDL_Renderer *pRenderer);

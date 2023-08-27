@@ -9,14 +9,10 @@ Spell::Spell() : Entity()
 {
 }
 
-bool Spell::init(EntityType type, Vector2 dir, SpellElement element, float damage, float lifeDur)
+bool Spell::init()
 {
-    Entity::init(type, Vector2::zero);
+    Entity::init(EntityType::Spell, Vector2::zero);
 
-    this->dir = dir;
-    this->element = element;
-    this->damage = damage;
-    this->lifeDur = lifeDur;
     aliveTime = 0;
 
     pCollider = registry.newComponent<ColliderComponent>();
@@ -25,6 +21,7 @@ bool Spell::init(EntityType type, Vector2 dir, SpellElement element, float damag
     pCollider->init(Vector2::zero, Vector2(1, 1), pTransform, pRigidbody, true, true);
     pCollider->setEntity(this);
     pCollider->disable();
+
     pRigidbody->init(pTransform, pCollider);
     pRenderer->disable();
 
