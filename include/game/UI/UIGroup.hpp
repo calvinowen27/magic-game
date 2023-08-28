@@ -56,6 +56,9 @@ public:
     SpellUIGroup();
     void init() override;
     bool toggleEnabled() override;
+
+    static void radialButton();
+    static void projectileButton();
 };
 
 class DebugUIGroup : public UIGroup

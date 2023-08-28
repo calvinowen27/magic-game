@@ -15,7 +15,7 @@ class Entity;
 class WorldManager
 {
 public:
-    static const int WORLD_SIZE = 100;
+    static const int WORLD_SIZE = 200;
 
 private:
     static WorldManager *_pInstance;

@@ -48,10 +48,10 @@ SpellUIGroup::SpellUIGroup() : UIGroup(), _spellManager(*game.pSpellManager)
 void SpellUIGroup::init()
 {
     _pRadialSpellButton = newUIElement<Button>();
-    _pRadialSpellButton->init("radial_spell_button", Vector2(0.5f, 0.25f), Vector2(0.05, 0.075), SpellManager::createSpell<RadialSpell>);
+    _pRadialSpellButton->init("radial_spell_button", Vector2(0.5f, 0.25f), Vector2(0.05, 0.075), SpellUIGroup::radialButton);
 
     _pProjectileSpellButton = newUIElement<Button>();
-    _pProjectileSpellButton->init("projectile_spell_button", Vector2(0.55f, 0.3f), Vector2(0.05, 0.075), SpellManager::createSpell<ProjectileSpell>);
+    _pProjectileSpellButton->init("projectile_spell_button", Vector2(0.55f, 0.3f), Vector2(0.05, 0.075), SpellUIGroup::projectileButton);
 
     UIGroup::init();
 
@@ -64,6 +64,42 @@ bool SpellUIGroup::toggleEnabled()
 
     if(enabled)
         _spellManager.killCurrSpell();
+}
+
+void SpellUIGroup::radialButton()
+{
+    auto spellManager = Game::getInstance()->pSpellManager;
+
+    if(spellManager->getCurrSpell())
+    {
+        spellManager->getCurrSpell()->addAttribute(SpellAttribute::Radial);
+    }
+    else
+    {
+        auto spell = spellManager->newSpell<RadialSpell>();
+        spell->init();
+        spell->setDamage(3);
+        spell->setLifeDur(1);
+        spell->setSpeed(3.5);
+    }
+}
+
+void SpellUIGroup::projectileButton()
+{
+    auto spellManager = Game::getInstance()->pSpellManager;
+
+    if(spellManager->getCurrSpell())
+    {
+        spellManager->getCurrSpell()->addAttribute(SpellAttribute::Projectile);
+    }
+    else
+    {
+        auto spell = spellManager->newSpell<ProjectileSpell>();
+        spell->init();
+        spell->setDamage(4);
+        spell->setLifeDur(2.5);
+        spell->setSpeed(5);
+    }
 }
 
 

@@ -22,9 +22,10 @@ void ProjectileSpell::kill()
     {
         auto radial = spellManager.newSpell<RadialSpell>();
         radial->init();
-        radial->setSpeed(3);
-        radial->setLifeDur(1.5f);
-        radial->cast(pTransform->pos);
+        radial->setDamage(3);
+        radial->setLifeDur(1);
+        radial->setSpeed(3.5);
+        radial->cast(pTransform->pos + (pTransform->dims / 2));
     }
 
     Spell::kill();
