@@ -76,6 +76,7 @@ class Vector2Int
         friend float distance(Vector2Int a, Vector2Int b);
         bool equals(const Vector2Int& b) const;
         void normalize();
+        Vector2Int normalized() const;
         friend bool operator==(const Vector2Int& a, const Vector2Int& b);
         Vector2Int operator+(const Vector2Int& b) const;
         Vector2Int operator-(const Vector2Int& b) const;

@@ -214,6 +214,13 @@ void Vector2Int::normalize()
     if(x != 0 && y != 0) *this /= (sqrt(pow(x, 2) + pow(y, 2)));
 }
 
+Vector2Int Vector2Int::normalized() const
+{
+    Vector2Int result = *this;
+    result.normalize();
+    return result;
+}
+
 bool operator==(const Vector2Int &a, const Vector2Int &b)
 {
     return a.equals(b);
