@@ -21,15 +21,17 @@ void MouseHandler::update()
 
 void MouseHandler::onMouseButtonDown(int button)
 {
-
 }
 
 void MouseHandler::onMouseButtonUp(int button)
 {
-    if(button == SDL_BUTTON_LEFT)
+    if (button == SDL_BUTTON_LEFT)
     {
-        if(!_game.pUIManager->getSpellUI()->isEnabled() && _game.pSpellManager->getCurrSpell())
+        if (!_game.pUIManager->getSpellUI()->isEnabled() && _game.pSpellManager->getCurrSpell())
+        {
+            _game.pSpellManager->getCurrSpell()->setDir(((Vector2)(_pxMousePos - _game.pPlayer->getPxPos())).normalized() * Vector2(1, -1));
             _game.pSpellManager->getCurrSpell()->cast(_game.pPlayer->getPos() + (_game.pPlayer->getDims() / 2));
+        }
     }
 }
 
@@ -55,10 +57,10 @@ bool MouseHandler::isButtonJustReleased(int button)
 
 void MouseHandler::mouseWheel(int wheelY)
 {
-    if(wheelY > 0)
+    if (wheelY > 0)
         _game.zoomIn();
 
-    if(wheelY < 0)
+    if (wheelY < 0)
         _game.zoomOut();
 }
 

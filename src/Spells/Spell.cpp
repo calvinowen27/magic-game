@@ -37,7 +37,7 @@ void Spell::update(float time)
     if (aliveTime < lifeDur)
     {
         aliveTime += time;
-        pRigidbody->velocity = dir * speed;
+        pRigidbody->velocity = dir.normalized() * speed;
     }
     else
     {
@@ -60,7 +60,7 @@ void Spell::hit(Entity *pEntity)
 void Spell::kill()
 {
     Entity::kill();
-    
+
     isCast = false;
 
     registry.killComponent(pRigidbody);

@@ -15,3 +15,17 @@ bool ProjectileSpell::init()
 
     return true;
 }
+
+void ProjectileSpell::kill()
+{
+    if(attributes.find(SpellAttribute::Radial) != attributes.end())
+    {
+        auto radial = spellManager.newSpell<RadialSpell>();
+        radial->init();
+        radial->setSpeed(3);
+        radial->setLifeDur(1.5f);
+        radial->cast(pTransform->pos);
+    }
+
+    Spell::kill();
+}

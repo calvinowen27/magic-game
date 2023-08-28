@@ -31,7 +31,7 @@ public:
         {
             throw new std::invalid_argument("SpellManager::newSpell<Type>() : Type must be derived from Spell class.");
         }
-        
+
         std::shared_ptr<T> entity = _game.pObjectManager->newEntity<T>();
         auto spell = std::dynamic_pointer_cast<Spell>(entity);
         spell->init();
@@ -45,16 +45,18 @@ public:
     static void createSpell()
     {
         auto spellManager = Game::getInstance()->pSpellManager;
-        if(spellManager->_pCurrSpell && std::is_same<ProjectileSpell, T>::value)
+        if (spellManager->_pCurrSpell && std::is_same<ProjectileSpell, T>::value)
         {
             spellManager->_pCurrSpell->addAttribute(SpellAttribute::Projectile);
+            return;
         }
-        else
+        if (spellManager->_pCurrSpell && std::is_same<RadialSpell, T>::value)
         {
-            spellManager->killCurrSpell();
-
-            spellManager->setCurrSpell(std::dynamic_pointer_cast<Spell>(spellManager->newSpell<T>()));
+            spellManager->_pCurrSpell->addAttribute(SpellAttribute::Radial);
+            return;
         }
+
+        spellManager->setCurrSpell(std::dynamic_pointer_cast<Spell>(spellManager->newSpell<T>()));
     }
 
     inline std::shared_ptr<Spell> getCurrSpell() { return _pCurrSpell; }
@@ -62,7 +64,10 @@ public:
     inline void killCurrSpell()
     {
         if (_pCurrSpell)
+        {
             _pCurrSpell->kill();
+            _pCurrSpell = nullptr;
+        }
     }
 };
 
