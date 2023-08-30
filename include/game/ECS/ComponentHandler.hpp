@@ -24,6 +24,7 @@ public:
     void update(float time);
     void updateTransforms(float time);
     void updateColliders(float time);
+    void updateAnimators(float time);
 };
 
 bool rendererComparator(std::shared_ptr<RendererComponent> a, std::shared_ptr<RendererComponent> b);

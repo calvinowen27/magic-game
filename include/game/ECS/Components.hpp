@@ -18,6 +18,9 @@ class Registry;
 class Object;
 class Entity;
 class ObjectManager;
+class Animation;
+class AnimationManager;
+
 enum class EntityType;
 
 class Component
@@ -149,22 +152,36 @@ public:
     void kill() override;
 };
 
-enum class AnimationState
-{
-    Walking,
-    Running,
-    CastSpell
-};
-
-class AnimationComponent : public Component
+class AnimatorComponent : public Component
 {
 private:
-    AnimationState _currState;
+    AnimationManager &_animationManager;
+
+    std::shared_ptr<Animation> _pAnimation;
+
+    std::shared_ptr<RendererComponent> _pRenderer;
+    std::vector<SDL_Rect> _rects;
+
+    int _currFrame;
+    int _frameCount;
+    float _frameTime;
+    float _duration;
+    float _timeSinceFrame;
+    bool _loops;
+    bool _playing;
+
+    EntityType _animationType;
+    std::string _animationName;
 
 public:
-    void playAnimation();
-    void setState(AnimationState state);
-    inline AnimationState getState() { return _currState; }
+    AnimatorComponent();
+    void init(std::shared_ptr<RendererComponent> pRenderer);
+    void update(float time);
+    void setAnimation(EntityType entityType, std::string name);
+    void kill();
+
+    inline void startAnimation() { _playing = true; }
+    inline void stopAnimation() { _playing = false; }
 };
 
 #endif

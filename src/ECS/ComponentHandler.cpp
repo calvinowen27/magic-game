@@ -28,6 +28,7 @@ void ComponentHandler::update(float time)
 {
     updateTransforms(time);
     updateColliders(time);
+    updateAnimators(time);
 }
 
 void ComponentHandler::updateTransforms(float time)
@@ -128,6 +129,15 @@ void ComponentHandler::updateColliders(float time)
         }
 
         pCol->pTransform->pos = nextPos;
+    }
+}
+
+void ComponentHandler::updateAnimators(float time)
+{
+    auto animators = _registry.getComponents<AnimatorComponent>();
+    for(auto animator : animators)
+    {
+        animator->update(time);
     }
 }
 

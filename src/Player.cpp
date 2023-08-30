@@ -18,38 +18,51 @@ bool Player::init(EntityType entityType, Vector2 pos)
     pHealth->init(10);
     pHealth->setEntity(this);
 
-    pRenderer->sourceRect.x = 16;
-    pRenderer->sourceRect.y = 16;
+    pAnimator = registry.newComponent<AnimatorComponent>();
+    pAnimator->init(pRenderer);
+    pAnimator->setAnimation(entityType, "walk");
 }
 
 void Player::update(float time)
 {
-    if(!alive)
+    if (!alive)
         return;
 
     Vector2 moveDir;
 
-    if(_pKeyboardHandler->isPressed(InputKey::Right)) // move right
+    if (_pKeyboardHandler->isPressed(InputKey::Right)) // move right
         moveDir.x += 1;
-    if(_pKeyboardHandler->isPressed(InputKey::Left)) // move left
+    if (_pKeyboardHandler->isPressed(InputKey::Left)) // move left
         moveDir.x -= 1;
-    if(_pKeyboardHandler->isPressed(InputKey::Up)) // move up
+    if (_pKeyboardHandler->isPressed(InputKey::Up)) // move up
         moveDir.y += 0.5f;
-    if(_pKeyboardHandler->isPressed(InputKey::Down)) // move down
+    if (_pKeyboardHandler->isPressed(InputKey::Down)) // move down
         moveDir.y -= 0.5f;
 
-    if(_pKeyboardHandler->isPressed(InputKey::ZoomIn)) // zoom in
+    if (_pKeyboardHandler->isPressed(InputKey::ZoomIn)) // zoom in
         game.zoomIn();
-    if(_pKeyboardHandler->isPressed(InputKey::ZoomOut)) // zoom out
+    if (_pKeyboardHandler->isPressed(InputKey::ZoomOut)) // zoom out
         game.zoomOut();
 
-    if(moveDir.x != 0)
+    if (moveDir.x != 0)
         pRigidbody->velocity = moveDir.normalized() * 2;
     else
         pRigidbody->velocity = moveDir * 2;
 
-    if(_pKeyboardHandler->isPressed(InputKey::Sprint)) // sprint
+    if (_pKeyboardHandler->isPressed(InputKey::Sprint)) // sprint
+    {
         pRigidbody->velocity *= 2.5;
+        pAnimator->setAnimation(type, "run");
+    }
+    else
+    {
+        pAnimator->setAnimation(type, "walk");
+    }
+
+    if (moveDir == Vector2::zero)
+        pAnimator->stopAnimation();
+    else
+        pAnimator->startAnimation();
 
     pHealth->pGreenRenderer->pTransform->pos = pTransform->pos + Vector2(0, pTransform->dims.y);
     pHealth->pRedRenderer->pTransform->pos = pHealth->pGreenRenderer->pTransform->pos;

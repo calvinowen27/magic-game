@@ -4,6 +4,8 @@
 #include "../../include/game/ECS/Registry.hpp"
 #include "../../include/game/Object.hpp"
 #include "../../include/game/ObjectManager.hpp"
+#include "../../include/game/Animation/AnimationManager.hpp"
+#include "../../include/game/Animation/Animation.hpp"
 
 #include <algorithm>
 
@@ -291,5 +293,68 @@ void HealthComponent::kill()
     registry.killComponent(pGreenRenderer);
     registry.killComponent(pRedRenderer);
 
+    Component::kill();
+}
+
+/* ANIMATION COMPONENT */
+AnimatorComponent::AnimatorComponent() : Component(), _animationManager(*game.pAnimationManager)
+{
+}
+
+void AnimatorComponent::init(std::shared_ptr<RendererComponent> pRenderer)
+{
+    _pRenderer = pRenderer;
+    _playing = false;
+
+    Component::init();
+}
+
+void AnimatorComponent::update(float time)
+{
+    if(_playing)
+    {
+        if(_timeSinceFrame >= _frameTime)
+        {
+            _currFrame++;
+            if(_currFrame >= _frameCount)
+            {
+                _currFrame = 0;
+
+                if(!_loops)
+                    _playing = false;
+            }
+
+            _timeSinceFrame = 0;
+
+            _pRenderer->sourceRect = _rects[_currFrame];
+        }
+        else
+        {
+            _timeSinceFrame += time;
+        }
+    }
+}
+
+void AnimatorComponent::setAnimation(EntityType entityType, std::string name)
+{
+    if(_animationName == name && _animationType == entityType)
+        return;
+
+    _animationName = name;
+    _animationType = entityType;
+    _pAnimation = _animationManager.getAnimation(entityType, name);
+    _currFrame = 0;
+    _frameCount = _pAnimation->getFrameCount();
+    _frameTime = _pAnimation->getFrameTime();
+    _duration = _pAnimation->getDuration();
+    _loops = _pAnimation->loops();
+    _playing = false;
+    _timeSinceFrame = 0;
+    _rects = _pAnimation->getRects();
+    _pRenderer->pTexture = _pAnimation->getTexture();
+}
+
+void AnimatorComponent::kill()
+{
     Component::kill();
 }

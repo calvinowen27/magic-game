@@ -25,6 +25,7 @@ class Entity
 {
 private:
     static std::map<EntityType, std::string> _stringFromType;
+    static std::map<std::string, EntityType> _typeFromString;
 
 protected:
     Game &game;
@@ -56,6 +57,7 @@ public:
     inline Vector2Int getPxDims() { return pTransform->pxDims; }
     inline bool isAlive() { return alive; }
     inline static std::string getStringFromType(EntityType entityType) { return _stringFromType[entityType]; }
+    inline static EntityType getTypeFromString(std::string typeName) { return _typeFromString[typeName]; }
 };
 
 #endif

@@ -56,6 +56,8 @@ void ContentManager::loadTextures()
     _textureFromType[EntityType::Enemy] = _textureFromName["enemy"];
     _textureFromType[EntityType::Grass] = _textureFromName["grass"];
     _textureFromType[EntityType::Spell] = _textureFromName["ice_spell"];
+
+    _spriteSheetFromType[EntityType::Player] = _textureFromName["player-sheet"];
 }
 
 void ContentManager::loadFonts()
@@ -112,6 +114,11 @@ SDL_Texture *ContentManager::getTexture(std::string textureName)
 SDL_Texture *ContentManager::getTextureFromType(EntityType type)
 {
     return _textureFromType[type];
+}
+
+SDL_Texture *ContentManager::getSpriteSheetFromType(EntityType type)
+{
+    return _spriteSheetFromType[type];
 }
 
 TTF_Font* ContentManager::getFont(std::string fontName)

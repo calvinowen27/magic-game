@@ -14,6 +14,7 @@ private:
 
 public:
     std::shared_ptr<HealthComponent> pHealth;
+    std::shared_ptr<AnimatorComponent> pAnimator;
 
     Player();
     bool init(EntityType entityType, Vector2 pos) override;

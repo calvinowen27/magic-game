@@ -12,6 +12,14 @@ std::map<EntityType, std::string> Entity::_stringFromType = {
     {EntityType::Spell, "Spell"}
 };
 
+std::map<std::string, EntityType> Entity::_typeFromString = {
+    {"Player", EntityType::Player},
+    {"Enemy", EntityType::Enemy},
+    {"Wall", EntityType::Wall},
+    {"Grass", EntityType::Grass},
+    {"Spell", EntityType::Spell}
+};
+
 Entity::Entity() : game(*Game::getInstance()), registry(*game.pRegistry), contentManager(*game.pContentManager), objectManager(*game.pObjectManager)
 {
 }

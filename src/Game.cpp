@@ -126,8 +126,9 @@ int Game::init()
     pContentManager->loadContent();
     pUIManager->init();
     pObjectManager->init();
-    pWorldManager->loadWorld();
     pAnimationManager->init();
+
+    pWorldManager->loadWorld(); // last because player and enemies created here!
 
     return 0;
 }
