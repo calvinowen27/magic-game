@@ -144,4 +144,22 @@ public:
     void kill() override;
 };
 
+enum class AnimationState
+{
+    Walking,
+    Running,
+    CastSpell
+};
+
+class AnimationComponent : public Component
+{
+private:
+    AnimationState _currState;
+
+public:
+    void playAnimation();
+    void setState(AnimationState state);
+    inline AnimationState getState() { return _currState; }
+};
+
 #endif

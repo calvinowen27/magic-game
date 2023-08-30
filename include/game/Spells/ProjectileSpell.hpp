@@ -10,6 +10,7 @@ class ProjectileSpell : public Spell
 public:
     ProjectileSpell();
     bool init();
+    void update(float time) override;
     void kill() override;
 };
 
