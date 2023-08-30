@@ -62,7 +62,7 @@ $(ANIMATION_DIR_O)/%.o: $(ANIMATION_DIR)/%.cpp $(INCLUDE_ANIMATION)/&.hpp
 
 .PHONY: clean
 clean:
-	rm -f $(DBG_DIR)/$(EXECUTABLE) $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS)
+	rm -f $(DBG_DIR)/$(EXECUTABLE) $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS)
 
 make_dirs:
 	mkdir -p $(BUILD_DIR)

@@ -3,11 +3,12 @@
 #include "../../include/game/ContentManager.hpp"
 #include "../../include/game/ECS/Registry.hpp"
 #include "../../include/game/Object.hpp"
+#include "../../include/game/ObjectManager.hpp"
 
 #include <algorithm>
 
 /* COMPONENT */
-Component::Component() : game(*Game::getInstance()), registry(*game.pRegistry)
+Component::Component() : game(*Game::getInstance()), registry(*game.pRegistry), objectManager(*game.pObjectManager)
 {
 }
 
@@ -37,26 +38,30 @@ RendererComponent::~RendererComponent()
     SDL_DestroyTexture(pTexture);
 }
 
-RendererComponent *RendererComponent::init(std::string textureName, shared_ptr<TransformComponent> pTransform, int renderOrder)
+RendererComponent *RendererComponent::init(std::string textureName, std::shared_ptr<TransformComponent> pTransform, int renderOrder)
 {
     Component::init();
 
     pTexture = contentManager.getTexture(textureName);
     this->pTransform = pTransform;
     this->renderOrder = renderOrder;
+    sourceRect = SDL_Rect{0, 0, 16, 16};
+    spriteDims = Vector2Int(16, 16);
 
     refreshDimensions();
 
     return this;
 }
 
-RendererComponent *RendererComponent::init(EntityType entityType, shared_ptr<TransformComponent> pTransform, int renderOrder)
+RendererComponent *RendererComponent::init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, int renderOrder)
 {
     Component::init();
 
     pTexture = contentManager.getTextureFromType(entityType);
     this->pTransform = pTransform;
     this->renderOrder = renderOrder;
+    spriteDims = objectManager.getSpriteDims(entityType);
+    sourceRect = SDL_Rect{0, 0, spriteDims.x, spriteDims.y};
 
     refreshDimensions();
 
@@ -75,7 +80,7 @@ void RendererComponent::draw(SDL_Renderer *pRenderer)
 
     spriteRect = SDL_Rect{pTransform->pxPos.x, pTransform->pxPos.y, pTransform->pxDims.x, pTransform->pxDims.y};
 
-    SDL_RenderCopyEx(pRenderer, pTexture, NULL, &spriteRect, spriteAngle, NULL, isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+    SDL_RenderCopyEx(pRenderer, pTexture, &sourceRect, &spriteRect, spriteAngle, NULL, isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 
 bool RendererComponent::setTexture(std::string textureName)
@@ -88,9 +93,7 @@ bool RendererComponent::setTexture(std::string textureName)
 void RendererComponent::refreshDimensions()
 {
     // change dimensions of
-    Vector2Int newPxDims;
-    SDL_QueryTexture(pTexture, NULL, NULL, &newPxDims.x, &newPxDims.y);
-    newPxDims = newPxDims * (float)(game.ppm / game.TEXTURE_PPM);
+    Vector2Int newPxDims = spriteDims * (float)game.ppm / game.SPRITE_PPM;
     pTransform->setPxDims(newPxDims);
 }
 
@@ -137,7 +140,7 @@ ColliderComponent::ColliderComponent() : Component()
 {
 }
 
-ColliderComponent *ColliderComponent::init(Vector2 start, Vector2 end, shared_ptr<TransformComponent> pTransform, shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions, bool isTrigger)
+ColliderComponent *ColliderComponent::init(Vector2 start, Vector2 end, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions, bool isTrigger)
 {
     Component::init();
 
@@ -204,7 +207,7 @@ RigidbodyComponent::RigidbodyComponent() : Component()
 {
 }
 
-RigidbodyComponent *RigidbodyComponent::init(shared_ptr<TransformComponent> pTransform, shared_ptr<ColliderComponent> pCollider, bool isStatic)
+RigidbodyComponent *RigidbodyComponent::init(std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<ColliderComponent> pCollider, bool isStatic)
 {
     Component::init();
 

@@ -17,6 +17,7 @@ class RigidbodyComponent;
 class Registry;
 class Object;
 class Entity;
+class ObjectManager;
 enum class EntityType;
 
 class Component
@@ -24,6 +25,7 @@ class Component
 protected:
     Game &game;
     Registry &registry;
+    ObjectManager &objectManager;
 
     Entity *pEntity;
 
@@ -46,6 +48,9 @@ public:
 
     SDL_Texture *pTexture;
     SDL_Rect spriteRect;
+    SDL_Rect sourceRect;
+
+    Vector2Int spriteDims;
 
     std::shared_ptr<TransformComponent> pTransform;
 

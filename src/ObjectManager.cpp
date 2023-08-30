@@ -28,15 +28,15 @@ ObjectManager *ObjectManager::getInstance()
 
 void ObjectManager::init()
 {
-    std::ifstream f(_colliderDataPath);
-    _colliderData = json::parse(f);
+    std::ifstream f(_entityDataPath);
+    _entityData = json::parse(f);
     f.close();
 }
 
 void ObjectManager::update(float time)
 {
     // obj.update();
-    std::vector<shared_ptr<Entity>> deadEntities;
+    std::vector<std::shared_ptr<Entity>> deadEntities;
 
     for (auto entity : _entities)
     {
@@ -53,11 +53,23 @@ void ObjectManager::update(float time)
 std::vector<Vector2> ObjectManager::getCollider(EntityType entityType)
 {
     std::string typeString = Entity::getStringFromType(entityType);
-    if (!_colliderData["colliders"].contains(typeString))
+    if (!_entityData["colliders"].contains(typeString))
     {
-        std::cerr << "Invalid objType '" << typeString << "'. Returning {Vector2(0, 0), Vector2(1, 0.5)}." << std::endl;
+        std::cerr << "ObjectManager::getCollider(entityType): Invalid entityType '" << typeString << "'. Returning {Vector2(0, 0), Vector2(1, 0.5)}." << std::endl;
         return std::vector<Vector2>{Vector2::zero, Vector2(1, 0.5)};
     }
-    auto endpoints = _colliderData["colliders"][typeString];
+    auto endpoints = _entityData["colliders"][typeString];
     return std::vector<Vector2>{Vector2((float)endpoints["start"][0], (float)endpoints["start"][1]), Vector2((float)endpoints["end"][0], (float)endpoints["end"][1])};
+}
+
+Vector2Int ObjectManager::getSpriteDims(EntityType entityType)
+{
+    std::string typeString = Entity::getStringFromType(entityType);
+    if (!_entityData["spriteDims"].contains(typeString))
+    {
+        std::cerr << "ObjectManager::getSpriteDims(entityType): Invalid entityType '" << typeString << "'. Returning Vector2Int(16, 16)." << std::endl;
+        return Vector2Int(16, 16);
+    }
+    auto spriteDims = _entityData["spriteDims"][typeString];
+    return Vector2Int((int)spriteDims[0], (int)spriteDims[1]);
 }

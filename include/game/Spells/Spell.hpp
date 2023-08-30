@@ -63,7 +63,7 @@ public:
     inline void setSpeed(float speed) { this->speed = speed; }
     inline void setDir(Vector2 dir) { this->dir = dir; }
     inline void addAttribute(SpellAttribute attribute) { attributes.emplace(attribute); }
-    virtual void update(float time);
+    void update(float time) override;
     virtual void cast(Vector2 pos);
     virtual void hit(Entity *pEntity);
 

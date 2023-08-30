@@ -52,7 +52,7 @@ void ContentManager::loadTextures()
     }
 
     _textureFromType[EntityType::Wall] = _textureFromName["wall"];
-    _textureFromType[EntityType::Player] = _textureFromName["player"];
+    _textureFromType[EntityType::Player] = _textureFromName["player-sheet"];
     _textureFromType[EntityType::Enemy] = _textureFromName["enemy"];
     _textureFromType[EntityType::Grass] = _textureFromName["grass"];
     _textureFromType[EntityType::Spell] = _textureFromName["ice_spell"];

@@ -27,8 +27,8 @@ private:
     std::vector<std::shared_ptr<Object>> _objects;
     std::set<std::shared_ptr<Entity>> _entities;
 
-    std::string _colliderDataPath = "./data/colliders.json";
-    json _colliderData;
+    std::string _entityDataPath = "./data/entityData.json";
+    json _entityData;
 
 public:
     ObjectManager();
@@ -39,6 +39,7 @@ public:
     inline std::set<std::shared_ptr<Entity>> getEntities() { return _entities; }
 
     std::vector<Vector2> getCollider(EntityType entityType);
+    Vector2Int getSpriteDims(EntityType entityType);
 
     template <typename T>
     std::shared_ptr<T> newEntity()

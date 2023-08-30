@@ -17,6 +17,7 @@
 #include "../include/game/ECS/Components.hpp"
 #include "../include/game/ECS/ComponentHandler.hpp"
 #include "../include/game/Spells/SpellManager.hpp"
+#include "../include/game/Animation/AnimationManager.hpp"
 
 #include <thread>
 #include <chrono>
@@ -50,6 +51,7 @@ Game::~Game()
     delete pRegistry;
     delete pComponentHandler;
     delete pSpellManager;
+    delete pAnimationManager;
 }
 
 Game *Game::getInstance()
@@ -119,11 +121,13 @@ int Game::init()
     pObjectManager = ObjectManager::getInstance();
     pWorldManager = WorldManager::getInstance();
     pSpellManager = new SpellManager();
+    pAnimationManager = new AnimationManager();
 
     pContentManager->loadContent();
     pUIManager->init();
     pObjectManager->init();
     pWorldManager->loadWorld();
+    pAnimationManager->init();
 
     return 0;
 }

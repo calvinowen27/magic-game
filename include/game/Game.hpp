@@ -31,8 +31,7 @@ class Registry;
 class ComponentHandler;
 class TransformComponent;
 class SpellManager;
-
-using std::shared_ptr;
+class AnimationManager;
 
 class Game
 {
@@ -47,7 +46,7 @@ private:
     std::mutex _mutex;
 
 public:
-    const int TEXTURE_PPM = 16; // texture pixels per meter
+    const int SPRITE_PPM = 16; // texture pixels per meter
 
     ContentManager *pContentManager;
     KeyboardHandler *pKeyboardHandler;
@@ -58,8 +57,9 @@ public:
     Registry *pRegistry;
     ComponentHandler *pComponentHandler;
     SpellManager *pSpellManager;
+    AnimationManager *pAnimationManager;
 
-    shared_ptr<Player> pPlayer;
+    std::shared_ptr<Player> pPlayer;
 
     int winWidth = 1250, winHeight = 835;
     int ppm = 64; // screen pixels per meter, 64 by default

@@ -16,7 +16,7 @@ private:
 
 public:
     RadialSpell();
-    bool init();
+    bool init() override;
     void update(float time) override;
     void cast(Vector2 pos) override;
     void hit(Entity *pEntity) override;

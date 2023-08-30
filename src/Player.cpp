@@ -17,6 +17,9 @@ bool Player::init(EntityType entityType, Vector2 pos)
     pHealth = registry.newComponent<HealthComponent>();
     pHealth->init(10);
     pHealth->setEntity(this);
+
+    pRenderer->sourceRect.x = 16;
+    pRenderer->sourceRect.y = 16;
 }
 
 void Player::update(float time)

@@ -1,6 +1,15 @@
 #include "../../include/game/Animation/AnimationManager.hpp"
-#include "../../include/game/Game.hpp"
+#include "../../include/game/Animation/Animation.hpp"
 
-AnimationManager::AnimationManager() : _game(*Game::getInstance())
+#include <fstream>
+
+AnimationManager::AnimationManager()
 {
+}
+
+void AnimationManager::init()
+{
+    std::ifstream f(_animationDataPath);
+    _animationData = json::parse(f);
+    f.close();
 }
