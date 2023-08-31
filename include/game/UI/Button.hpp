@@ -9,7 +9,7 @@ class Button : public UIElement
 {
     private:
     MouseHandler &_mouseHandler;
-    void (*_actionFunc)();
+    void (*_actionFunc)() = nullptr;
 
 public:
     Button();

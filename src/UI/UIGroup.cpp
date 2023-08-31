@@ -64,6 +64,8 @@ bool SpellUIGroup::toggleEnabled()
 
     if(enabled)
         _spellManager.killCurrSpell();
+
+    return enabled;
 }
 
 void SpellUIGroup::radialButton()

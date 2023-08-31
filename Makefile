@@ -31,7 +31,7 @@ INPUT_OBJS = $(patsubst $(INPUT_DIR)/%.cpp, $(INPUT_DIR_O)/%.o, $(wildcard $(INP
 ANIMATION_OBJS = $(patsubst $(ANIMATION_DIR)/%.cpp, $(ANIMATION_DIR_O)/%.o, $(wildcard $(ANIMATION_DIR)/*.cpp))
 
 CC = g++
-CFLAGS = -std=c++17 -Wall -Wextra -pedantic -I$(INCLUDE_DIR)
+CFLAGS = -std=c++17 -g3 -Wall -Wextra -pedantic
 
 LDFLAGS = -L./lib -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lUser32
 

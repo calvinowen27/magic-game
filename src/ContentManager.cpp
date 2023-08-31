@@ -30,7 +30,7 @@ void ContentManager::loadTextures()
 
     for(const auto& dirEntry : recursive_directory_iterator(TEXTURE_PATH))
     {
-        pSurface = IMG_Load((const char *)dirEntry.path().c_str());
+        pSurface = IMG_Load((const char *)dirEntry.path().string().c_str());
         if(pSurface == NULL)
         {
             std::cerr << "ContentManager loadTextures(): Failed to load image to surface: " << IMG_GetError() << std::endl;
@@ -71,7 +71,7 @@ void ContentManager::loadFonts()
     {
         currPath = dirEntry.path().filename().string();
 
-        font = TTF_OpenFont((const char *)dirEntry.path().c_str(), 51);
+        font = TTF_OpenFont((const char *)dirEntry.path().string().c_str(), 51);
         if(font == NULL)
         {
             std::cerr << "ContentManager loadFonts(): Failed to open font: " << TTF_GetError() << std::endl;

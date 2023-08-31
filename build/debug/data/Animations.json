@@ -3,7 +3,7 @@
         {
             "name": "walk",
             "duration": 1,
-            "frameCount": 3
+            "frameCount": 2
         },
         {
             "name": "run",

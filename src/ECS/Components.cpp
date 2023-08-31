@@ -35,11 +35,6 @@ RendererComponent::RendererComponent() : Component(), contentManager(*game.pCont
 {
 }
 
-RendererComponent::~RendererComponent()
-{
-    SDL_DestroyTexture(pTexture);
-}
-
 RendererComponent *RendererComponent::init(std::string textureName, std::shared_ptr<TransformComponent> pTransform, int renderOrder)
 {
     Component::init();

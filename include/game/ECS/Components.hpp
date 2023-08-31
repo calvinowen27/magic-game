@@ -63,7 +63,6 @@ public:
     int renderOrder = 0;
 
     RendererComponent();
-    ~RendererComponent();
     RendererComponent *init(std::string textureName, std::shared_ptr<TransformComponent> pTransform, int renderOrder = 0); // returns true if successful
     RendererComponent *init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, int renderOrder = 0); // returns true if successful
     void update(float time);

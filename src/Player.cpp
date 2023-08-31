@@ -21,6 +21,8 @@ bool Player::init(EntityType entityType, Vector2 pos)
     pAnimator = registry.newComponent<AnimatorComponent>();
     pAnimator->init(pRenderer);
     pAnimator->setAnimation(entityType, "walk");
+
+    return true;
 }
 
 void Player::update(float time)

@@ -1,8 +1,8 @@
-#include "../include/game/Spells/Spell.hpp"
-#include "../include/game/Game.hpp"
-#include "../include/game/Enemy.hpp"
-#include "../include/game/ObjectManager.hpp"
-#include "../include/game/Spells/SpellManager.hpp"
+#include "../../include/game/Spells/Spell.hpp"
+#include "../../include/game/Game.hpp"
+#include "../../include/game/Enemy.hpp"
+#include "../../include/game/ObjectManager.hpp"
+#include "../../include/game/Spells/SpellManager.hpp"
 
 #include <type_traits>
 

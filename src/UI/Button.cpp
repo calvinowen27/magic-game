@@ -11,6 +11,8 @@ bool Button::init(std::string textureName, Vector2 relativePos, Vector2 relative
     UIElement::init(textureName, relativePos, relativeDims, enabled);
 
     _actionFunc = actionFunc;
+
+    return true;
 }
 
 void Button::update()
