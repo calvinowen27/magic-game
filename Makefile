@@ -60,13 +60,13 @@ $(ECS_DIR_O)/%.o: $(ECS_DIR)/%.cpp $(INCLUDE_ECS)/%.hpp
 $(UI_DIR_O)/%.o: $(UI_DIR)/%.cpp $(INCLUDE_UI)/%.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(SPELLS_DIR_O)/%.o: $(SPELLS_DIR)/%.cpp $(INCLUDE_SPELLS)/&.hpp
+$(SPELLS_DIR_O)/%.o: $(SPELLS_DIR)/%.cpp $(INCLUDE_SPELLS)/%.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(INPUT_DIR_O)/%.o: $(INPUT_DIR)/%.cpp $(INCLUDE_INPUT)/&.hpp
+$(INPUT_DIR_O)/%.o: $(INPUT_DIR)/%.cpp $(INCLUDE_INPUT)/%.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(ANIMATION_DIR_O)/%.o: $(ANIMATION_DIR)/%.cpp $(INCLUDE_ANIMATION)/&.hpp
+$(ANIMATION_DIR_O)/%.o: $(ANIMATION_DIR)/%.cpp $(INCLUDE_ANIMATION)/%.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 .PHONY: clean
