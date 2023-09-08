@@ -39,7 +39,7 @@ LDFLAGS = -L./lib -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lUser32
 EXECUTABLE = magic
 
 debug: make_dirs refresh_content refresh_data refresh_world $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS)
-	$(CC) $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS) $(LDFLAGS) -o $(BUILD_DIR)/$(EXECUTABLE) -static-libgcc -static-libstdc++
+	$(CC) $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS) $(LDFLAGS) -o $(BUILD_DIR)/$(EXECUTABLE) -lpthread -static-libgcc -static-libstdc++
 
 ### CREATE OBJECTS ###
 
