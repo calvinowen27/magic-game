@@ -1,5 +1,6 @@
 SRC_DIR = src
 DBG_DIR = build/debug
+RLS_DIR = build/release
 ECS_DIR = $(SRC_DIR)/ECS
 UI_DIR = $(SRC_DIR)/UI
 SPELLS_DIR = $(SRC_DIR)/Spells
@@ -38,7 +39,14 @@ LDFLAGS = -L./lib -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lUser32
 
 EXECUTABLE = magic
 
-debug: make_dirs refresh_content refresh_data refresh_world $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS)
+debug: CFLAGS += -g3
+debug: BUILD_DIR = $(DBG_DIR)
+debug: build
+
+release: BUILD_DIR = $(RLS_DIR)
+release: build
+
+build: make_dirs refresh_content refresh_data refresh_world $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS)
 	$(CC) $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS) $(LDFLAGS) -o $(BUILD_DIR)/$(EXECUTABLE) -static-libgcc -static-libstdc++
 
 ### CREATE OBJECTS ###
@@ -63,7 +71,7 @@ $(ANIMATION_DIR_O)/%.o: $(ANIMATION_DIR)/%.cpp $(INCLUDE_ANIMATION)/&.hpp
 
 .PHONY: clean
 clean:
-	rm -f $(DBG_DIR)/$(EXECUTABLE) $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS)
+	rm -f $(DBG_DIR)/$(EXECUTABLE) $(RLS_DIR)/$(EXECUTABLE) $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS)
 
 make_dirs:
 	mkdir -p $(BUILD_DIR)

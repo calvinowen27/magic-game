@@ -1,0 +1,14 @@
+{
+    "Player": [
+        {
+            "name": "walk",
+            "duration": 1,
+            "frameCount": 2
+        },
+        {
+            "name": "run",
+            "duration": 0.5,
+            "frameCount": 2
+        }
+    ]
+}
