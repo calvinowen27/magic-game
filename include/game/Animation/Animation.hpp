@@ -39,7 +39,7 @@ private:
 
 public:
     Animation(AnimationManager *animationManager);
-    void init(EntityType entityType, std::string name, float duration, int frameCount, int animationIdx);
+    void init(EntityType entityType, std::string name, float duration, int frameCount, int animationIdx, bool loops);
 
     inline void play() { _playing = true; }
     inline void stop() { _playing = false; }

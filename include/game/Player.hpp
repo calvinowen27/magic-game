@@ -11,6 +11,8 @@ class Player : public Object
 {
 private:
     KeyboardHandler *_pKeyboardHandler;
+    Vector2 _moveDir;
+    Vector2 _prevMoveDir;
 
 public:
     std::shared_ptr<HealthComponent> pHealth;

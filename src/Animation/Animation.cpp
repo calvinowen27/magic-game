@@ -10,7 +10,7 @@ Animation::Animation(AnimationManager *animationManager) : _game(*Game::getInsta
 {
 }
 
-void Animation::init(EntityType entityType, std::string name, float duration, int frameCount, int animationIdx)
+void Animation::init(EntityType entityType, std::string name, float duration, int frameCount, int animationIdx, bool loops)
 {
     _entityType = entityType;
     _name = name;
@@ -18,6 +18,7 @@ void Animation::init(EntityType entityType, std::string name, float duration, in
     _frameCount = frameCount;
     _frameTime = _duration / _frameCount;
     _animationIdx = animationIdx;
+    _loops = loops;
     _pTexture = _contentManager.getTextureFromType(_entityType);
 
     Vector2Int spriteDims = _objectManager.getSpriteDims(entityType);

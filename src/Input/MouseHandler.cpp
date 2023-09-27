@@ -31,7 +31,7 @@ void MouseHandler::onMouseButtonUp(int button)
         {
             Vector2 dir = ((Vector2)(_pxMousePos - _game.pPlayer->getPxPos())).normalized() * Vector2(1, -1);
             _game.pSpellManager->getCurrSpell()->setDir(dir);
-            _game.pSpellManager->getCurrSpell()->cast(_game.pPlayer->getPos() + (_game.pPlayer->getDims() / 2));
+            _game.pSpellManager->castCurrSpell(_game.pPlayer->getPos() + (_game.pPlayer->getDims() / 2));
         }
     }
 }

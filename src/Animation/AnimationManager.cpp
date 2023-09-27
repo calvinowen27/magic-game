@@ -15,8 +15,6 @@ void AnimationManager::init()
     f.close();
 
     loadAnimations();
-
-    // newAnimation(EntityType::Player, "walk");
 }
 
 void AnimationManager::loadAnimations()
@@ -24,14 +22,14 @@ void AnimationManager::loadAnimations()
     uint32_t idx;
     EntityType entityType;
 
-    for(auto& [typeName, typeAnimations] : _animationData.items())
+    for (auto &[typeName, typeAnimations] : _animationData.items())
     {
         entityType = Entity::getTypeFromString(typeName);
         idx = 0;
-        for(auto& animData : typeAnimations)
+        for (auto &animData : typeAnimations)
         {
             std::shared_ptr<Animation> animation = std::make_shared<Animation>(this);
-            animation->init(entityType, animData["name"], (float)animData["duration"], (int)animData["frameCount"], idx);
+            animation->init(entityType, animData["name"], (float)animData["duration"], (int)animData["frameCount"], idx, animData["loops"]);
             _animations[entityType][animData["name"]] = animation;
 
             idx++;
@@ -53,7 +51,7 @@ std::shared_ptr<Animation> AnimationManager::newAnimation(std::string entityType
     int frameCount = (int)_animationData[entityTypeName][animationIdx][name]["frameCount"];
 
     std::shared_ptr<Animation> animation = std::make_shared<Animation>(this);
-    animation->init(entityType, name, duration, frameCount, animationIdx);
+    animation->init(entityType, name, duration, frameCount, animationIdx, _animationData[entityTypeName][animationIdx][name]["loops"]);
     _animations[entityType][name] = animation;
 
     return animation;
@@ -61,5 +59,11 @@ std::shared_ptr<Animation> AnimationManager::newAnimation(std::string entityType
 
 std::shared_ptr<Animation> AnimationManager::getAnimation(EntityType entityType, std::string name)
 {
+    if (_animations[entityType].find(name) == _animations[entityType].end())
+    {
+        std::cerr << "AnimationManager::getAnimation(entityType, name) : Could not find name \"" << name << "\" in _animations[entityType]. entityType: " << Entity::getStringFromType(entityType) << ". No animation with this name exists.\n";
+        return nullptr;
+    }
+
     return _animations[entityType][name];
 }

@@ -20,7 +20,7 @@ bool Player::init(EntityType entityType, Vector2 pos)
 
     pAnimator = registry.newComponent<AnimatorComponent>();
     pAnimator->init(pRenderer);
-    pAnimator->setAnimation(entityType, "idle");
+    pAnimator->setAnimation(entityType, "idle_down");
 
     return true;
 }
@@ -30,57 +30,82 @@ void Player::update(float time)
     if (!alive)
         return;
 
-    Vector2 moveDir;
+    std::string nextAnimation;
+
+    _moveDir = Vector2::zero;
 
     if (_pKeyboardHandler->isPressed(InputKey::Right)) // move right
-        moveDir.x += 1;
+        _moveDir.x += 1;
     if (_pKeyboardHandler->isPressed(InputKey::Left)) // move left
-        moveDir.x -= 1;
+        _moveDir.x -= 1;
     if (_pKeyboardHandler->isPressed(InputKey::Up)) // move up
-        moveDir.y += 0.5f;
+        _moveDir.y += 0.5f;
     if (_pKeyboardHandler->isPressed(InputKey::Down)) // move down
-        moveDir.y -= 0.5f;
+        _moveDir.y -= 0.5f;
+
+    if (_moveDir == Vector2::zero && _prevMoveDir != Vector2::zero)
+    {
+        nextAnimation = _prevMoveDir.x < 0 ? "idle_left" : "idle_right";
+
+        if (_prevMoveDir.y != 0)
+            nextAnimation = _prevMoveDir.y > 0 ? "idle_up" : "idle_down";
+    }
+
+    _prevMoveDir = _moveDir;
 
     if (_pKeyboardHandler->isPressed(InputKey::ZoomIn)) // zoom in
         game.zoomIn();
     if (_pKeyboardHandler->isPressed(InputKey::ZoomOut)) // zoom out
         game.zoomOut();
 
-    if (moveDir.x != 0)
-        pRigidbody->velocity = moveDir.normalized() * 2;
+    if (_moveDir.x != 0)
+        pRigidbody->velocity = _moveDir.normalized() * 2;
     else
-        pRigidbody->velocity = moveDir * 2;
+        pRigidbody->velocity = _moveDir * 2;
 
     if (_pKeyboardHandler->isPressed(InputKey::Sprint)) // sprint
     {
         pRigidbody->velocity *= 2.5;
-        // pAnimator->setAnimation(type, "run");
+
+        if (_moveDir.y > 0)
+        {
+            nextAnimation = "run_up";
+        }
+        if (_moveDir.y < 0)
+        {
+            nextAnimation = "run_down";
+        }
+        if (_moveDir.x > 0)
+        {
+            nextAnimation = "run_right";
+        }
+        if (_moveDir.x < 0)
+        {
+            nextAnimation = "run_left";
+        }
     }
     else
     {
-        // pAnimator->setAnimation(type, "walk");
-        if(moveDir.x > 0)
+        if (_moveDir.y > 0)
         {
-            pAnimator->setAnimation(type, "walk_right");
+            nextAnimation = "walk_up";
         }
-        if(moveDir.x < 0)
+        if (_moveDir.y < 0)
         {
-            pAnimator->setAnimation(type, "walk_left");
+            nextAnimation = "walk_down";
         }
-        if(moveDir.y > 0)
+        if (_moveDir.x > 0)
         {
-            pAnimator->setAnimation(type, "walk_up");
+            nextAnimation = "walk_right";
         }
-        if(moveDir.y < 0)
+        if (_moveDir.x < 0)
         {
-            pAnimator->setAnimation(type, "walk_down");
+            nextAnimation = "walk_left";
         }
     }
 
-    if (moveDir == Vector2::zero)
-        pAnimator->stopAnimation();
-    else
-        pAnimator->startAnimation();
+    if(nextAnimation != "")
+        pAnimator->setAnimation(type, nextAnimation);
 
     pHealth->pGreenRenderer->pTransform->pos = pTransform->pos + Vector2(0, pTransform->dims.y);
     pHealth->pRedRenderer->pTransform->pos = pHealth->pGreenRenderer->pTransform->pos;

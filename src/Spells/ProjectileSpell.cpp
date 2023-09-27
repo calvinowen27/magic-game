@@ -20,7 +20,8 @@ void ProjectileSpell::update(float time)
 {
     Spell::update(time);
 
-    pRenderer->spriteAngle = atan2(dir.x, dir.y) * RAD_TO_DEGS;
+    if(pRenderer)
+        pRenderer->spriteAngle = atan2(dir.x, dir.y) * RAD_TO_DEGS;
 }
 
 void ProjectileSpell::kill()

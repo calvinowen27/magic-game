@@ -65,6 +65,7 @@ public:
     inline void addAttribute(SpellAttribute attribute) { attributes.emplace(attribute); }
     void update(float time) override;
     virtual void cast(Vector2 pos);
+    inline bool hasBeenCast() { return isCast; }
     virtual void hit(Entity *pEntity);
 
     void kill() override;

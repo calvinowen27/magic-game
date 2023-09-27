@@ -272,7 +272,7 @@ bool HealthComponent::damage(float dmgAmount)
     {
         health = 0;
         pGreenRenderer->pTransform->dims.x = 0;
-        if(pEntity)
+        if (pEntity)
             pEntity->kill();
 
         return true;
@@ -306,16 +306,16 @@ void AnimatorComponent::init(std::shared_ptr<RendererComponent> pRenderer)
 
 void AnimatorComponent::update(float time)
 {
-    if(_playing)
+    if (_playing)
     {
-        if(_timeSinceFrame >= _frameTime)
+        if (_timeSinceFrame >= _frameTime)
         {
             _currFrame++;
-            if(_currFrame >= _frameCount)
+            if (_currFrame >= _frameCount)
             {
                 _currFrame = 0;
 
-                if(!_loops)
+                if (!_loops)
                     _playing = false;
             }
 
@@ -332,18 +332,24 @@ void AnimatorComponent::update(float time)
 
 void AnimatorComponent::setAnimation(EntityType entityType, std::string name)
 {
-    if(_animationName == name && _animationType == entityType)
+    if (_animationName == name && _animationType == entityType)
         return;
+
+    _pAnimation = _animationManager.getAnimation(entityType, name);
+    if (_pAnimation == nullptr)
+    {
+        std::cout << "returning null with animation name " << name << " on EntityType " << Entity::getStringFromType(entityType) << "\n";
+        return;
+    }
 
     _animationName = name;
     _animationType = entityType;
-    _pAnimation = _animationManager.getAnimation(entityType, name);
     _currFrame = 0;
     _frameCount = _pAnimation->getFrameCount();
     _frameTime = _pAnimation->getFrameTime();
     _duration = _pAnimation->getDuration();
     _loops = _pAnimation->loops();
-    _playing = false;
+    _playing = true;
     _timeSinceFrame = 0;
     _rects = _pAnimation->getRects();
     _pRenderer->pTexture = _pAnimation->getTexture();

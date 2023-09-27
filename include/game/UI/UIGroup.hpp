@@ -4,11 +4,13 @@
 #include "UIElement.hpp"
 #include "Button.hpp"
 #include "TextElement.hpp"
+#include "../Spells/SpellManager.hpp"
 
 #include "../../SDL2/SDL.h"
 
 #include <set>
 #include <memory>
+#include <queue>
 
 class Game;
 class SpellManager;
@@ -52,9 +54,13 @@ private:
     std::shared_ptr<Button> _pRadialSpellButton;
     std::shared_ptr<Button> _pProjectileSpellButton;
 
+    static std::queue<SpellAttribute> _spellAttributes;
+
 public:
     SpellUIGroup();
     void init() override;
+    void update() override;
+    void createSpell();
     bool toggleEnabled() override;
 
     static void radialButton();

@@ -22,24 +22,27 @@ bool Enemy::init(EntityType entityType, Vector2 pos)
 
 void Enemy::update(float time)
 {
-    if(!alive)
+    if (!alive)
         return;
 
-    if (_timeSincePathFind > _pathFindTime)
+    if (Vector2::distance(game.pPlayer->getPos(), pTransform->pos) < 3)
     {
-        _dir = (game.pPlayer->getPos() - pTransform->pos).normalized();
-        _timeSincePathFind = 0;
-    }
-    else
-    {
-        _timeSincePathFind += time;
-        pRigidbody->velocity = _dir * _speed;
+        if (_timeSincePathFind > _pathFindTime)
+        {
+            _dir = (game.pPlayer->getPos() - pTransform->pos).normalized();
+            _timeSincePathFind = 0;
+        }
+        else
+        {
+            _timeSincePathFind += time;
+            pRigidbody->velocity = _dir * _speed;
+        }
     }
 
     pHealth->pGreenRenderer->pTransform->pos = pTransform->pos + Vector2(0, pTransform->dims.y);
     pHealth->pRedRenderer->pTransform->pos = pHealth->pGreenRenderer->pTransform->pos;
 
-    if(_timeSinceHit < _hitCooldown)
+    if (_timeSinceHit < _hitCooldown)
     {
         _timeSinceHit += time;
     }
@@ -56,7 +59,7 @@ void Enemy::kill()
 
 void Enemy::onCollisionEnter(Entity *pOther)
 {
-    if(pOther && pOther->getType() == EntityType::Player && _timeSinceHit >= _hitCooldown)
+    if (pOther && pOther->getType() == EntityType::Player && _timeSinceHit >= _hitCooldown)
     {
         Player *player = dynamic_cast<Player *>(pOther);
         player->pHealth->damage(_damage);

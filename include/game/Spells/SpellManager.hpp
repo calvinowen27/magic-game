@@ -39,14 +39,10 @@ public:
     }
 
     inline std::shared_ptr<Spell> getCurrSpell() { return _pCurrSpell; }
-    inline void killCurrSpell()
-    {
-        if (_pCurrSpell)
-        {
-            _pCurrSpell->kill();
-            _pCurrSpell = nullptr;
-        }
-    }
+
+    void killCurrSpell();
+    void castCurrSpell(Vector2 pos);
+    inline void resetCurrSpell() { _pCurrSpell = nullptr; }
 };
 
 #endif
