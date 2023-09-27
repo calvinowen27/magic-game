@@ -1,13 +1,28 @@
 {
     "Player": [
         {
-            "name": "walk",
-            "duration": 1,
+            "name": "idle",
+            "duration": 100,
+            "frameCount": 1
+        },
+        {
+            "name": "walk_down",
+            "duration": 0.75,
             "frameCount": 2
         },
         {
-            "name": "run",
-            "duration": 0.5,
+            "name": "walk_up",
+            "duration": 0.75,
+            "frameCount": 2
+        },
+        {
+            "name": "walk_left",
+            "duration": 0.75,
+            "frameCount": 2
+        },
+        {
+            "name": "walk_right",
+            "duration": 0.75,
             "frameCount": 2
         }
     ]

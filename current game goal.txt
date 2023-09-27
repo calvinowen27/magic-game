@@ -1,0 +1,6 @@
+current game goal
+	spawn room with nothing or maybe a little
+	doors to randomly placed rooms (can be preset)
+	a couple enemies
+	concept art
+	current story but it can evolve
