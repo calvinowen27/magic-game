@@ -23,7 +23,7 @@ SPELLS_DIR_O = $(SRC_DIR_O)/Spells
 INPUT_DIR_O = $(SRC_DIR_O)/Input
 ANIMATION_DIR_O = $(SRC_DIR_O)/Animation
 
-BUILD_DIR = build/debug
+BUILD_DIR = $(DBG_DIR)
 
 SRC_OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(SRC_DIR_O)/%.o, $(wildcard $(SRC_DIR)/*.cpp))
 ECS_OBJS = $(patsubst $(ECS_DIR)/%.cpp, $(ECS_DIR_O)/%.o, $(wildcard $(ECS_DIR)/*.cpp))
