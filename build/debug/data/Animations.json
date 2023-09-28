@@ -26,8 +26,8 @@
         },
         {
             "name": "walk_down",
-            "duration": 0.75,
-            "frameCount": 2,
+            "duration": 1.25,
+            "frameCount": 6,
             "loops": true
         },
         {
