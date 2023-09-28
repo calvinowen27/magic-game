@@ -39,8 +39,6 @@ LDFLAGS = -L./lib -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lUser32
 
 EXECUTABLE = magic
 
-refresh_addtl: refresh_content refresh_data refresh_world
-
 debug: CFLAGS += -g3
 debug: BUILD_DIR = $(DBG_DIR)
 debug: build
@@ -48,8 +46,10 @@ debug: build
 release: BUILD_DIR = $(RLS_DIR)
 release: build
 
-build: make_dirs refresh_content refresh_data refresh_world $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS)
+build: make_dirs refresh_addtl $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS)
 	$(CC) $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS) $(LDFLAGS) -o $(BUILD_DIR)/$(EXECUTABLE) -static-libgcc -static-libstdc++
+
+refresh_addtl: refresh_content refresh_data refresh_world
 
 ### CREATE OBJECTS ###
 
