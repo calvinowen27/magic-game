@@ -11,6 +11,7 @@
 #include <set>
 #include <vector>
 #include <type_traits>
+#include <queue>
 
 class Game;
 
@@ -20,6 +21,9 @@ private:
     std::shared_ptr<Spell> _pCurrSpell;
 
     Game &_game;
+
+    std::queue<SpellAttribute> _spellAttributes;
+    bool _hasValidSpell = false;
 
 public:
     SpellManager();
@@ -40,9 +44,17 @@ public:
 
     inline std::shared_ptr<Spell> getCurrSpell() { return _pCurrSpell; }
 
+    void createSpell();
+    void castCurrSpell(Vector2 pos, Vector2 dir);
     void killCurrSpell();
-    void castCurrSpell(Vector2 pos);
+
+    inline void addSpellAttribute(SpellAttribute attribute)
+    {
+        _spellAttributes.push(attribute);
+        _hasValidSpell = true;
+    }
     inline void resetCurrSpell() { _pCurrSpell = nullptr; }
+    inline bool hasValidSpell() { return _hasValidSpell; }
 };
 
 #endif

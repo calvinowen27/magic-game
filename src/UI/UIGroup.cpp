@@ -40,8 +40,6 @@ bool UIGroup::toggleEnabled()
 }
 
 /* SPELL UI GROUP */
-std::queue<SpellAttribute> SpellUIGroup::_spellAttributes;
-
 SpellUIGroup::SpellUIGroup() : UIGroup(), _spellManager(*game.pSpellManager)
 {
 }
@@ -63,60 +61,16 @@ void SpellUIGroup::update()
 {
     UIGroup::update();
 
-    createSpell();
-}
-
-void SpellUIGroup::createSpell()
-{
-    SpellAttribute attribute;
-    while(_spellAttributes.size())
-    {
-        attribute = _spellAttributes.front();
-        _spellAttributes.pop();
-
-        switch(attribute)
-        {
-            /* RADIAL */
-            case SpellAttribute::Radial:
-                if (_spellManager.getCurrSpell())
-                {
-                    _spellManager.getCurrSpell()->addAttribute(SpellAttribute::Radial);
-                }
-                else
-                {
-                    auto spell = _spellManager.newSpell<RadialSpell>();
-                    spell->init();
-                    spell->setDamage(3);
-                    spell->setLifeDur(1);
-                    spell->setSpeed(3.5);
-                }
-                break;
-
-            /* PROJECTILE */
-            case SpellAttribute::Projectile:
-                if (_spellManager.getCurrSpell())
-                {
-                    _spellManager.getCurrSpell()->addAttribute(SpellAttribute::Projectile);
-                }
-                else
-                {
-                    auto spell = _spellManager.newSpell<ProjectileSpell>();
-                    spell->init();
-                    spell->setDamage(4);
-                    spell->setLifeDur(2.5);
-                    spell->setSpeed(5);
-                }
-        }
-    }
+    // createSpell();
 }
 
 bool SpellUIGroup::toggleEnabled()
 {
     UIGroup::toggleEnabled();
 
-    if (enabled && _spellManager.getCurrSpell())
+    if (enabled && _spellManager.hasValidSpell())
     {
-        if (!_spellManager.getCurrSpell()->hasBeenCast())
+        if (_spellManager.hasValidSpell())
             _spellManager.killCurrSpell();
         else
             _spellManager.resetCurrSpell();
@@ -127,16 +81,12 @@ bool SpellUIGroup::toggleEnabled()
 
 void SpellUIGroup::radialButton()
 {
-    auto spellManager = Game::getInstance()->pSpellManager;
-
-    _spellAttributes.push(SpellAttribute::Radial);
+    Game::getInstance()->pSpellManager->addSpellAttribute(SpellAttribute::Radial);
 }
 
 void SpellUIGroup::projectileButton()
 {
-    auto spellManager = Game::getInstance()->pSpellManager;
-
-    _spellAttributes.push(SpellAttribute::Projectile);
+    Game::getInstance()->pSpellManager->addSpellAttribute(SpellAttribute::Projectile);
 }
 
 /* DEBUG UI GROUP */

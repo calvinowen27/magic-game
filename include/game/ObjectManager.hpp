@@ -51,6 +51,7 @@ public:
         }
 
         std::shared_ptr<T> entity = TypePool<T>::getInstance()->instantiate();
+        std::dynamic_pointer_cast<Entity>(entity)->kill();
         _entities.emplace(entity);
         return entity;
     }

@@ -27,11 +27,10 @@ void MouseHandler::onMouseButtonUp(int button)
 {
     if (button == SDL_BUTTON_LEFT)
     {
-        if (!_game.pUIManager->getSpellUI()->isEnabled() && _game.pSpellManager->getCurrSpell())
+        if (!_game.pUIManager->getSpellUI()->isEnabled() && _game.pSpellManager->hasValidSpell())
         {
             Vector2 dir = ((Vector2)(_pxMousePos - _game.pPlayer->getPxPos())).normalized() * Vector2(1, -1);
-            _game.pSpellManager->getCurrSpell()->setDir(dir);
-            _game.pSpellManager->castCurrSpell(_game.pPlayer->getPos() + (_game.pPlayer->getDims() / 2));
+            _game.pSpellManager->castCurrSpell(_game.pPlayer->getPos() + (_game.pPlayer->getDims() / 2), dir);
         }
     }
 }

@@ -202,6 +202,9 @@ std::shared_ptr<T> Registry::newComponent()
 template <typename T>
 void Registry::killComponent(std::shared_ptr<T> component)
 {
+    if(!component)
+        return;
+
     // do not use component kill function if type is not a component
     if (!std::is_base_of<Component, T>::value)
     {
