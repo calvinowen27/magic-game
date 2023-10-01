@@ -16,7 +16,6 @@ WorldManager *WorldManager::_pInstance;
 
 WorldManager::WorldManager() : _game(*Game::getInstance()), _objectManager(*_game.pObjectManager)
 {
-    // _pGame = Game::getInstance();
 }
 
 WorldManager *WorldManager::getInstance()
@@ -121,6 +120,18 @@ void WorldManager::loadWorld()
                     wall->getCollider()->borderEnabled[3] = 0;
                 }
             }
+        }
+    }
+}
+
+void WorldManager::reset()
+{
+    int i, j;
+    for(i = 0; i < WORLD_SIZE; i++)
+    {
+        for(j = 0; j < WORLD_SIZE; j++)
+        {
+            _worldMap[i][j] = nullptr;
         }
     }
 }

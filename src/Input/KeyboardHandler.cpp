@@ -63,6 +63,12 @@ void KeyboardHandler::onKeyUp(SDL_Scancode scancode)
     {
         _game.pUIManager->getDebugUI()->toggleEnabled();
     }
+
+    // Reset game
+    if(scancode == _keybinds[InputKey::Reset])
+    {
+        _game.reset();
+    }
 }
 
 void KeyboardHandler::onKeyDown(SDL_Scancode scancode)

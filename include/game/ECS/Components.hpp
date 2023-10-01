@@ -67,6 +67,7 @@ public:
     RendererComponent *init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, int renderOrder = 0); // returns true if successful
     void update(float time);
     void draw(SDL_Renderer *pRenderer);
+    void kill() override;
     bool setTexture(std::string textureName); // returns true if successful
     void refreshDimensions();
 };
@@ -133,6 +134,7 @@ public:
     RigidbodyComponent();
     RigidbodyComponent *init(std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<ColliderComponent> pCollider, bool isStatic = false); // returns true if successful
     void update(float time);
+    void kill() override;
 };
 
 class HealthComponent : public Component

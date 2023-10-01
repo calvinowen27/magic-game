@@ -82,6 +82,7 @@ public:
     void frameUpdate();
     void physicsUpdate();
     void draw();
+    void reset();
 
     Vector2 pixelToWorld(Vector2Int pxPos);
     Vector2Int worldToPixel(Vector2 pos);

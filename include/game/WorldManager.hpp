@@ -31,6 +31,7 @@ public:
     WorldManager();
     static WorldManager *getInstance();
     void loadWorld();
+    void reset();
 };
 
 #endif

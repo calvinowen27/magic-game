@@ -59,7 +59,7 @@ public:
     template <typename T>
     void killEntity(std::shared_ptr<T> pEntity)
     {
-        // do not use entity kill function if type is not a entity
+        // do not use entity kill function if Type is not a entity
         if (!std::is_base_of<Entity, T>::value)
         {
             throw new std::invalid_argument("ObjectManager::killEntity<Type>() : Type must be derived from Entity class.");
@@ -68,6 +68,21 @@ public:
         _entities.erase(pEntity);
         auto pool = TypePool<T>::getInstance();
         pool->release(pEntity);
+    }
+
+    template <typename T>
+    void killEntitiesOfType()
+    {
+        // do not use if Type is not derived from Entity
+        if(!std::is_base_of<Entity, T>::value)
+        {
+            throw new std::invalid_argument("ObjectManager::killEntitiesOfType<Type>() : Type must be derived from Entity class.");
+        }
+
+        for(auto entity : TypePool<T>::getInstance()->getAlive())
+        {
+            entity->kill();
+        }
     }
 };
 

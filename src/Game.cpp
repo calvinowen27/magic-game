@@ -4,6 +4,9 @@
 #include "../include/game/UI/TextElement.hpp"
 #include "../include/game/Object.hpp"
 #include "../include/game/Player.hpp"
+#include "../include/game/Enemy.hpp"
+#include "../include/game/Grass.hpp"
+#include "../include/game/Wall.hpp"
 #include "../include/game/UI/UIElement.hpp"
 #include "../include/game/UI/UIManager.hpp"
 #include "../include/game/Input/MouseHandler.hpp"
@@ -51,6 +54,7 @@ Game::~Game()
     delete pRegistry;
     delete pComponentHandler;
     delete pSpellManager;
+    delete pWorldManager;
     delete pAnimationManager;
 }
 
@@ -279,6 +283,17 @@ void Game::draw()
     SDL_SetRenderDrawColor(pRenderer, 47, 120, 46, 255);
 
     SDL_RenderPresent(pRenderer);
+}
+
+void Game::reset()
+{
+    pObjectManager->killEntitiesOfType<Enemy>();
+    pObjectManager->killEntitiesOfType<Grass>();
+    pObjectManager->killEntitiesOfType<Wall>();
+    pPlayer->kill();
+    
+    pWorldManager->reset();
+    pWorldManager->loadWorld();
 }
 
 Vector2 Game::pixelToWorld(Vector2Int pxPos)

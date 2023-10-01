@@ -80,6 +80,17 @@ void RendererComponent::draw(SDL_Renderer *pRenderer)
     SDL_RenderCopyEx(pRenderer, pTexture, &sourceRect, &spriteRect, spriteAngle, NULL, isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 
+void RendererComponent::kill()
+{
+    pTexture = nullptr;
+    pTransform = nullptr;
+    spriteAngle = 0;
+    isFlipped = false;
+    renderOrder = 0;
+
+    Component::kill();
+}
+
 bool RendererComponent::setTexture(std::string textureName)
 {
     pTexture = contentManager.getTexture(textureName);
@@ -154,7 +165,14 @@ ColliderComponent *ColliderComponent::init(Vector2 start, Vector2 end, std::shar
 
 void ColliderComponent::kill()
 {
-    this->pEntity = nullptr;
+    pEntity = nullptr;
+    borderEnabled[0] = 1;
+    borderEnabled[1] = 1;
+    borderEnabled[2] = 1;
+    borderEnabled[3] = 1;
+    collidersTouching.clear();
+
+    Component::kill();
 }
 
 void ColliderComponent::update(float time)
@@ -227,6 +245,13 @@ void RigidbodyComponent::update(float time)
         velocity.y = 0;
 
     pTransform->pos += velocity * time;
+}
+
+void RigidbodyComponent::kill()
+{
+    velocity = Vector2::zero;
+
+    Component::kill();
 }
 
 /* HEALTH COMPONENT */
