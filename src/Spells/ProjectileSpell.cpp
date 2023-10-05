@@ -26,7 +26,9 @@ void ProjectileSpell::update(float time)
 
 void ProjectileSpell::kill()
 {
-    if(attributes.find(SpellAttribute::Radial) != attributes.end())
+    // if(attributes.find(SpellAttribute::Radial) != attributes.end())
+    
+    if(hasAttribute(SpellAttribute::Radial))
     {
         auto radial = spellManager.newSpell<RadialSpell>();
         radial->init();
