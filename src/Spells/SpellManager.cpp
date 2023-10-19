@@ -1,6 +1,7 @@
 #include "../../include/game/Spells/SpellManager.hpp"
 #include "../../include/game/UI/UIGroup.hpp"
 #include "../../include/game/UI/UIManager.hpp"
+#include "../../include/game/Spells/TrailSpell.hpp"
 
 SpellManager::SpellManager() : _game(*Game::getInstance())
 {
@@ -8,6 +9,8 @@ SpellManager::SpellManager() : _game(*Game::getInstance())
 
 void SpellManager::createSpell()
 {
+    _pCurrSpell = nullptr;
+
     SpellAttribute attribute;
     while(_spellAttributes.size())
     {
@@ -47,13 +50,29 @@ void SpellManager::createSpell()
                     spell->setSpeed(5);
                 }
                 break;
+
+            /* TRAIL */
+            case SpellAttribute::Trail:
+                if(_pCurrSpell)
+                {
+                    _pCurrSpell->addAttribute(SpellAttribute::Trail);
+                }
+                else
+                {
+                    auto spell = newSpell<TrailSpell>();
+                    spell->init();
+                    spell->setDamage(1.5);
+                    spell->setLifeDur(5);
+                    spell->setSpeed(0);
+                    spell->setDir(Vector2::zero);
+                }
+                break;
         }
     }
 }
 
 void SpellManager::castCurrSpell(Vector2 pos, Vector2 dir)
 {
-    _pCurrSpell = nullptr;
     createSpell();
 
     if (_pCurrSpell)
@@ -70,7 +89,7 @@ void SpellManager::killCurrSpell()
 {
     if (_pCurrSpell)
     {
-        _pCurrSpell->kill();
+        killSpell(_pCurrSpell);
     }
 
     _pCurrSpell = nullptr;

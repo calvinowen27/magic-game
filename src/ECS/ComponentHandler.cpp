@@ -21,7 +21,12 @@ void ComponentHandler::draw(SDL_Renderer *pRenderer)
     std::sort(renderers.begin(), renderers.end(), rendererComparator);
 
     for (auto renderer : renderers)
-        renderer->draw(pRenderer);
+    {
+        if (renderer->isEnabled())
+        {
+            renderer->draw(pRenderer);
+        }
+    }
 }
 
 void ComponentHandler::update(float time)
@@ -44,7 +49,7 @@ void ComponentHandler::updateColliders(float time)
     auto colliders = _registry.getComponents<ColliderComponent>();
     for (auto pCol : colliders)
     {
-        if(!pCol->isEnabled())
+        if (!pCol->isEnabled())
             continue;
 
         pCol->update(time);
@@ -54,7 +59,7 @@ void ComponentHandler::updateColliders(float time)
 
         for (auto pOther : colliders)
         {
-            if(!pOther->isEnabled() || !pCol->isEnabled())
+            if (!pOther->isEnabled() || !pCol->isEnabled())
                 continue;
 
             if (pCol == pOther)
@@ -113,7 +118,7 @@ void ComponentHandler::updateColliders(float time)
                     pOther->onCollisionEnter(pCol);
                 }
             }
-            
+
             // this top and other bottom
             if (pCol->borderEnabled[3] && pOther->borderEnabled[2])
             {
@@ -135,7 +140,7 @@ void ComponentHandler::updateColliders(float time)
 void ComponentHandler::updateAnimators(float time)
 {
     auto animators = _registry.getComponents<AnimatorComponent>();
-    for(auto animator : animators)
+    for (auto animator : animators)
     {
         animator->update(time);
     }
@@ -143,6 +148,12 @@ void ComponentHandler::updateAnimators(float time)
 
 bool rendererComparator(shared_ptr<RendererComponent> a, shared_ptr<RendererComponent> b)
 {
+    if (!a->isEnabled() && b->isEnabled())
+        return false;
+
+    if (!b->isEnabled())
+        return true;
+
     if (a->renderOrder != b->renderOrder)
         return a->renderOrder > b->renderOrder;
 

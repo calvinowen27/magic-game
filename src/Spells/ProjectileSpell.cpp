@@ -2,6 +2,7 @@
 #include "../../include/game/ObjectManager.hpp"
 #include "../../include/game/Enemy.hpp"
 #include "../../include/game/Spells/SpellManager.hpp"
+#include "../../include/game/Spells/TrailSpell.hpp"
 
 ProjectileSpell::ProjectileSpell() : Spell()
 {
@@ -22,6 +23,29 @@ void ProjectileSpell::update(float time)
 
     if(pRenderer)
         pRenderer->spriteAngle = atan2(dir.x, dir.y) * RAD_TO_DEGS;
+
+    if(!_hasTrail)
+    {
+        if(!(_hasTrail = attributes.find(SpellAttribute::Trail) != attributes.end()))
+            return;
+    }
+
+    if(_timeSinceTrail < _trailCreateTime)
+    {
+        _timeSinceTrail += time;
+    }
+    else
+    {
+        _timeSinceTrail = 0;
+
+        auto trail = spellManager.newSpell<TrailSpell>();
+        trail->init();
+        trail->setDamage(1.5);
+        trail->setLifeDur(5);
+        trail->setSpeed(0);
+        trail->setDir(Vector2::zero);
+        trail->cast(pTransform->pos);
+    }
 }
 
 void ProjectileSpell::kill()

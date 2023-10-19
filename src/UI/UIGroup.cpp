@@ -47,10 +47,13 @@ SpellUIGroup::SpellUIGroup() : UIGroup(), _spellManager(*game.pSpellManager)
 void SpellUIGroup::init()
 {
     _pRadialSpellButton = newUIElement<Button>();
-    _pRadialSpellButton->init("radial_spell_button", Vector2(0.5f, 0.25f), Vector2(0.05, 0.075), SpellUIGroup::radialButton);
+    _pRadialSpellButton->init("radial_spell_button", Vector2(0.475f, 0.25f), Vector2(0.05f, 0.075f), SpellUIGroup::radialButton);
 
     _pProjectileSpellButton = newUIElement<Button>();
-    _pProjectileSpellButton->init("projectile_spell_button", Vector2(0.55f, 0.3f), Vector2(0.05, 0.075), SpellUIGroup::projectileButton);
+    _pProjectileSpellButton->init("projectile_spell_button", Vector2(0.55f, 0.2875f), Vector2(0.05f, 0.075f), SpellUIGroup::projectileButton);
+
+    _pTrailSpellButton = newUIElement<Button>();
+    _pTrailSpellButton->init("trail_spell_button", Vector2(Vector2(0.625f, 0.325f)), Vector2(0.05f, 0.075f), SpellUIGroup::trailButton);
 
     UIGroup::init();
 
@@ -68,13 +71,17 @@ bool SpellUIGroup::toggleEnabled()
 {
     UIGroup::toggleEnabled();
 
-    if (enabled && _spellManager.hasValidSpell())
+    if (enabled)
     {
         if (_spellManager.hasValidSpell())
             _spellManager.killCurrSpell();
         else
             _spellManager.resetCurrSpell();
     }
+    // else
+    // {
+    //     _spellManager.createSpell();
+    // }
 
     return enabled;
 }
@@ -87,6 +94,11 @@ void SpellUIGroup::radialButton()
 void SpellUIGroup::projectileButton()
 {
     Game::getInstance()->pSpellManager->addSpellAttribute(SpellAttribute::Projectile);
+}
+
+void SpellUIGroup::trailButton()
+{
+    Game::getInstance()->pSpellManager->addSpellAttribute(SpellAttribute::Trail);
 }
 
 /* DEBUG UI GROUP */

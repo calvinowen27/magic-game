@@ -48,6 +48,23 @@ public:
     void castCurrSpell(Vector2 pos, Vector2 dir);
     void killCurrSpell();
 
+    template <typename T>
+    void killSpell(std::shared_ptr<T> spell)
+    {
+        if(!spell)
+            return;
+
+        // do not use spell kill function if type is not a spell
+        if (!std::is_base_of<Spell, T>::value)
+        {
+            throw new std::invalid_argument("SpellManager::killSpell<Type>() : Type must be derived from Spell class.");
+        }
+
+        std::dynamic_pointer_cast<Spell>(spell)->kill();
+        auto pool = TypePool<T>::getInstance();
+        pool->release(spell);
+    }
+
     inline void addSpellAttribute(SpellAttribute attribute)
     {
         _spellAttributes.push(attribute);

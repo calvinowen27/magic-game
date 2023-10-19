@@ -53,6 +53,7 @@ private:
 
     std::shared_ptr<Button> _pRadialSpellButton;
     std::shared_ptr<Button> _pProjectileSpellButton;
+    std::shared_ptr<Button> _pTrailSpellButton;
 
 public:
     SpellUIGroup();
@@ -62,6 +63,7 @@ public:
 
     static void radialButton();
     static void projectileButton();
+    static void trailButton();
 };
 
 class DebugUIGroup : public UIGroup

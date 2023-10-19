@@ -7,6 +7,12 @@
 
 class ProjectileSpell : public Spell
 {
+private:
+    bool _hasTrail = false;
+
+    float _trailCreateTime = 0.25;
+    float _timeSinceTrail = 0;
+
 public:
     ProjectileSpell();
     bool init() override;

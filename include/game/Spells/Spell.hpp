@@ -29,7 +29,8 @@ enum class SpellAttribute
 {
     Chain,
     Projectile,
-    Radial
+    Radial,
+    Trail
 };
 
 class SpellManager;
