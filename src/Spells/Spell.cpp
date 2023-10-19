@@ -66,7 +66,7 @@ void Spell::kill()
     registry.killComponent(pRigidbody);
     registry.killComponent(pCollider);
 
-    attributes.clear();
+    clearAttributes();
 }
 
 void Spell::cast(Vector2 pos)

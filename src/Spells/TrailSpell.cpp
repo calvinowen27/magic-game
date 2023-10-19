@@ -18,7 +18,7 @@ bool TrailSpell::init()
 
 void TrailSpell::kill()
 {
-    if(attributes.find(SpellAttribute::Radial) != attributes.end())
+    if(hasAttribute(SpellAttribute::Radial))
     {
         auto radial = spellManager.newSpell<RadialSpell>();
         radial->init();

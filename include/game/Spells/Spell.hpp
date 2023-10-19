@@ -25,12 +25,12 @@ enum class SpellElement
     Lightning
 };
 
-enum class SpellAttribute
+enum SpellAttribute
 {
-    Chain,
-    Projectile,
-    Radial,
-    Trail
+    Projectile = 0x01,
+    Radial = 0x02,
+    Trail = 0x04,
+    Chain = 0x08
 };
 
 class SpellManager;
@@ -44,7 +44,8 @@ protected:
     std::shared_ptr<ColliderComponent> pCollider;
 
     SpellElement element;
-    std::set<SpellAttribute> attributes;
+    // std::set<SpellAttribute> attributes;
+    uint8_t attributes;
     Vector2 dir;
     bool isCast = false;
 
@@ -63,7 +64,10 @@ public:
     inline void setLifeDur(float lifeDur) { this->lifeDur = lifeDur; }
     inline void setSpeed(float speed) { this->speed = speed; }
     inline void setDir(Vector2 dir) { this->dir = dir; }
-    inline void addAttribute(SpellAttribute attribute) { attributes.emplace(attribute); }
+    inline void addAttribute(SpellAttribute attribute) { attributes |= attribute; }
+    inline void removeAttribute(SpellAttribute attribute) { attributes &= (~attribute); }
+    inline bool hasAttribute(SpellAttribute attribute) { return attributes & attribute; }
+    inline void clearAttributes() { attributes = 0x00; }
     void update(float time) override;
     virtual void cast(Vector2 pos);
     inline bool hasBeenCast() { return isCast; }

@@ -22,10 +22,8 @@ void ComponentHandler::draw(SDL_Renderer *pRenderer)
 
     for (auto renderer : renderers)
     {
-        if (renderer->isEnabled())
-        {
+        if (renderer && renderer->isEnabled())
             renderer->draw(pRenderer);
-        }
     }
 }
 
@@ -148,11 +146,11 @@ void ComponentHandler::updateAnimators(float time)
 
 bool rendererComparator(shared_ptr<RendererComponent> a, shared_ptr<RendererComponent> b)
 {
-    if (!a->isEnabled() && b->isEnabled())
+    if (!a->isEnabled())
         return false;
 
     if (!b->isEnabled())
-        return true;
+        return false;
 
     if (a->renderOrder != b->renderOrder)
         return a->renderOrder > b->renderOrder;

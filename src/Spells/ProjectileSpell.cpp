@@ -26,7 +26,7 @@ void ProjectileSpell::update(float time)
 
     if(!_hasTrail)
     {
-        if(!(_hasTrail = attributes.find(SpellAttribute::Trail) != attributes.end()))
+        if(!(_hasTrail = hasAttribute(SpellAttribute::Trail)))
             return;
     }
 
@@ -50,7 +50,9 @@ void ProjectileSpell::update(float time)
 
 void ProjectileSpell::kill()
 {
-    if(attributes.find(SpellAttribute::Radial) != attributes.end())
+    // if(attributes.find(SpellAttribute::Radial) != attributes.end())
+    
+    if(hasAttribute(SpellAttribute::Radial))
     {
         auto radial = spellManager.newSpell<RadialSpell>();
         radial->init();

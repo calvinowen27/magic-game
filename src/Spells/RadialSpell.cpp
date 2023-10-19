@@ -73,7 +73,9 @@ void RadialSpell::cast(Vector2 pos)
     _startPos = pos;
     pTransform->pos = pos;
 
-    if(attributes.find(SpellAttribute::Projectile) != attributes.end())
+    // if(attributes.find(SpellAttribute::Projectile) != attributes.end())
+
+    if(hasAttribute(SpellAttribute::Projectile))
     {
         std::shared_ptr<ProjectileSpell> proj = spellManager.newSpell<ProjectileSpell>();
         proj->init();
