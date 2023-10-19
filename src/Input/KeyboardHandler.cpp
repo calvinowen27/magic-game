@@ -18,7 +18,7 @@ KeyboardHandler::KeyboardHandler() : _game(*Game::getInstance())
         { InputKey::Reset, SDL_SCANCODE_R },
         { InputKey::ZoomIn, SDL_SCANCODE_EQUALS },
         { InputKey::ZoomOut, SDL_SCANCODE_MINUS },
-        { InputKey::Close, SDL_SCANCODE_ESCAPE },
+        { InputKey::Pause, SDL_SCANCODE_ESCAPE },
         { InputKey::ToggleSpellUI, SDL_SCANCODE_C },
         { InputKey::ToggleDebugUI, SDL_SCANCODE_B }
     };
@@ -69,11 +69,17 @@ void KeyboardHandler::onKeyUp(SDL_Scancode scancode)
     {
         _game.reset();
     }
+
+    // Toggle game pause
+    if(scancode == _keybinds[InputKey::Pause])
+    {
+        _game.togglePause();
+    }
 }
 
 void KeyboardHandler::onKeyDown(SDL_Scancode scancode)
 {
-
+    
 }
 
 bool KeyboardHandler::isPressed(InputKey key)

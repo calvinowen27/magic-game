@@ -30,6 +30,9 @@ void UIManager::init()
 
     _pDebugUI = newUIGroup<DebugUIGroup>();
     _pDebugUI->init();
+
+    _pPauseUI = newUIGroup<PauseUIGroup>();
+    _pPauseUI->init();
 }
 
 void UIManager::update()

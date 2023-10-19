@@ -13,7 +13,7 @@ enum class InputKey {
     ZoomIn,
     ZoomOut,
     Sprint,
-    Close,
+    Pause,
     Reset,
     ToggleSpellUI,
     ToggleDebugUI

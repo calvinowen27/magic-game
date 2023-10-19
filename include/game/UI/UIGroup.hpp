@@ -4,6 +4,7 @@
 #include "UIElement.hpp"
 #include "Button.hpp"
 #include "TextElement.hpp"
+#include "TextButton.hpp"
 #include "../Spells/SpellManager.hpp"
 
 #include "../../SDL2/SDL.h"
@@ -58,7 +59,6 @@ private:
 public:
     SpellUIGroup();
     void init() override;
-    void update() override;
     bool toggleEnabled() override;
 
     static void radialButton();
@@ -80,6 +80,17 @@ public:
     DebugUIGroup();
     void init() override;
     void update() override;
+};
+
+class PauseUIGroup : public UIGroup
+{
+private:
+    std::shared_ptr<TextButton> _pResumeButton;
+    std::shared_ptr<TextButton> _pQuitButton;
+
+public:
+    PauseUIGroup();
+    void init() override;
 };
 
 #endif

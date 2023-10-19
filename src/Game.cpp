@@ -170,7 +170,7 @@ void Game::pollEvents()
 
     while (SDL_PollEvent(&event))
     {
-        if (event.type == SDL_QUIT || pKeyboardHandler->isPressed(InputKey::Close))
+        if (event.type == SDL_QUIT)
         {
             running = false;
         }
@@ -184,7 +184,7 @@ void Game::pollEvents()
         if (event.type == SDL_MOUSEWHEEL)
             pMouseHandler->mouseWheel(event.wheel.y);
 
-        if(event.type == SDL_MOUSEBUTTONDOWN)
+        if (event.type == SDL_MOUSEBUTTONDOWN)
             pMouseHandler->onMouseButtonDown(event.button.button);
 
         if (event.type == SDL_MOUSEBUTTONUP)
@@ -250,11 +250,14 @@ void Game::physicsUpdate()
 
     pKeyboardHandler->processInputs();
 
+    if (paused)
+        return;
+
     pComponentHandler->update(updateTime);
 
     pObjectManager->update(updateTime);
 
-    if (pPlayer != nullptr && pPlayer->isAlive())
+    if (pPlayer && pPlayer->isAlive())
         cameraPos = pPlayer->getPos() + Vector2(pPlayer->getDims().x / 2, pPlayer->getDims().y / 2);
 
     auto execTime = duration_cast<nanoseconds>(high_resolution_clock::now() - startTime);
@@ -291,7 +294,7 @@ void Game::reset()
     pObjectManager->killEntitiesOfType<Grass>();
     pObjectManager->killEntitiesOfType<Wall>();
     pPlayer->kill();
-    
+
     pWorldManager->reset();
     pWorldManager->loadWorld();
 }
@@ -323,4 +326,16 @@ bool Game::isTransformOnScreen(TransformComponent &transform)
 {
     return transform.pxPos.x <= winWidth && transform.pxPos.x + transform.pxDims.x >= 0 &&
            transform.pxPos.y <= winHeight && transform.pxPos.y + transform.pxDims.y >= 0;
+}
+
+void Game::togglePause()
+{
+    auto game = Game::getInstance();
+    game->paused = !game->paused;
+    game->pUIManager->getPauseUI()->toggleEnabled();
+}
+
+void Game::quit()
+{
+    Game::getInstance()->running = false;
 }

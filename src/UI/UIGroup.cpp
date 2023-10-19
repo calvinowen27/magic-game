@@ -60,13 +60,6 @@ void SpellUIGroup::init()
     setEnabled(false);
 }
 
-void SpellUIGroup::update()
-{
-    UIGroup::update();
-
-    // createSpell();
-}
-
 bool SpellUIGroup::toggleEnabled()
 {
     UIGroup::toggleEnabled();
@@ -137,4 +130,22 @@ void DebugUIGroup::update()
     _pVelDisplay->setText("Velocity: " + game.pPlayer->getVelocity().round(3).to_string());
 
     UIGroup::update();
+}
+
+/* PAUSE UI GROUP */
+PauseUIGroup::PauseUIGroup() : UIGroup()
+{
+}
+
+void PauseUIGroup::init()
+{
+    _pResumeButton = newUIElement<TextButton>();
+    _pResumeButton->init("ui_button", "Resume", "arial", WHITE, Vector2(0.35, 0.15), Vector2(0.3, 0.05), Game::togglePause);
+
+    _pQuitButton = newUIElement<TextButton>();
+    _pQuitButton->init("ui_button", "Quit", "arial", WHITE, Vector2(0.35, 0.25), Vector2(0.3, 0.05), Game::quit);
+
+    UIGroup::init();
+
+    setEnabled(false);
 }

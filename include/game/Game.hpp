@@ -71,6 +71,7 @@ public:
 
     Vector2 cameraPos;
     bool running = true;
+    bool paused = false;
 
     static Game *getInstance();
     Game();
@@ -104,6 +105,8 @@ public:
         if (ppm < minPPM)
             ppm = minPPM;
     }
+    static void togglePause();
+    static void quit();
 };
 
 #endif

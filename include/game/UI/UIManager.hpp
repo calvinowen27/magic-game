@@ -38,6 +38,7 @@ private:
 
     std::shared_ptr<SpellUIGroup> _pSpellUI;
     std::shared_ptr<DebugUIGroup> _pDebugUI;
+    std::shared_ptr<PauseUIGroup> _pPauseUI;
 
 public:
     UIManager();
@@ -61,6 +62,7 @@ public:
 
     inline std::shared_ptr<SpellUIGroup> getSpellUI() { return _pSpellUI; }
     inline std::shared_ptr<DebugUIGroup> getDebugUI() { return _pDebugUI; }
+    inline std::shared_ptr<PauseUIGroup> getPauseUI() { return _pPauseUI; }
 };
 
 #endif
