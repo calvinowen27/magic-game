@@ -20,7 +20,7 @@ void TrailSpell::kill()
 {
     if(hasAttribute(SpellAttribute::Radial))
     {
-        auto radial = spellManager.newSpell<RadialSpell>();
+        std::shared_ptr<RadialSpell> radial = spellManager.newSpell<RadialSpell>();
         radial->init();
         radial->setDamage(1);
         radial->setLifeDur(0.5);

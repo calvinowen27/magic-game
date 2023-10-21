@@ -26,6 +26,8 @@ bool Spell::init()
     pRigidbody->init(pTransform, pCollider);
     pRenderer->disable();
 
+    attributes = 0x00;
+
     return true;
 }
 
@@ -59,29 +61,32 @@ void Spell::hit(Entity *pEntity)
 
 void Spell::kill()
 {
+    clearAttributes();
+
     Entity::kill();
 
     isCast = false;
 
     registry.killComponent(pRigidbody);
     registry.killComponent(pCollider);
-
-    clearAttributes();
 }
 
 void Spell::cast(Vector2 pos)
 {
-    isCast = true;
-    pCollider->enable();
-    pRenderer->enable();
     pTransform->pos = pos;
+    pRenderer->enable();
+    pCollider->enable();
+    isCast = true;
 }
 
 void Spell::onCollisionEnter(Entity *pEntity)
 {
+    if(!pEntity)
+        return;
+
     Entity::onCollisionEnter(pEntity);
 
-    if (alive && isCast && pEntity && pEntity->getType() == EntityType::Enemy)
+    if (alive && isCast && pEntity->getType() == EntityType::Enemy)
     {
         hit(pEntity);
     }

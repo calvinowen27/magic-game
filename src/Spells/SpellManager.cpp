@@ -27,7 +27,7 @@ void SpellManager::createSpell()
                 }
                 else
                 {
-                    auto spell = newSpell<RadialSpell>();
+                    std::shared_ptr<RadialSpell> spell = newSpell<RadialSpell>();
                     spell->init();
                     spell->setDamage(3);
                     spell->setLifeDur(1);
@@ -43,11 +43,12 @@ void SpellManager::createSpell()
                 }
                 else
                 {
-                    auto spell = newSpell<ProjectileSpell>();
+                    std::shared_ptr<ProjectileSpell> spell = newSpell<ProjectileSpell>();
                     spell->init();
                     spell->setDamage(4);
                     spell->setLifeDur(2.5);
                     spell->setSpeed(5);
+
                 }
                 break;
 
@@ -59,7 +60,7 @@ void SpellManager::createSpell()
                 }
                 else
                 {
-                    auto spell = newSpell<TrailSpell>();
+                    std::shared_ptr<TrailSpell> spell = newSpell<TrailSpell>();
                     spell->init();
                     spell->setDamage(1.5);
                     spell->setLifeDur(5);
@@ -73,16 +74,17 @@ void SpellManager::createSpell()
 
 void SpellManager::castCurrSpell(Vector2 pos, Vector2 dir)
 {
+    _hasValidSpell = false;
+
     createSpell();
 
     if (_pCurrSpell)
     {
         _pCurrSpell->setDir(dir);
         _pCurrSpell->cast(pos);
+
         _pCurrSpell = nullptr;
     }
-
-    _hasValidSpell = false;
 }
 
 void SpellManager::killCurrSpell()

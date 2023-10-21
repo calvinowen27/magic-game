@@ -34,12 +34,23 @@ public:
         if (!std::is_base_of<Spell, T>::value)
         {
             throw new std::invalid_argument("SpellManager::newSpell<Type>() : Type must be derived from Spell class.");
+            return nullptr;
         }
+        else
+        {
+            std::shared_ptr<T> spell = _game.pObjectManager->newEntity<T>();
+            try
+            {
+                _pCurrSpell = std::dynamic_pointer_cast<Spell>(spell);
+            }
+            catch (const std::exception& e)
+            {
+                std::cerr << "Exception caught: " << e.what() << std::endl;
+                return nullptr;
+            }
 
-        std::shared_ptr<T> spell = _game.pObjectManager->newEntity<T>();
-        _pCurrSpell = std::dynamic_pointer_cast<Spell>(spell);
-
-        return spell;
+            return spell;
+        }
     }
 
     inline std::shared_ptr<Spell> getCurrSpell() { return _pCurrSpell; }
@@ -51,7 +62,7 @@ public:
     template <typename T>
     void killSpell(std::shared_ptr<T> spell)
     {
-        if(!spell)
+        if (!spell)
             return;
 
         // do not use spell kill function if type is not a spell

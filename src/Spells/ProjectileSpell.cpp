@@ -38,7 +38,7 @@ void ProjectileSpell::update(float time)
     {
         _timeSinceTrail = 0;
 
-        auto trail = spellManager.newSpell<TrailSpell>();
+        std::shared_ptr<TrailSpell> trail = spellManager.newSpell<TrailSpell>();
         trail->init();
         trail->setDamage(1.5);
         trail->setLifeDur(5);
@@ -54,7 +54,7 @@ void ProjectileSpell::kill()
     
     if(hasAttribute(SpellAttribute::Radial))
     {
-        auto radial = spellManager.newSpell<RadialSpell>();
+        std::shared_ptr<RadialSpell> radial = spellManager.newSpell<RadialSpell>();
         radial->init();
         radial->setDamage(3);
         radial->setLifeDur(1);

@@ -73,6 +73,10 @@ void KeyboardHandler::onKeyUp(SDL_Scancode scancode)
     // Toggle game pause
     if(scancode == _keybinds[InputKey::Pause])
     {
+        auto spellUI = _game.pUIManager->getSpellUI();
+        if(spellUI->isEnabled())
+            spellUI->toggleEnabled();
+
         _game.togglePause();
     }
 }
