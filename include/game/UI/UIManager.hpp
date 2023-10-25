@@ -40,6 +40,8 @@ private:
     std::shared_ptr<DebugUIGroup> _pDebugUI;
     std::shared_ptr<PauseUIGroup> _pPauseUI;
 
+    std::shared_ptr<UIGroup> _pCurrUIGroup;
+
 public:
     UIManager();
     static UIManager *getInstance();
@@ -63,6 +65,9 @@ public:
     inline std::shared_ptr<SpellUIGroup> getSpellUI() { return _pSpellUI; }
     inline std::shared_ptr<DebugUIGroup> getDebugUI() { return _pDebugUI; }
     inline std::shared_ptr<PauseUIGroup> getPauseUI() { return _pPauseUI; }
+    inline void setCurrUIGroup(std::shared_ptr<UIGroup> pNewGroup) { _pCurrUIGroup = pNewGroup; }
+    inline void enableCurrUIGroup() { _pCurrUIGroup->setEnabled(true); }
+    inline void disableCurrUIGroup() { _pCurrUIGroup->setEnabled(false); }
 };
 
 #endif

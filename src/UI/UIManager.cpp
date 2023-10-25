@@ -28,11 +28,11 @@ void UIManager::init()
     _pSpellUI = newUIGroup<SpellUIGroup>();
     _pSpellUI->init();
 
-    _pDebugUI = newUIGroup<DebugUIGroup>();
-    _pDebugUI->init();
-
     _pPauseUI = newUIGroup<PauseUIGroup>();
     _pPauseUI->init();
+
+    _pDebugUI = newUIGroup<DebugUIGroup>();
+    _pDebugUI->init();
 }
 
 void UIManager::update()

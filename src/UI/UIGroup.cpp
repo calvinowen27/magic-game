@@ -71,10 +71,10 @@ bool SpellUIGroup::toggleEnabled()
         else
             _spellManager.resetCurrSpell();
     }
-    // else
-    // {
-    //     _spellManager.createSpell();
-    // }
+    else
+    {
+        _spellManager.createSpell();
+    }
 
     return enabled;
 }
@@ -139,11 +139,14 @@ PauseUIGroup::PauseUIGroup() : UIGroup()
 
 void PauseUIGroup::init()
 {
+    _pPauseOverlay = newUIElement<UIElement>();
+    _pPauseOverlay->init("pause_overlay", Vector2::zero, Vector2(1, 1), false);
+
     _pResumeButton = newUIElement<TextButton>();
-    _pResumeButton->init("ui_button", "Resume", "arial", WHITE, Vector2(0.35, 0.15), Vector2(0.3, 0.05), Game::togglePause);
+    _pResumeButton->init("ui_button", "Resume", "arial", WHITE, Vector2(0.4, 0.15), Vector2(0.2, 0.05), Game::togglePause);
 
     _pQuitButton = newUIElement<TextButton>();
-    _pQuitButton->init("ui_button", "Quit", "arial", WHITE, Vector2(0.35, 0.25), Vector2(0.3, 0.05), Game::quit);
+    _pQuitButton->init("ui_button", "Quit", "arial", WHITE, Vector2(0.4, 0.25), Vector2(0.2, 0.05), Game::quit);
 
     UIGroup::init();
 

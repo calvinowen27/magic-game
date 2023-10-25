@@ -45,7 +45,7 @@ void TextElement::update()
     _textRect = _drawRect;
     if(_pxTextWidth > _drawRect.w) 
     {
-        _pxTextWidth = _drawRect.w*0.85;
+        _pxTextWidth = _drawRect.w*0.65;
         _textRect.h = ((float)_textDims.y/(float)_textDims.x)*_relativeDims.x*_game.winHeight;
     }
 

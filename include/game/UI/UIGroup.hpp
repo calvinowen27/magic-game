@@ -85,6 +85,7 @@ public:
 class PauseUIGroup : public UIGroup
 {
 private:
+    std::shared_ptr<UIElement> _pPauseOverlay;
     std::shared_ptr<TextButton> _pResumeButton;
     std::shared_ptr<TextButton> _pQuitButton;
 
