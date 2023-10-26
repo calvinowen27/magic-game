@@ -18,6 +18,8 @@
 
 #include "Vector2.hpp"
 
+typedef void (*func_ptr)(void);
+
 class Object;
 class UIElement;
 class Player;
