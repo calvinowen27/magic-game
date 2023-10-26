@@ -48,7 +48,6 @@ void SpellManager::createSpell()
                     spell->setDamage(4);
                     spell->setLifeDur(2.5);
                     spell->setSpeed(5);
-
                 }
                 break;
 

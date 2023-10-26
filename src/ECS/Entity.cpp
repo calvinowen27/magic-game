@@ -34,6 +34,7 @@ bool Entity::init(EntityType type, Vector2 pos)
 
     pTransform->init(pos);
     pRenderer->init(type, pTransform);
+    // pRenderer->enable();
 
     return true;
 }

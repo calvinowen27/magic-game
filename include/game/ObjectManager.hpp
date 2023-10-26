@@ -65,21 +65,25 @@ public:
             throw new std::invalid_argument("ObjectManager::killEntity<Type>() : Type must be derived from Entity class.");
         }
 
-        _entities.erase(pEntity);
-        auto pool = TypePool<T>::getInstance();
-        pool->release(pEntity);
+        if (pEntity)
+        {
+            // pEntity->kill();
+            _entities.erase(pEntity);
+            auto pool = TypePool<T>::getInstance();
+            pool->release(pEntity);
+        }
     }
 
     template <typename T>
     void killEntitiesOfType()
     {
         // do not use if Type is not derived from Entity
-        if(!std::is_base_of<Entity, T>::value)
+        if (!std::is_base_of<Entity, T>::value)
         {
             throw new std::invalid_argument("ObjectManager::killEntitiesOfType<Type>() : Type must be derived from Entity class.");
         }
 
-        for(auto entity : TypePool<T>::getInstance()->getAlive())
+        for (auto entity : TypePool<T>::getInstance()->getAlive())
         {
             entity->kill();
         }

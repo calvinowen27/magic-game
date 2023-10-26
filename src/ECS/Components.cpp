@@ -50,9 +50,10 @@ RendererComponent *RendererComponent::init(std::string textureName, std::shared_
     return this;
 }
 
-RendererComponent *RendererComponent::init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, int renderOrder)
+RendererComponent *RendererComponent::init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, int renderOrder, bool startEnabled)
 {
-    Component::init();
+    if(startEnabled)
+        Component::init();
 
     pTexture = contentManager.getTextureFromType(entityType);
     this->pTransform = pTransform;
@@ -72,9 +73,7 @@ void RendererComponent::update(float time)
 
 void RendererComponent::draw(SDL_Renderer *pRenderer)
 {
-    if (!enabled)
-        return;
-
+    pTransform->updatePxPos();
     spriteRect = SDL_Rect{pTransform->pxPos.x, pTransform->pxPos.y, pTransform->pxDims.x, pTransform->pxDims.y};
 
     SDL_RenderCopyEx(pRenderer, pTexture, &sourceRect, &spriteRect, spriteAngle, NULL, isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
@@ -117,7 +116,7 @@ TransformComponent *TransformComponent::init(Vector2 pos, Vector2 dims)
     this->pos = pos;
     this->dims = dims;
     pxDims = (Vector2Int)(dims * game.ppm);
-    pxPos = game.worldToPixel(pos) - Vector2Int(0, pxDims.y);
+    updatePxPos();
 
     return this;
 }
@@ -128,7 +127,7 @@ void TransformComponent::update(float time)
         return;
 
     pxDims = (Vector2Int)(dims * game.ppm);
-    pxPos = game.worldToPixel(pos) - Vector2Int(0, pxDims.y);
+    updatePxPos();
 }
 
 void TransformComponent::setDims(Vector2 newDims)
@@ -141,6 +140,11 @@ void TransformComponent::setPxDims(Vector2Int newPxDims)
 {
     pxDims = newPxDims;
     dims = (Vector2)pxDims / game.ppm;
+}
+
+void TransformComponent::updatePxPos()
+{
+    pxPos = game.worldToPixel(pos) - Vector2Int(0, pxDims.y);
 }
 
 /* COLLIDER COMPONENT */

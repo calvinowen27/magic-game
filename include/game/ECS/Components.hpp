@@ -64,7 +64,7 @@ public:
 
     RendererComponent();
     RendererComponent *init(std::string textureName, std::shared_ptr<TransformComponent> pTransform, int renderOrder = 0); // returns true if successful
-    RendererComponent *init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, int renderOrder = 0); // returns true if successful
+    RendererComponent *init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, int renderOrder = 0, bool startEnabled = false); // returns true if successful
     void update(float time);
     void draw(SDL_Renderer *pRenderer);
     void kill() override;
@@ -86,6 +86,8 @@ public:
 
     void setDims(Vector2 newDims);        // set new dimensions
     void setPxDims(Vector2Int newPxDims); // set new px dims
+
+    void updatePxPos();
 };
 
 class ColliderComponent : public Component

@@ -118,4 +118,5 @@ void Player::kill()
     Object::kill();
 
     registry.killComponent(pHealth);
+    registry.killComponent(pAnimator);
 }

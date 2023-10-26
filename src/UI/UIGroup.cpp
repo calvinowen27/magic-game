@@ -122,8 +122,11 @@ void DebugUIGroup::update()
     _pFPScounter->setText("FPS: " + std::to_string(game.getFPS()));
     _pUPScounter->setText("UPS: " + std::to_string(game.getUPS()));
     _pPPMDisplay->setText("PPM: " + std::to_string(game.ppm));
-    _pPosDisplay->setText("Position: " + game.pPlayer->getPos().round(3).to_string());
-    _pVelDisplay->setText("Velocity: " + game.pPlayer->getVelocity().round(3).to_string());
+    if (game.pPlayer && game.pPlayer->isAlive())
+    {
+        _pPosDisplay->setText("Position: " + game.pPlayer->getPos().round(3).to_string());
+        _pVelDisplay->setText("Velocity: " + game.pPlayer->getVelocity().round(3).to_string());
+    }
 
     UIGroup::update();
 }

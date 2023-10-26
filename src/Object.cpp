@@ -21,6 +21,8 @@ bool Object::init(EntityType entityType, Vector2 pos)
     pCollider->init(colliderEndpoints[0], colliderEndpoints[1], pTransform, pRigidbody);
     pCollider->setEntity(this);
 
+    pRenderer->enable();
+
     return true;
 }
 
