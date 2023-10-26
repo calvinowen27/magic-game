@@ -76,7 +76,7 @@ void SpellManager::castCurrSpell(Vector2 pos, Vector2 dir)
 {
     _hasValidSpell = false;
 
-    // createSpell();
+    createSpell();
 
     if (_pCurrSpell)
     {

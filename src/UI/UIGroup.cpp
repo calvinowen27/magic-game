@@ -71,10 +71,6 @@ bool SpellUIGroup::toggleEnabled()
         else
             _spellManager.resetCurrSpell();
     }
-    else
-    {
-        _spellManager.createSpell();
-    }
 
     return enabled;
 }
