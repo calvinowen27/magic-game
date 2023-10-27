@@ -21,7 +21,9 @@ void Animation::init(EntityType entityType, std::string name, float duration, in
     _loops = loops;
     _pTexture = _contentManager.getTextureFromType(_entityType);
 
-    Vector2Int spriteDims = _objectManager.getSpriteDims(entityType);
+    json jSpriteDims = _objectManager.getEntityData(entityType)["spriteDims"];
+    Vector2Int spriteDims = Vector2Int((int)jSpriteDims[0], (int)jSpriteDims[1]);
+
     Vector2Int textureDims;
     SDL_QueryTexture(_pTexture, NULL, NULL, &textureDims.x, &textureDims.y);
 

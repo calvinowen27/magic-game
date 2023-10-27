@@ -37,9 +37,7 @@ public:
     void init();
     void update(float time);
     inline std::set<std::shared_ptr<Entity>> getEntities() { return _entities; }
-
-    std::vector<Vector2> getCollider(EntityType entityType);
-    Vector2Int getSpriteDims(EntityType entityType);
+    json getEntityData(EntityType entityType);
 
     template <typename T>
     std::shared_ptr<T> newEntity()

@@ -258,7 +258,7 @@ void Game::physicsUpdate()
     pObjectManager->update(updateTime);
 
     if (pPlayer && pPlayer->isAlive())
-        cameraPos = pPlayer->getPos() + Vector2(pPlayer->getDims().x / 2, pPlayer->getDims().y / 2);
+        cameraPos = pPlayer->getPos();
 
     auto execTime = duration_cast<nanoseconds>(high_resolution_clock::now() - startTime);
 
@@ -301,10 +301,9 @@ void Game::reset()
 
 Vector2 Game::pixelToWorld(Vector2Int pxPos)
 {
-    pxPos -= Vector2Int(winWidth / 2, winHeight / 2);
-    pxPos.y -= winHeight;
-    pxPos /= ppm;
-    return (Vector2)pxPos + cameraPos;
+    pxPos -= Vector2Int(winWidth / 2, -winHeight / 2);
+    pxPos.y = winHeight - pxPos.y;
+    return ((Vector2)pxPos / (float)ppm) + cameraPos;
 }
 
 Vector2Int Game::worldToPixel(Vector2 pos)

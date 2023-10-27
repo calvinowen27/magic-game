@@ -52,9 +52,14 @@ public:
 
     inline EntityType getType() { return type; }
     inline Vector2 getPos() { return pTransform->pos; }
-    inline Vector2Int getPxPos() { return pTransform->pxPos; }
+    inline Vector2Int getPxPos()
+    {
+        pTransform->updatePxPos();
+        return pTransform->pxPos;
+    }
     inline Vector2 getDims() { return pTransform->dims; }
     inline Vector2Int getPxDims() { return pTransform->pxDims; }
+    inline Vector2 getRoot() { return pTransform->root; }
     inline bool isAlive() { return alive; }
     inline static std::string getStringFromType(EntityType entityType) { return _stringFromType[entityType]; }
     inline static EntityType getTypeFromString(std::string typeName) { return _typeFromString[typeName]; }

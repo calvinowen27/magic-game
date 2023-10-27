@@ -17,8 +17,10 @@ bool Object::init(EntityType entityType, Vector2 pos)
 
     pRigidbody->init(pTransform, pCollider);
 
-    std::vector<Vector2> colliderEndpoints = objectManager.getCollider(entityType);
-    pCollider->init(colliderEndpoints[0], colliderEndpoints[1], pTransform, pRigidbody);
+    json jColliderStart = objectManager.getEntityData(entityType)["collider"]["start"];
+    json jColliderEnd = objectManager.getEntityData(entityType)["collider"]["end"];
+
+    pCollider->init(Vector2((float)jColliderStart[0], (float)jColliderStart[1]), Vector2((float)jColliderEnd[0], (float)jColliderEnd[1]), pTransform, pRigidbody);
     pCollider->setEntity(this);
 
     pRenderer->enable();

@@ -3,6 +3,7 @@
 #include "../../include/game/ContentManager.hpp"
 #include "../../include/game/ECS/Registry.hpp"
 #include "../../include/game/ObjectManager.hpp"
+#include "../../include/game/Input/MouseHandler.hpp"
 
 std::map<EntityType, std::string> Entity::_stringFromType = {
     {EntityType::Player, "Player"},

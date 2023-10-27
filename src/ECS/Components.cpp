@@ -52,13 +52,16 @@ RendererComponent *RendererComponent::init(std::string textureName, std::shared_
 
 RendererComponent *RendererComponent::init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, int renderOrder, bool startEnabled)
 {
-    if(startEnabled)
+    if (startEnabled)
         Component::init();
 
     pTexture = contentManager.getTextureFromType(entityType);
     this->pTransform = pTransform;
     this->renderOrder = renderOrder;
-    spriteDims = objectManager.getSpriteDims(entityType);
+
+    json jSpriteDims = objectManager.getEntityData(entityType)["spriteDims"];
+    spriteDims = Vector2Int((int)jSpriteDims[0], (int)jSpriteDims[1]);
+
     sourceRect = SDL_Rect{0, 0, spriteDims.x, spriteDims.y};
 
     refreshDimensions();
@@ -73,8 +76,11 @@ void RendererComponent::update(float time)
 
 void RendererComponent::draw(SDL_Renderer *pRenderer)
 {
-    pTransform->updatePxPos();
-    spriteRect = SDL_Rect{pTransform->pxPos.x, pTransform->pxPos.y, pTransform->pxDims.x, pTransform->pxDims.y};
+    if (pTransform)
+    {
+        // pTransform->updatePxPos();
+        spriteRect = SDL_Rect{pTransform->pxPos.x, pTransform->pxPos.y, pTransform->pxDims.x, pTransform->pxDims.y};
+    }
 
     SDL_RenderCopyEx(pRenderer, pTexture, &sourceRect, &spriteRect, spriteAngle, NULL, isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
@@ -114,8 +120,32 @@ TransformComponent *TransformComponent::init(Vector2 pos, Vector2 dims)
     Component::init();
 
     this->pos = pos;
+
     this->dims = dims;
     pxDims = (Vector2Int)(dims * game.ppm);
+
+    this->root = Vector2::zero;
+
+    updatePxPos();
+
+    return this;
+}
+
+TransformComponent *TransformComponent::init(EntityType entityType, Vector2 pos, Vector2 dims)
+{
+    Component::init();
+
+    this->pos = pos;
+
+    this->dims = dims;
+    pxDims = (Vector2Int)(dims * game.ppm);
+
+    json jRelRoot = objectManager.getEntityData(entityType)["relativeRoot"];
+    Vector2 relativeRoot = Vector2((float)jRelRoot[0], (float)jRelRoot[1]);
+
+    this->root = relativeRoot * dims;
+    pxRoot = (Vector2Int)(root * game.ppm);
+
     updatePxPos();
 
     return this;
@@ -127,6 +157,7 @@ void TransformComponent::update(float time)
         return;
 
     pxDims = (Vector2Int)(dims * game.ppm);
+    pxRoot = (Vector2Int)(root * game.ppm);
     updatePxPos();
 }
 
@@ -144,7 +175,7 @@ void TransformComponent::setPxDims(Vector2Int newPxDims)
 
 void TransformComponent::updatePxPos()
 {
-    pxPos = game.worldToPixel(pos) - Vector2Int(0, pxDims.y);
+    pxPos = game.worldToPixel(pos - root) - Vector2Int(0, pxDims.y);
 }
 
 /* COLLIDER COMPONENT */

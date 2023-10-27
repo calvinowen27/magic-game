@@ -50,26 +50,13 @@ void ObjectManager::update(float time)
         killEntity(entity);
 }
 
-std::vector<Vector2> ObjectManager::getCollider(EntityType entityType)
+json ObjectManager::getEntityData(EntityType entityType)
 {
     std::string typeString = Entity::getStringFromType(entityType);
-    if (!_entityData["colliders"].contains(typeString))
+    if(!_entityData.contains(typeString))
     {
-        std::cerr << "ObjectManager::getCollider(entityType): Invalid entityType '" << typeString << "'. Returning {Vector2(0, 0), Vector2(1, 0.5)}." << std::endl;
-        return std::vector<Vector2>{Vector2::zero, Vector2(1, 0.5)};
+        throw new std::invalid_argument("ObjectManager::getEntityData(entityType): entityType '" + typeString + "' not in entityData.json file.\n");        
     }
-    auto endpoints = _entityData["colliders"][typeString];
-    return std::vector<Vector2>{Vector2((float)endpoints["start"][0], (float)endpoints["start"][1]), Vector2((float)endpoints["end"][0], (float)endpoints["end"][1])};
-}
 
-Vector2Int ObjectManager::getSpriteDims(EntityType entityType)
-{
-    std::string typeString = Entity::getStringFromType(entityType);
-    if (!_entityData["spriteDims"].contains(typeString))
-    {
-        std::cerr << "ObjectManager::getSpriteDims(entityType): Invalid entityType '" << typeString << "'. Returning Vector2Int(16, 16)." << std::endl;
-        return Vector2Int(16, 16);
-    }
-    auto spriteDims = _entityData["spriteDims"][typeString];
-    return Vector2Int((int)spriteDims[0], (int)spriteDims[1]);
+    return _entityData[typeString];
 }

@@ -79,9 +79,12 @@ public:
     Vector2Int pxPos;  // pixels
     Vector2 dims;      // meters
     Vector2Int pxDims; // pixels
+    Vector2 root;
+    Vector2Int pxRoot;
 
     TransformComponent();
     TransformComponent *init(Vector2 pos, Vector2 dims = Vector2(1, 1)); // returns true if successful
+    TransformComponent *init(EntityType entityType, Vector2 pos, Vector2 dims = Vector2(1, 1)); // returns true if successful
     void update(float time);
 
     void setDims(Vector2 newDims);        // set new dimensions
