@@ -49,7 +49,7 @@ release: build
 build: make_dirs refresh_addtl $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS)
 	$(CC) $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS) $(LDFLAGS) -o $(BUILD_DIR)/$(EXECUTABLE) -static-libgcc -static-libstdc++
 
-refresh_addtl: refresh_content refresh_data refresh_world
+refresh_addtl: refresh_content refresh_data refresh_level
 
 ### CREATE OBJECTS ###
 
@@ -89,10 +89,10 @@ refresh_content:
 	mkdir -p $(BUILD_DIR)/content
 	cp -r content $(BUILD_DIR)
 
-refresh_world:
-	rm -rf $(BUILD_DIR)/world
-	mkdir -p $(BUILD_DIR)/world
-	cp -r world $(BUILD_DIR)
+refresh_level:
+	rm -rf $(BUILD_DIR)/level
+	mkdir -p $(BUILD_DIR)/level
+	cp -r level $(BUILD_DIR)
 
 refresh_data:
 	rm -rf $(BUILD_DIR)/data
