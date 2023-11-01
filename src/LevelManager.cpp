@@ -32,7 +32,7 @@ bool LevelManager::loadLevel(int levelIdx)
     _currLevelIdx = levelIdx;
 
     std::stringstream levelPath;
-    levelPath << LEVEL_DIRECTORY << "level" << levelIdx << ".txt";
+    levelPath << LEVEL_DIRECTORY << "level" << levelIdx << ".dat";
 
     std::ifstream in;
     in.open(levelPath.str());
