@@ -6,6 +6,7 @@
 #include "../../include/game/ObjectManager.hpp"
 #include "../../include/game/Animation/AnimationManager.hpp"
 #include "../../include/game/Animation/Animation.hpp"
+#include "../../include/game/UI/UIManager.hpp"
 
 #include <algorithm>
 
@@ -55,6 +56,8 @@ RendererComponent *RendererComponent::init(EntityType entityType, std::shared_pt
     if (startEnabled)
         Component::init();
 
+    pCollider = nullptr;
+
     pTexture = contentManager.getTextureFromType(entityType);
     this->pTransform = pTransform;
     this->renderOrder = renderOrder;
@@ -76,15 +79,26 @@ void RendererComponent::update(float time)
 
 void RendererComponent::draw(SDL_Renderer *pRenderer)
 {
-    if (pTransform)
-    {
-        pTransform->updatePxDims();
-        pTransform->updatePxRoot();
-        pTransform->updatePxPos();
-        spriteRect = SDL_Rect{pTransform->pxPos.x, pTransform->pxPos.y, pTransform->pxDims.x, pTransform->pxDims.y};
-    }
+    if (!pTransform)
+        return;
+
+    pTransform->updatePxDims();
+    pTransform->updatePxRoot();
+    pTransform->updatePxPos();
+    spriteRect = SDL_Rect{pTransform->pxPos.x, pTransform->pxPos.y, pTransform->pxDims.x, pTransform->pxDims.y};
 
     SDL_RenderCopyEx(pRenderer, pTexture, &sourceRect, &spriteRect, spriteAngle, NULL, isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+
+    if(pCollider && game.pUIManager->getDebugUI()->isEnabled())
+    {
+        Vector2Int colStart = game.worldToPixel(Vector2(pCollider->leftX, pCollider->bottomY)) - pTransform->pxRoot;
+        Vector2Int colDims = game.worldToPixel(Vector2(pCollider->rightX, pCollider->topY)) - colStart - pTransform->pxRoot;
+
+        auto colliderRect = SDL_Rect{colStart.x, colStart.y, colDims.x, colDims.y};
+
+        SDL_SetRenderDrawColor(pRenderer, 255, 0, 0, 255);
+        SDL_RenderDrawRect(pRenderer, &colliderRect);
+    }
 }
 
 void RendererComponent::kill()
@@ -186,7 +200,6 @@ void TransformComponent::updatePxDims()
 void TransformComponent::updatePxRoot()
 {
     pxRoot = (Vector2Int)(root * game.ppm);
-    pointPxRoot = SDL_Point{pxRoot.x, pxRoot.y};
 }
 
 /* COLLIDER COMPONENT */

@@ -308,8 +308,8 @@ Vector2 Game::pixelToWorld(Vector2Int pxPos)
 
 Vector2Int Game::worldToPixel(Vector2 pos)
 {
-    pos.y = pos.y / 2;
-    pos -= (cameraPos * Vector2(1, 0.5f));
+    pos.y = pos.y;// / 2;
+    pos -= (cameraPos);// * Vector2(1, 0.5f));
     pos *= ppm;
     pos.y = winHeight - pos.y;
     return (Vector2Int)pos.round(0) + Vector2Int(winWidth / 2, -winHeight / 2);

@@ -19,12 +19,16 @@ bool Spell::init()
     pCollider = registry.newComponent<ColliderComponent>();
     pRigidbody = registry.newComponent<RigidbodyComponent>();
 
-    pCollider->init(Vector2::zero, Vector2(1, 1), pTransform, pRigidbody, true, true);
+    json jColliderStart = objectManager.getEntityData(EntityType::Spell)["collider"]["start"];
+    json jColliderEnd = objectManager.getEntityData(EntityType::Spell)["collider"]["end"];
+
+    pCollider->init(Vector2((float)jColliderStart[0], (float)jColliderStart[1]), Vector2((float)jColliderEnd[0], (float)jColliderEnd[1]), pTransform, pRigidbody, true, true);
     pCollider->setEntity(this);
     pCollider->disable();
 
     pRigidbody->init(pTransform, pCollider);
     pRenderer->disable();
+    pRenderer->setCollider(pCollider);
 
     clearAttributes();
 
@@ -104,7 +108,6 @@ void Spell::setDir(Vector2 dir)
     if (pRenderer)
     {
         pRenderer->spriteAngle = atan2(dir.x, dir.y / 2) * RAD_TO_DEGS;
-        std::cout << pRenderer->spriteAngle << "\n";
         
         if(dir.x < 0)
             pRenderer->isFlipped = true;

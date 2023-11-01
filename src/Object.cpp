@@ -15,6 +15,8 @@ bool Object::init(EntityType entityType, Vector2 pos)
     pRigidbody = registry.newComponent<RigidbodyComponent>();
     pCollider = registry.newComponent<ColliderComponent>();
 
+    pRenderer->setCollider(pCollider);
+
     pRigidbody->init(pTransform, pCollider);
 
     json jColliderStart = objectManager.getEntityData(entityType)["collider"]["start"];

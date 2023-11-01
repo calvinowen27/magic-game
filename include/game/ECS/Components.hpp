@@ -20,6 +20,7 @@ class Entity;
 class ObjectManager;
 class Animation;
 class AnimationManager;
+class ColliderComponent;
 
 enum class EntityType;
 
@@ -56,6 +57,7 @@ public:
     Vector2Int spriteDims;
 
     std::shared_ptr<TransformComponent> pTransform;
+    std::shared_ptr<ColliderComponent> pCollider;
 
     float spriteAngle = 0;  // sprite rotation angle, degrees
     bool isFlipped = false; // over y axis
@@ -63,13 +65,14 @@ public:
     int renderOrder = 0;
 
     RendererComponent();
-    RendererComponent *init(std::string textureName, std::shared_ptr<TransformComponent> pTransform, int renderOrder = 0); // returns true if successful
+    RendererComponent *init(std::string textureName, std::shared_ptr<TransformComponent> pTransform, int renderOrder = 0);                          // returns true if successful
     RendererComponent *init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, int renderOrder = 0, bool startEnabled = false); // returns true if successful
     void update(float time);
     void draw(SDL_Renderer *pRenderer);
     void kill() override;
     bool setTexture(std::string textureName); // returns true if successful
     void refreshDimensions();
+    inline void setCollider(std::shared_ptr<ColliderComponent> pCollider) { this->pCollider = pCollider; }
 };
 
 class TransformComponent : public Component
@@ -79,13 +82,11 @@ public:
     Vector2Int pxPos;  // pixels
     Vector2 dims;      // meters
     Vector2Int pxDims; // pixels
-    Vector2 root;
-    Vector2Int pxRoot;
-
-    SDL_Point pointPxRoot;
+    Vector2 root;      // meters
+    Vector2Int pxRoot; // pixels
 
     TransformComponent();
-    TransformComponent *init(Vector2 pos, Vector2 dims = Vector2(1, 1)); // returns true if successful
+    TransformComponent *init(Vector2 pos, Vector2 dims = Vector2(1, 1));                        // returns true if successful
     TransformComponent *init(EntityType entityType, Vector2 pos, Vector2 dims = Vector2(1, 1)); // returns true if successful
     void update(float time);
 
