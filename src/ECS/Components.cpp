@@ -78,9 +78,9 @@ void RendererComponent::draw(SDL_Renderer *pRenderer)
 {
     if (pTransform)
     {
-        pTransform->updatePxPos();
         pTransform->updatePxDims();
         pTransform->updatePxRoot();
+        pTransform->updatePxPos();
         spriteRect = SDL_Rect{pTransform->pxPos.x, pTransform->pxPos.y, pTransform->pxDims.x, pTransform->pxDims.y};
     }
 

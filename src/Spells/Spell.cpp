@@ -103,7 +103,8 @@ void Spell::setDir(Vector2 dir)
 
     if (pRenderer)
     {
-        pRenderer->spriteAngle = atan2(dir.x, dir.y) * RAD_TO_DEGS;
+        pRenderer->spriteAngle = atan2(dir.x, dir.y / 2) * RAD_TO_DEGS;
+        std::cout << pRenderer->spriteAngle << "\n";
         
         if(dir.x < 0)
             pRenderer->isFlipped = true;

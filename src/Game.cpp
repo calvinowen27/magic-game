@@ -312,7 +312,7 @@ Vector2Int Game::worldToPixel(Vector2 pos)
     pos -= (cameraPos * Vector2(1, 0.5f));
     pos *= ppm;
     pos.y = winHeight - pos.y;
-    return (Vector2Int)pos + Vector2Int(winWidth / 2, -winHeight / 2);
+    return (Vector2Int)pos.round(0) + Vector2Int(winWidth / 2, -winHeight / 2);
 }
 
 bool Game::objOnScreen(Object &obj)

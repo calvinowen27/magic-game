@@ -26,6 +26,8 @@ private:
     int _currLevelIdx = -1;
     int _currLevelHalfSize;
 
+    Vector2 _playerStartPos;
+
 public:
     LevelManager();
     static LevelManager *getInstance();

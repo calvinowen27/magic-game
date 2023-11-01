@@ -15,7 +15,6 @@ LevelManager *LevelManager::_pInstance;
 
 LevelManager::LevelManager() : _game(*Game::getInstance()), _objectManager(*_game.pObjectManager)
 {
-
 }
 
 bool LevelManager::init()
@@ -25,9 +24,9 @@ bool LevelManager::init()
 
 bool LevelManager::loadLevel(int levelIdx)
 {
-    if(_currLevelIdx != -1)
+    if (_currLevelIdx != -1)
         unloadLevel();
-        
+
     // _worldMap.clear();
 
     _currLevelIdx = levelIdx;
@@ -37,7 +36,7 @@ bool LevelManager::loadLevel(int levelIdx)
 
     std::ifstream in;
     in.open(levelPath.str());
-    if(!in.is_open())
+    if (!in.is_open())
     {
         std::cerr << "Unable to open file " << levelPath.str() << " for reading." << std::endl;
         return false;
@@ -50,9 +49,9 @@ bool LevelManager::loadLevel(int levelIdx)
     std::getline(in, line);
     _currLevelHalfSize = std::stoi(line) / 2;
 
-    for(x = -_currLevelHalfSize; x < _currLevelHalfSize; x++)
+    for (x = -_currLevelHalfSize; x < _currLevelHalfSize; x++)
     {
-        for(y = -_currLevelHalfSize; y < _currLevelHalfSize; y++)
+        for (y = -_currLevelHalfSize; y < _currLevelHalfSize; y++)
         {
             _worldMap[Vector2(x, y)] = nullptr;
         }
@@ -74,7 +73,7 @@ bool LevelManager::loadLevel(int levelIdx)
 
                 // left
                 checkPos = pos + Vector2(-1, 0);
-                if(_worldMap.find(checkPos) != _worldMap.end() && _worldMap[checkPos] && _worldMap[checkPos]->getType() == EntityType::Wall)
+                if (_worldMap.find(checkPos) != _worldMap.end() && _worldMap[checkPos] && _worldMap[checkPos]->getType() == EntityType::Wall)
                 {
                     _worldMap[pos]->getCollider()->borderEnabled[0] = 0;
                     _worldMap[checkPos]->getCollider()->borderEnabled[1] = 0;
@@ -82,15 +81,15 @@ bool LevelManager::loadLevel(int levelIdx)
 
                 // right
                 checkPos = pos + Vector2(1, 0);
-                if(_worldMap.find(checkPos) != _worldMap.end() && _worldMap[checkPos] && _worldMap[checkPos]->getType() == EntityType::Wall)
+                if (_worldMap.find(checkPos) != _worldMap.end() && _worldMap[checkPos] && _worldMap[checkPos]->getType() == EntityType::Wall)
                 {
                     _worldMap[pos]->getCollider()->borderEnabled[1] = 0;
                     // _worldMap[checkPos]->getCollider()->borderEnabled[0] = 0;
                 }
-                
+
                 // bottom
                 checkPos = pos + Vector2(0, -1);
-                if(_worldMap.find(checkPos) != _worldMap.end() && _worldMap[checkPos] && _worldMap[checkPos]->getType() == EntityType::Wall)
+                if (_worldMap.find(checkPos) != _worldMap.end() && _worldMap[checkPos] && _worldMap[checkPos]->getType() == EntityType::Wall)
                 {
                     _worldMap[pos]->getCollider()->borderEnabled[2] = 0;
                     // _worldMap[checkPos]->getCollider()->borderEnabled[3] = 0;
@@ -98,7 +97,7 @@ bool LevelManager::loadLevel(int levelIdx)
 
                 // top
                 checkPos = pos + Vector2(0, 1);
-                if(_worldMap.find(checkPos) != _worldMap.end() && _worldMap[checkPos] && _worldMap[checkPos]->getType() == EntityType::Wall)
+                if (_worldMap.find(checkPos) != _worldMap.end() && _worldMap[checkPos] && _worldMap[checkPos]->getType() == EntityType::Wall)
                 {
                     _worldMap[pos]->getCollider()->borderEnabled[3] = 0;
                     _worldMap[checkPos]->getCollider()->borderEnabled[2] = 0;
@@ -110,8 +109,16 @@ bool LevelManager::loadLevel(int levelIdx)
                 _worldMap[pos]->init(EntityType::Grass, pos);
                 break;
             case '@':
-                _game.pPlayer = _objectManager.newEntity<Player>();
-                _game.pPlayer->init(EntityType::Player, pos);
+                _playerStartPos = pos;
+                if (_game.pPlayer)
+                {
+                    _game.pPlayer->setPos(_playerStartPos);
+                }
+                else
+                {
+                    _game.pPlayer = _objectManager.newEntity<Player>();
+                    _game.pPlayer->init(EntityType::Player, pos);
+                }
                 break;
             case '!':
                 _objectManager.newEntity<Enemy>()->init(EntityType::Enemy, pos);
@@ -130,12 +137,12 @@ bool LevelManager::unloadLevel()
     int x, y;
     std::shared_ptr<Object> pObj;
 
-    for(x = -_currLevelHalfSize; x < _currLevelHalfSize; x++)
+    for (x = -_currLevelHalfSize; x < _currLevelHalfSize; x++)
     {
-        for(y = -_currLevelHalfSize; y < _currLevelHalfSize; y++)
+        for (y = -_currLevelHalfSize; y < _currLevelHalfSize; y++)
         {
             pObj = _worldMap[Vector2(x, y)];
-            if(pObj)
+            if (pObj)
                 pObj->kill();
         }
     }
@@ -144,15 +151,12 @@ bool LevelManager::unloadLevel()
 
     _objectManager.killEntitiesOfType<Enemy>();
 
-    if(_game.pPlayer)
-        _game.pPlayer->kill();
-
     return true;
 }
 
 LevelManager *LevelManager::getInstance()
 {
-    if(_pInstance == nullptr)
+    if (_pInstance == nullptr)
     {
         _pInstance = new LevelManager();
     }
@@ -162,22 +166,20 @@ LevelManager *LevelManager::getInstance()
 
 std::shared_ptr<Object> LevelManager::getObjAtPos(Vector2 pos)
 {
-    if(_worldMap.find(pos) != _worldMap.end())
+    if (_worldMap.find(pos) != _worldMap.end())
         return _worldMap[pos];
-    
+
     return nullptr;
 }
 
 bool LevelManager::placeObjAtPos(std::shared_ptr<Object> obj, Vector2 pos)
 {
-    if(_worldMap.find(pos) == _worldMap.end())
+    if (_worldMap.find(pos) == _worldMap.end())
     {
         _worldMap[pos] = obj;
-    } 
-
+    }
 }
 
 void LevelManager::removeObjAtPos(Vector2 pos)
 {
-
 }

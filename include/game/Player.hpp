@@ -22,6 +22,8 @@ public:
     bool init(EntityType entityType, Vector2 pos) override;
     void update(float time) override;
     void kill() override;
+
+    inline void setPos(Vector2 newPos) { pTransform->pos = newPos; }
 };
 
 #endif
