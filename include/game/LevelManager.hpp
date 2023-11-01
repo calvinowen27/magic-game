@@ -23,7 +23,7 @@ private:
 
     std::map<Vector2, std::shared_ptr<Object>> _worldMap;
 
-    int _currLevelIdx;
+    int _currLevelIdx = -1;
     int _currLevelHalfSize;
 
 public:

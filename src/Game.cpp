@@ -292,8 +292,8 @@ void Game::reset()
 {
     // pLevelManager->unloadLevel();
     pObjectManager->killEntitiesOfType<Enemy>();
-    pObjectManager->killEntitiesOfType<Grass>();
-    pObjectManager->killEntitiesOfType<Wall>();
+    // pObjectManager->killEntitiesOfType<Grass>();
+    // pObjectManager->killEntitiesOfType<Wall>();
     pPlayer->kill();
     
     pLevelManager->loadLevel(0);

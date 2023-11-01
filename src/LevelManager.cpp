@@ -25,8 +25,10 @@ bool LevelManager::init()
 
 bool LevelManager::loadLevel(int levelIdx)
 {
-    // unloadLevel();
-    _worldMap.clear();
+    if(_currLevelIdx != -1)
+        unloadLevel();
+        
+    // _worldMap.clear();
 
     _currLevelIdx = levelIdx;
 
@@ -139,6 +141,11 @@ bool LevelManager::unloadLevel()
     }
 
     _worldMap.clear();
+
+    _objectManager.killEntitiesOfType<Enemy>();
+
+    if(_game.pPlayer)
+        _game.pPlayer->kill();
 
     return true;
 }

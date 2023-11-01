@@ -2,6 +2,7 @@
 #include "../../include/game/Game.hpp"
 #include "../../include/game/Spells/SpellManager.hpp"
 #include"../../include/game/UI/UIManager.hpp"
+#include "../../include/game/LevelManager.hpp"
 
 #include <iostream>
 
@@ -20,7 +21,9 @@ KeyboardHandler::KeyboardHandler() : _game(*Game::getInstance())
         { InputKey::ZoomOut, SDL_SCANCODE_MINUS },
         { InputKey::Pause, SDL_SCANCODE_ESCAPE },
         { InputKey::ToggleSpellUI, SDL_SCANCODE_C },
-        { InputKey::ToggleDebugUI, SDL_SCANCODE_B }
+        { InputKey::ToggleDebugUI, SDL_SCANCODE_B },
+        { InputKey::NextLevel, SDL_SCANCODE_RIGHT },
+        { InputKey::PrevLevel, SDL_SCANCODE_LEFT }
     };
 }
 
@@ -78,6 +81,18 @@ void KeyboardHandler::onKeyUp(SDL_Scancode scancode)
             spellUI->toggleEnabled();
 
         _game.togglePause();
+    }
+
+    // Next Level
+    if(scancode == _keybinds[InputKey::NextLevel])
+    {
+        _game.pLevelManager->nextLevel();
+    }
+
+    // Prev Level
+    if(scancode == _keybinds[InputKey::PrevLevel])
+    {
+        _game.pLevelManager->prevLevel();
     }
 }
 
