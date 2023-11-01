@@ -26,7 +26,7 @@ bool Spell::init()
     pRigidbody->init(pTransform, pCollider);
     pRenderer->disable();
 
-    attributes = 0x00;
+    clearAttributes();
 
     return true;
 }
@@ -81,7 +81,7 @@ void Spell::cast(Vector2 pos)
 
 void Spell::onCollisionEnter(Entity *pEntity)
 {
-    if(!pEntity)
+    if (!pEntity)
         return;
 
     Entity::onCollisionEnter(pEntity);
@@ -94,5 +94,18 @@ void Spell::onCollisionEnter(Entity *pEntity)
     if (pEntity->getType() != EntityType::Player && pEntity->getType() != EntityType::Spell)
     {
         kill();
+    }
+}
+
+void Spell::setDir(Vector2 dir)
+{
+    this->dir = dir;
+
+    if (pRenderer)
+    {
+        pRenderer->spriteAngle = atan2(dir.x, dir.y) * RAD_TO_DEGS;
+        
+        if(dir.x < 0)
+            pRenderer->isFlipped = true;
     }
 }

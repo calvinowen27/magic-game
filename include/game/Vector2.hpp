@@ -48,6 +48,7 @@ class Vector2
         Vector2 round(int decimals) const; // rounds the values of this vector to [decimals] decimal places
         friend bool operator==(const Vector2& a, const Vector2& b);
         friend bool operator!=(const Vector2& a, const Vector2& b);
+        friend bool operator<(const Vector2& a, const Vector2& b);
         Vector2 operator+(const Vector2& b) const; // returns a new vector where x = [this].x + [b].x and y = [this].y + [b].y
         Vector2 operator-(const Vector2& b) const; // returns a new vector where x = [this].x - [b].x and y = [this].y - [b].y
         Vector2 operator*(const float& a) const; // scalar multiplication [a]*[this]

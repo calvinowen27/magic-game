@@ -12,7 +12,6 @@
 #include "../include/game/Input/MouseHandler.hpp"
 #include "../include/game/Input/KeyboardHandler.hpp"
 #include "../include/game/ContentManager.hpp"
-#include "../include/game/WorldManager.hpp"
 #include "../include/game/ObjectManager.hpp"
 #include "../include/game/Spells/Spell.hpp"
 #include "../include/game/Spells/RadialSpell.hpp"
@@ -21,6 +20,7 @@
 #include "../include/game/ECS/ComponentHandler.hpp"
 #include "../include/game/Spells/SpellManager.hpp"
 #include "../include/game/Animation/AnimationManager.hpp"
+#include "../include/game/LevelManager.hpp"
 
 #include <thread>
 #include <chrono>
@@ -54,8 +54,8 @@ Game::~Game()
     delete pRegistry;
     delete pComponentHandler;
     delete pSpellManager;
-    delete pWorldManager;
     delete pAnimationManager;
+    delete pLevelManager;
 }
 
 Game *Game::getInstance()
@@ -123,7 +123,7 @@ int Game::init()
     pContentManager = new ContentManager();
     pUIManager = UIManager::getInstance();
     pObjectManager = ObjectManager::getInstance();
-    pWorldManager = WorldManager::getInstance();
+    pLevelManager = LevelManager::getInstance();
     pSpellManager = new SpellManager();
     pAnimationManager = new AnimationManager();
 
@@ -132,7 +132,7 @@ int Game::init()
     pObjectManager->init();
     pAnimationManager->init();
 
-    pWorldManager->loadWorld(); // last because player and enemies created here!
+    pLevelManager->loadLevel(0); // last because instantiates player and enemies
 
     return 0;
 }
@@ -258,7 +258,7 @@ void Game::physicsUpdate()
     pObjectManager->update(updateTime);
 
     if (pPlayer && pPlayer->isAlive())
-        cameraPos = pPlayer->getPos();
+        cameraPos = pPlayer->getPos() + Vector2(0, 0.5);
 
     auto execTime = duration_cast<nanoseconds>(high_resolution_clock::now() - startTime);
 
@@ -290,13 +290,13 @@ void Game::draw()
 
 void Game::reset()
 {
+    // pLevelManager->unloadLevel();
     pObjectManager->killEntitiesOfType<Enemy>();
     pObjectManager->killEntitiesOfType<Grass>();
     pObjectManager->killEntitiesOfType<Wall>();
     pPlayer->kill();
-
-    pWorldManager->reset();
-    pWorldManager->loadWorld();
+    
+    pLevelManager->loadLevel(0);
 }
 
 Vector2 Game::pixelToWorld(Vector2Int pxPos)
@@ -308,7 +308,8 @@ Vector2 Game::pixelToWorld(Vector2Int pxPos)
 
 Vector2Int Game::worldToPixel(Vector2 pos)
 {
-    pos -= cameraPos;
+    pos.y = pos.y / 2;
+    pos -= (cameraPos * Vector2(1, 0.5f));
     pos *= ppm;
     pos.y = winHeight - pos.y;
     return (Vector2Int)pos + Vector2Int(winWidth / 2, -winHeight / 2);

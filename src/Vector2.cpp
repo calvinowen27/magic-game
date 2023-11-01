@@ -79,6 +79,11 @@ bool operator!=(const Vector2& a, const Vector2& b)
     return !a.equals(b);
 }
 
+bool operator<(const Vector2& a, const Vector2& b)
+{
+    return a.magnitude() < b.magnitude();
+}
+
 Vector2 Vector2::operator+(const Vector2 &b) const
 {
     return Vector2(x+b.x, y+b.y);

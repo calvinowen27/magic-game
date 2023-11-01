@@ -82,6 +82,8 @@ public:
     Vector2 root;
     Vector2Int pxRoot;
 
+    SDL_Point pointPxRoot;
+
     TransformComponent();
     TransformComponent *init(Vector2 pos, Vector2 dims = Vector2(1, 1)); // returns true if successful
     TransformComponent *init(EntityType entityType, Vector2 pos, Vector2 dims = Vector2(1, 1)); // returns true if successful
@@ -91,6 +93,8 @@ public:
     void setPxDims(Vector2Int newPxDims); // set new px dims
 
     void updatePxPos();
+    void updatePxDims();
+    void updatePxRoot();
 };
 
 class ColliderComponent : public Component

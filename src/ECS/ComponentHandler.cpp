@@ -1,7 +1,6 @@
 #include "../../include/game/ECS/ComponentHandler.hpp"
 #include "../../include/game/ECS/Registry.hpp"
 #include "../../include/game/Game.hpp"
-#include "../../include/game/WorldManager.hpp"
 #include "../../include/game/ECS/Components.hpp"
 
 #include <algorithm>
@@ -17,7 +16,7 @@ ComponentHandler::~ComponentHandler()
 void ComponentHandler::draw(SDL_Renderer *pRenderer)
 {
     auto rendererSet = _registry.getComponents<RendererComponent>();
-    auto renderers = std::vector<shared_ptr<RendererComponent>>(rendererSet.begin(), rendererSet.end());
+    auto renderers = std::vector<std::shared_ptr<RendererComponent>>(rendererSet.begin(), rendererSet.end());
     std::sort(renderers.begin(), renderers.end(), rendererComparator);
 
     for (auto renderer : renderers)
@@ -144,7 +143,7 @@ void ComponentHandler::updateAnimators(float time)
     }
 }
 
-bool rendererComparator(shared_ptr<RendererComponent> a, shared_ptr<RendererComponent> b)
+bool rendererComparator(std::shared_ptr<RendererComponent> a, std::shared_ptr<RendererComponent> b)
 {
     if (!a->isEnabled())
         return false;

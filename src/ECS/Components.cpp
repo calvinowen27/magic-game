@@ -78,7 +78,9 @@ void RendererComponent::draw(SDL_Renderer *pRenderer)
 {
     if (pTransform)
     {
-        // pTransform->updatePxPos();
+        pTransform->updatePxPos();
+        pTransform->updatePxDims();
+        pTransform->updatePxRoot();
         spriteRect = SDL_Rect{pTransform->pxPos.x, pTransform->pxPos.y, pTransform->pxDims.x, pTransform->pxDims.y};
     }
 
@@ -124,7 +126,7 @@ TransformComponent *TransformComponent::init(Vector2 pos, Vector2 dims)
     this->dims = dims;
     pxDims = (Vector2Int)(dims * game.ppm);
 
-    this->root = Vector2::zero;
+    this->root = Vector2(0.5, 0);
 
     updatePxPos();
 
@@ -156,9 +158,7 @@ void TransformComponent::update(float time)
     if (!enabled)
         return;
 
-    pxDims = (Vector2Int)(dims * game.ppm);
-    pxRoot = (Vector2Int)(root * game.ppm);
-    updatePxPos();
+    // updatePxPos();
 }
 
 void TransformComponent::setDims(Vector2 newDims)
@@ -178,6 +178,17 @@ void TransformComponent::updatePxPos()
     pxPos = game.worldToPixel(pos - root) - Vector2Int(0, pxDims.y);
 }
 
+void TransformComponent::updatePxDims()
+{
+    pxDims = (Vector2Int)(dims * game.ppm);
+}
+
+void TransformComponent::updatePxRoot()
+{
+    pxRoot = (Vector2Int)(root * game.ppm);
+    pointPxRoot = SDL_Point{pxRoot.x, pxRoot.y};
+}
+
 /* COLLIDER COMPONENT */
 ColliderComponent::ColliderComponent() : Component()
 {
@@ -194,6 +205,11 @@ ColliderComponent *ColliderComponent::init(Vector2 start, Vector2 end, std::shar
 
     this->doCollisions = doCollisions;
     this->isTrigger = isTrigger;
+
+    borderEnabled[0] = 1;
+    borderEnabled[1] = 1;
+    borderEnabled[2] = 1;
+    borderEnabled[3] = 1;
 
     return this;
 }

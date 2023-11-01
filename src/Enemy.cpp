@@ -39,7 +39,7 @@ void Enemy::update(float time)
         }
     }
 
-    pHealth->pGreenRenderer->pTransform->pos = pTransform->pos + Vector2(0, pTransform->dims.y);
+    pHealth->pGreenRenderer->pTransform->pos = pTransform->pos + Vector2(0, pTransform->dims.y + 0.5);
     pHealth->pRedRenderer->pTransform->pos = pHealth->pGreenRenderer->pTransform->pos;
 
     if (_timeSinceHit < _hitCooldown)

@@ -67,8 +67,7 @@ public:
         {
             // pEntity->kill();
             _entities.erase(pEntity);
-            auto pool = TypePool<T>::getInstance();
-            pool->release(pEntity);
+            TypePool<T>::getInstance()->release(pEntity);
         }
     }
 

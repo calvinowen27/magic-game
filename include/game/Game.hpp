@@ -28,12 +28,12 @@ class ObjectManager;
 class ContentManager;
 class KeyboardHandler;
 class MouseHandler;
-class WorldManager;
 class Registry;
 class ComponentHandler;
 class TransformComponent;
 class SpellManager;
 class AnimationManager;
+class LevelManager;
 
 class Game
 {
@@ -54,12 +54,12 @@ public:
     KeyboardHandler *pKeyboardHandler;
     MouseHandler *pMouseHandler;
     UIManager *pUIManager;
-    WorldManager *pWorldManager;
     ObjectManager *pObjectManager;
     Registry *pRegistry;
     ComponentHandler *pComponentHandler;
     SpellManager *pSpellManager;
     AnimationManager *pAnimationManager;
+    LevelManager *pLevelManager;
 
     std::shared_ptr<Player> pPlayer;
 

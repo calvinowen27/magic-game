@@ -39,9 +39,9 @@ void Player::update(float time)
     if (_pKeyboardHandler->isPressed(InputKey::Left)) // move left
         _moveDir.x -= 1;
     if (_pKeyboardHandler->isPressed(InputKey::Up)) // move up
-        _moveDir.y += 0.5f;
+        _moveDir.y += 1;
     if (_pKeyboardHandler->isPressed(InputKey::Down)) // move down
-        _moveDir.y -= 0.5f;
+        _moveDir.y -= 1;
 
     if (_moveDir == Vector2::zero && _prevMoveDir != Vector2::zero)
     {
@@ -107,7 +107,7 @@ void Player::update(float time)
     if(nextAnimation != "")
         pAnimator->setAnimation(type, nextAnimation);
 
-    pHealth->pGreenRenderer->pTransform->pos = pTransform->pos + Vector2(0, pTransform->dims.y);
+    pHealth->pGreenRenderer->pTransform->pos = pTransform->pos + Vector2(0, pTransform->dims.y + 0.5);
     pHealth->pRedRenderer->pTransform->pos = pHealth->pGreenRenderer->pTransform->pos;
 
     Entity::update(time);

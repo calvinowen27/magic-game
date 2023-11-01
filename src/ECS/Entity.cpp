@@ -33,7 +33,7 @@ bool Entity::init(EntityType type, Vector2 pos)
     pTransform = registry.newComponent<TransformComponent>();
     pRenderer = registry.newComponent<RendererComponent>();
 
-    pTransform->init(pos);
+    pTransform->init(type, pos);
     pRenderer->init(type, pTransform);
     // pRenderer->enable();
 

@@ -29,8 +29,8 @@ void MouseHandler::onMouseButtonUp(int button)
     {
         if (!_game.pUIManager->getSpellUI()->isEnabled() && _game.pSpellManager->hasValidSpell())
         {
-            Vector2 dir = ((Vector2)(_mousePos - _game.pPlayer->getPos() - _game.pPlayer->getRoot())).normalized();
-            _game.pSpellManager->castCurrSpell(_game.pPlayer->getPos() + dir, dir);
+            Vector2 dir = ((Vector2)(_mousePos - _game.pPlayer->getPos() - Vector2(0, 0.5)) * Vector2(1, 2)).normalized();
+            _game.pSpellManager->castCurrSpell(_game.pPlayer->getPos() + Vector2(0, 0.5) + dir, dir);
         }
     }
 }

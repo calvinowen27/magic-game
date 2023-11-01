@@ -9,7 +9,7 @@
 
 #include "../../SDL2/SDL.h"
 
-#include <set>
+#include <vector>
 #include <memory>
 #include <queue>
 
@@ -21,7 +21,7 @@ class UIGroup
 protected:
     Game &game;
 
-    std::set<std::shared_ptr<UIElement>> uiElements;
+    std::vector<std::shared_ptr<UIElement>> uiElements;
     bool enabled = true;
 
 public:
@@ -42,7 +42,7 @@ public:
         }
 
         std::shared_ptr<T> element = std::make_shared<T>();
-        uiElements.emplace(element);
+        uiElements.push_back(element);
         return element;
     }
 };

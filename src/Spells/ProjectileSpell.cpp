@@ -20,10 +20,7 @@ bool ProjectileSpell::init()
 void ProjectileSpell::update(float time)
 {
     Spell::update(time);
-
-    if(pRenderer)
-        pRenderer->spriteAngle = atan2(dir.x, dir.y) * RAD_TO_DEGS;
-
+    
     if(!_hasTrail)
     {
         if(!(_hasTrail = hasAttribute(SpellAttribute::Trail)))
