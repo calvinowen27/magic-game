@@ -65,8 +65,8 @@ public:
     int renderOrder = 0;
 
     RendererComponent();
-    RendererComponent *init(std::string textureName, std::shared_ptr<TransformComponent> pTransform, int renderOrder = 0);                          // returns true if successful
-    RendererComponent *init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, int renderOrder = 0, bool startEnabled = false); // returns true if successful
+    bool init(std::string textureName, std::shared_ptr<TransformComponent> pTransform, int renderOrder = 0);                          // returns true if successful
+    bool init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, int renderOrder = 0, bool startEnabled = false); // returns true if successful
     void update(float time);
     void draw(SDL_Renderer *pRenderer);
     void kill() override;
@@ -86,11 +86,9 @@ public:
     Vector2Int pxRoot; // pixels
 
     TransformComponent();
-    TransformComponent *init(Vector2 pos, Vector2 dims = Vector2(1, 1));                        // returns true if successful
-    TransformComponent *init(EntityType entityType, Vector2 pos, Vector2 dims = Vector2(1, 1)); // returns true if successful
-    void update(float time);
+    bool init(Vector2 pos, Vector2 dims = Vector2(1, 1));                        // returns true if successful
+    bool init(EntityType entityType, Vector2 pos, Vector2 dims = Vector2(1, 1)); // returns true if successful
 
-    void setDims(Vector2 newDims);        // set new dimensions
     void setPxDims(Vector2Int newPxDims); // set new px dims
 
     void updatePxPos();
@@ -98,11 +96,21 @@ public:
     void updatePxRoot();
 };
 
+enum class ColliderType
+{
+    Box,
+    Circle
+};
+
 class ColliderComponent : public Component
 {
 public:
-    Vector2 start; // scalar of dims, relative to bottom left of object
-    Vector2 end;   // scalar of dims, relative to top right of object
+    ColliderType colliderType;
+
+    Vector2 start; // scalar of dims, relative to bottom left of object (for Box type)
+                   // substitutes as center point (for Circle type)
+    Vector2 end;   // scalar of dims, relative to top right of object (for Box type)
+                   // substitutes as radius (for Circle type)
 
     std::shared_ptr<TransformComponent> pTransform;
     std::shared_ptr<RigidbodyComponent> pRigidbody;
@@ -122,7 +130,7 @@ public:
     bool isTrigger = false;
 
     ColliderComponent();
-    ColliderComponent *init(Vector2 start, Vector2 end, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions = true, bool isTrigger = false); // returns true if successful
+    bool init(Vector2 start, Vector2 end, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions = true, bool isTrigger = false); // returns true if successful
     void update(float time);
     void kill() override;
     void onCollisionEnter(std::shared_ptr<ColliderComponent> other);
@@ -142,7 +150,7 @@ public:
     std::shared_ptr<ColliderComponent> pCollider;
 
     RigidbodyComponent();
-    RigidbodyComponent *init(std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<ColliderComponent> pCollider, bool isStatic = false); // returns true if successful
+    bool init(std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<ColliderComponent> pCollider, bool isStatic = false); // returns true if successful
     void update(float time);
     void kill() override;
 };
@@ -157,7 +165,7 @@ public:
     std::shared_ptr<RendererComponent> pGreenRenderer;
 
     HealthComponent();
-    HealthComponent *init(float baseHealth);
+    bool init(float baseHealth);
     void heal(float healAmount);
     bool damage(float dmgAmount); // returns true if dead after damage dealt
     void kill() override;
@@ -186,7 +194,7 @@ private:
 
 public:
     AnimatorComponent();
-    void init(std::shared_ptr<RendererComponent> pRenderer);
+    bool init(std::shared_ptr<RendererComponent> pRenderer);
     void update(float time);
     void setAnimation(EntityType entityType, std::string name);
     void kill();

@@ -36,7 +36,7 @@ RendererComponent::RendererComponent() : Component(), contentManager(*game.pCont
 {
 }
 
-RendererComponent *RendererComponent::init(std::string textureName, std::shared_ptr<TransformComponent> pTransform, int renderOrder)
+bool RendererComponent::init(std::string textureName, std::shared_ptr<TransformComponent> pTransform, int renderOrder)
 {
     Component::init();
 
@@ -48,10 +48,10 @@ RendererComponent *RendererComponent::init(std::string textureName, std::shared_
 
     refreshDimensions();
 
-    return this;
+    return true;
 }
 
-RendererComponent *RendererComponent::init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, int renderOrder, bool startEnabled)
+bool RendererComponent::init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, int renderOrder, bool startEnabled)
 {
     if (startEnabled)
         Component::init();
@@ -69,7 +69,7 @@ RendererComponent *RendererComponent::init(EntityType entityType, std::shared_pt
 
     refreshDimensions();
 
-    return this;
+    return true;
 }
 
 void RendererComponent::update(float time)
@@ -89,7 +89,7 @@ void RendererComponent::draw(SDL_Renderer *pRenderer)
 
     SDL_RenderCopyEx(pRenderer, pTexture, &sourceRect, &spriteRect, spriteAngle, NULL, isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 
-    if(pCollider && game.pUIManager->getDebugUI()->isEnabled())
+    if (pCollider && game.pUIManager->getDebugUI()->isEnabled())
     {
         Vector2Int colStart = game.worldToPixel(Vector2(pCollider->leftX, pCollider->bottomY)) - pTransform->pxRoot;
         Vector2Int colDims = game.worldToPixel(Vector2(pCollider->rightX, pCollider->topY)) - colStart - pTransform->pxRoot;
@@ -131,7 +131,7 @@ TransformComponent::TransformComponent() : Component()
 {
 }
 
-TransformComponent *TransformComponent::init(Vector2 pos, Vector2 dims)
+bool TransformComponent::init(Vector2 pos, Vector2 dims)
 {
     Component::init();
 
@@ -144,10 +144,10 @@ TransformComponent *TransformComponent::init(Vector2 pos, Vector2 dims)
 
     updatePxPos();
 
-    return this;
+    return true;
 }
 
-TransformComponent *TransformComponent::init(EntityType entityType, Vector2 pos, Vector2 dims)
+bool TransformComponent::init(EntityType entityType, Vector2 pos, Vector2 dims)
 {
     Component::init();
 
@@ -164,21 +164,7 @@ TransformComponent *TransformComponent::init(EntityType entityType, Vector2 pos,
 
     updatePxPos();
 
-    return this;
-}
-
-void TransformComponent::update(float time)
-{
-    if (!enabled)
-        return;
-
-    // updatePxPos();
-}
-
-void TransformComponent::setDims(Vector2 newDims)
-{
-    dims = newDims;
-    pxDims = (Vector2Int)(dims * game.ppm);
+    return true;
 }
 
 void TransformComponent::setPxDims(Vector2Int newPxDims)
@@ -207,12 +193,12 @@ ColliderComponent::ColliderComponent() : Component()
 {
 }
 
-ColliderComponent *ColliderComponent::init(Vector2 start, Vector2 end, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions, bool isTrigger)
+bool ColliderComponent::init(Vector2 start, Vector2 end, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions, bool isTrigger)
 {
     Component::init();
 
-    this->start = start;
-    this->end = end;
+    this->start = start * Vector2(1, 2); // multiply y by 2 to account for perspective
+    this->end = end * Vector2(1, 2);     // multiply y by 2 to account for perspective
     this->pTransform = pTransform;
     this->pRigidbody = pRigidbody;
 
@@ -224,7 +210,7 @@ ColliderComponent *ColliderComponent::init(Vector2 start, Vector2 end, std::shar
     borderEnabled[2] = 1;
     borderEnabled[3] = 1;
 
-    return this;
+    return true;
 }
 
 void ColliderComponent::kill()
@@ -286,7 +272,7 @@ RigidbodyComponent::RigidbodyComponent() : Component()
 {
 }
 
-RigidbodyComponent *RigidbodyComponent::init(std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<ColliderComponent> pCollider, bool isStatic)
+bool RigidbodyComponent::init(std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<ColliderComponent> pCollider, bool isStatic)
 {
     Component::init();
 
@@ -295,7 +281,7 @@ RigidbodyComponent *RigidbodyComponent::init(std::shared_ptr<TransformComponent>
 
     this->isStatic = isStatic;
 
-    return this;
+    return true;
 }
 
 void RigidbodyComponent::update(float time)
@@ -323,7 +309,7 @@ HealthComponent::HealthComponent() : Component()
 {
 }
 
-HealthComponent *HealthComponent::init(float baseHealth)
+bool HealthComponent::init(float baseHealth)
 {
     Component::init();
 
@@ -385,12 +371,14 @@ AnimatorComponent::AnimatorComponent() : Component(), _animationManager(*game.pA
 {
 }
 
-void AnimatorComponent::init(std::shared_ptr<RendererComponent> pRenderer)
+bool AnimatorComponent::init(std::shared_ptr<RendererComponent> pRenderer)
 {
     _pRenderer = pRenderer;
     _playing = false;
 
     Component::init();
+
+    return true;
 }
 
 void AnimatorComponent::update(float time)

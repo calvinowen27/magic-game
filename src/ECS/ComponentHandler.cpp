@@ -28,17 +28,8 @@ void ComponentHandler::draw(SDL_Renderer *pRenderer)
 
 void ComponentHandler::update(float time)
 {
-    updateTransforms(time);
     updateColliders(time);
     updateAnimators(time);
-}
-
-void ComponentHandler::updateTransforms(float time)
-{
-    for (auto transform : _registry.getComponents<TransformComponent>())
-    {
-        transform->update(time);
-    }
 }
 
 void ComponentHandler::updateColliders(float time)

@@ -22,7 +22,6 @@ public:
     ~ComponentHandler();
     void draw(SDL_Renderer *pRenderer);
     void update(float time);
-    void updateTransforms(float time);
     void updateColliders(float time);
     void updateAnimators(float time);
 };
