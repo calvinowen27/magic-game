@@ -177,7 +177,10 @@ bool LevelManager::placeObjAtPos(std::shared_ptr<Object> obj, Vector2 pos)
     if (_worldMap.find(pos) == _worldMap.end())
     {
         _worldMap[pos] = obj;
+        return true;
     }
+    
+    return false;
 }
 
 void LevelManager::removeObjAtPos(Vector2 pos)

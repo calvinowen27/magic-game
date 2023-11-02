@@ -97,24 +97,11 @@ public:
     void updatePxRoot();
 };
 
-enum class ColliderType
-{
-    Box,
-    Circle
-};
-
 class ColliderComponent : public Component
 {
-private:
-    static std::map<std::string, ColliderType> _typeFromString;
-
 public:
-    ColliderType colliderType = ColliderType::Box;
-
-    Vector2 start; // scalar of dims, relative to bottom left of object (for Box type)
-                   // acts as center point (for Circle type)
-    Vector2 end;   // scalar of dims, relative to top right of object (for Box type)
-                   // x = y = act as radius (for Circle type)
+    Vector2 start; // scalar of dims, relative to bottom left of object
+    Vector2 end;   // scalar of dims, relative to top right of object
 
     std::shared_ptr<TransformComponent> pTransform;
     std::shared_ptr<RigidbodyComponent> pRigidbody;

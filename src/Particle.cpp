@@ -18,8 +18,9 @@ bool Particle::init(std::string type, float lifeDur)
     pRenderer->init(type, pTransform);
     pRenderer->refreshDimensions();
 
-
     this->type = type;
+
+    return true;
 }
 
 void Particle::update(float time)
