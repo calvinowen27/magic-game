@@ -200,20 +200,13 @@ void Game::pollEvents()
                 SDL_GetWindowSize(win, &winWidth, &winHeight);
             }
         }
-
-        /* TEMP */
-        // if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_F)
-        //     pPlayer->pHealth->damage(1);
-
-        // if (event.type == SDL_KEYUP && event.key.keysym.scancode == SDL_SCANCODE_G)
-        //     pPlayer->pHealth->heal(1);
     }
 }
 
 void Game::frameUpdate()
 {
     using namespace std::chrono;
-    float frameTime = 1 / (float)TARGET_FPS;
+    float frameTime = 1 / (float)_targetFPS;
     nanoseconds timeDiff((int)(frameTime * 1000000000));
 
     auto startTime = high_resolution_clock::now();
@@ -242,7 +235,7 @@ void Game::frameUpdate()
 void Game::physicsUpdate()
 {
     using namespace std::chrono;
-    float updateTime = 1 / (float)TARGET_UPS; // seconds
+    float updateTime = 1 / (float)_targetUPS; // seconds
 
     nanoseconds timeDiff((int)(updateTime * 1000000000)); // convert updateTime to nanoseconds
 
@@ -250,13 +243,14 @@ void Game::physicsUpdate()
 
     pKeyboardHandler->processInputs();
 
-    if (paused)
+    if (paused) // don't update any of the following 
         return;
 
-    pComponentHandler->update(updateTime);
+    pComponentHandler->update(updateTime); // call update function on all entity components
 
-    pObjectManager->update(updateTime);
+    pObjectManager->update(updateTime); // call update function on all objects
 
+    // set camera position to follow player
     if (pPlayer && pPlayer->isAlive())
         cameraPos = pPlayer->getPos() + Vector2(0, 0.5);
 
@@ -277,49 +271,41 @@ void Game::draw()
 {
     SDL_RenderClear(pRenderer);
 
-    SDL_SetRenderDrawColor(pRenderer, 47, 120, 46, 255);
+    pComponentHandler->draw(pRenderer); // calls draw function on all renderer components with render ordering
 
-    pComponentHandler->draw(pRenderer);
+    pUIManager->draw(pRenderer); // draw all ui elements
 
-    pUIManager->draw(pRenderer);
-
-    SDL_SetRenderDrawColor(pRenderer, 47, 120, 46, 255);
+    SDL_SetRenderDrawColor(pRenderer, 47, 120, 46, 255); // green background color (temporary)
 
     SDL_RenderPresent(pRenderer);
 }
 
 void Game::reset()
 {
-    // pLevelManager->unloadLevel();
     pObjectManager->killEntitiesOfType<Enemy>();
-    // pObjectManager->killEntitiesOfType<Grass>();
-    // pObjectManager->killEntitiesOfType<Wall>();
     pPlayer->kill();
-    
+
     pLevelManager->loadLevel(0);
 }
 
-Vector2 Game::pixelToWorld(Vector2Int pxPos)
+Vector2Int Game::worldToPixel(const Vector2 &pos)
 {
-    pxPos -= Vector2Int(winWidth / 2, -winHeight / 2);
-    pxPos.y = winHeight - pxPos.y;
-    return ((Vector2)pxPos / (float)ppm) + cameraPos;
+    Vector2 pxPos = pos;
+    pxPos.y /= 2;                                                                // half y value to account for perspective
+    pxPos -= cameraPos / Vector2(1, 2);                                          // half cameraPos.y to account for perspective, make pxPos relative to cameraPos
+    pxPos *= ppm;                                                                // convert from meters to pixels
+    pxPos.y *= -1;                                                               // invert y relative to window (pixel y positioning is from top not bottom)
+    return (Vector2Int)pxPos.round(0) + Vector2Int(winWidth / 2, winHeight / 2); // add half of window dimensions to center on screen
 }
 
-Vector2Int Game::worldToPixel(Vector2 pos)
+Vector2 Game::pixelToWorld(const Vector2Int &pxPos)
 {
-    pos.y = pos.y;// / 2;
-    pos -= (cameraPos);// * Vector2(1, 0.5f));
-    pos *= ppm;
-    pos.y = winHeight - pos.y;
-    return (Vector2Int)pos.round(0) + Vector2Int(winWidth / 2, -winHeight / 2);
-}
-
-bool Game::objOnScreen(Object &obj)
-{
-    Vector2Int pxPos = obj.getPxPos();
-    Vector2Int pxDims = obj.getPxDims();
-    return pxPos.x <= winWidth && pxPos.x + pxDims.x >= 0 && pxPos.y <= winHeight && pxPos.y + pxDims.y >= 0;
+    Vector2 pos = (Vector2)pxPos;
+    pos.x -= winWidth / 2;           // subtract half of window width to convert x to pixel positioning
+    pos.y = (winHeight / 2) - pos.y; // convert y to pixel positioning with inversion in 1 step
+    pos /= ppm;                      // convert from pixels to meters
+    pos += cameraPos;                // add cameraPos for relative camera positioning
+    return pos;
 }
 
 bool Game::isTransformOnScreen(TransformComponent &transform)
@@ -328,6 +314,21 @@ bool Game::isTransformOnScreen(TransformComponent &transform)
            transform.pxPos.y <= winHeight && transform.pxPos.y + transform.pxDims.y >= 0;
 }
 
+void Game::zoomIn()
+{
+    ppm *= zoomScale;
+    if (ppm > maxPPM)
+        ppm = maxPPM;
+}
+
+void Game::zoomOut()
+{
+    ppm /= zoomScale;
+    if (ppm < minPPM)
+        ppm = minPPM;
+}
+
+// static
 void Game::togglePause()
 {
     auto game = Game::getInstance();
@@ -335,6 +336,7 @@ void Game::togglePause()
     game->pUIManager->getPauseUI()->toggleEnabled();
 }
 
+// static
 void Game::quit()
 {
     Game::getInstance()->running = false;

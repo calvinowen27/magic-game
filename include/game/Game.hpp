@@ -18,7 +18,7 @@
 
 #include "Vector2.hpp"
 
-typedef void (*func_ptr)(void);
+typedef void (*func_ptr)(void); // for passing function ptrs to ui buttons
 
 class Object;
 class UIElement;
@@ -38,8 +38,8 @@ class LevelManager;
 class Game
 {
 private:
-    const int TARGET_UPS = 60;  // physics updates
-    const int TARGET_FPS = 120; // aim for this many fps
+    int _targetUPS = 60;  // physics updates
+    int _targetFPS = 120; // aim for this many fps
 
     static Game *_pInstance;
 
@@ -48,7 +48,7 @@ private:
     std::mutex _mutex;
 
 public:
-    const int SPRITE_PPM = 16; // texture pixels per meter
+    const int SPRITE_PPM = 16; // texture pixels per meter (determines scaling of sprite on screen by dimensions)
 
     ContentManager *pContentManager;
     KeyboardHandler *pKeyboardHandler;
@@ -63,11 +63,12 @@ public:
 
     std::shared_ptr<Player> pPlayer;
 
-    int winWidth = 1250, winHeight = 835;
+    int winWidth = 1250, winHeight = 835; // window dimensions, 1250x835 by default in windowed mode
+    int screenWidth, screenHeight;
     int ppm = 64; // screen pixels per meter, 64 by default
     int maxPPM = 512;
     int minPPM = 8;
-    float zoomScale = 1.125;
+    float zoomScale = 1.125; // scalar to multiply or divide ppm by when zooming
     SDL_Window *pWindow;
     SDL_Renderer *pRenderer;
 
@@ -75,40 +76,31 @@ public:
     bool running = true;
     bool paused = false;
 
-    static Game *getInstance();
+    static Game *getInstance(); // get singleton instance
     Game();
     ~Game();
-    int init();
-    void start();
-    void runPhysics();
-    void pollEvents();
-    void frameUpdate();
-    void physicsUpdate();
-    void draw();
-    void reset();
+    int init();           // init window and manager class instances
+    void start();         // start game
+    void runPhysics();    // runs physics thread
+    void pollEvents();    // polls input events for mouse and keyboard
+    void frameUpdate();   // perform render cycle
+    void physicsUpdate(); // perform physics cycle
+    void draw();          // draw everything to screen
+    void reset();         // reset game
 
-    Vector2 pixelToWorld(Vector2Int pxPos);
-    Vector2Int worldToPixel(Vector2 pos);
+    Vector2Int worldToPixel(const Vector2 &pos);   // converts a world position to a pixel position
+    Vector2 pixelToWorld(const Vector2Int &pxPos); // converts a pixel position to a world position
 
-    bool objOnScreen(Object &obj);
-    bool isTransformOnScreen(TransformComponent &transform);
+    bool isTransformOnScreen(TransformComponent &transform); // returns true if transform is on screen, false otherwise
+
+    void zoomIn();  // zooms camera in by zoomScale
+    void zoomOut(); // zooms camera out by zoomScale
+
+    static void togglePause();
+    static void quit();
 
     inline int getFPS() { return _fps; }
     inline int getUPS() { return _ups; }
-    inline void zoomIn()
-    {
-        ppm *= ppm * zoomScale <= maxPPM ? zoomScale : 1;
-        if (ppm > maxPPM)
-            ppm = maxPPM;
-    }
-    inline void zoomOut()
-    {
-        ppm /= ppm / zoomScale >= minPPM ? zoomScale : 1;
-        if (ppm < minPPM)
-            ppm = minPPM;
-    }
-    static void togglePause();
-    static void quit();
 };
 
 #endif
