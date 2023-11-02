@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include <set>
+#include <map>
 
 #include "../../SDL2/SDL.h"
 
@@ -104,39 +105,50 @@ enum class ColliderType
 
 class ColliderComponent : public Component
 {
+private:
+    static std::map<std::string, ColliderType> _typeFromString;
+
 public:
-    ColliderType colliderType;
+    ColliderType colliderType = ColliderType::Box;
 
     Vector2 start; // scalar of dims, relative to bottom left of object (for Box type)
-                   // substitutes as center point (for Circle type)
+                   // acts as center point (for Circle type)
     Vector2 end;   // scalar of dims, relative to top right of object (for Box type)
-                   // substitutes as radius (for Circle type)
+                   // x = y = act as radius (for Circle type)
 
     std::shared_ptr<TransformComponent> pTransform;
     std::shared_ptr<RigidbodyComponent> pRigidbody;
 
-    // positions of each border of collider
-    float leftX;
-    float rightX;
-    float topY;
-    float bottomY;
+    // positions of each corner of collider (for Box and Circle)
+    Vector2 bottomLeft;
+    Vector2 bottomRight;
+    Vector2 topLeft;
+    Vector2 topRight;
+
+    Vector2 center; // position of center of collider (for Circle)
 
     // colliders that are touching this on
     std::set<std::shared_ptr<ColliderComponent>> collidersTouching;
 
-    int borderEnabled[4]{1, 1, 1, 1}; // left right bottom top
+    bool borderEnabled[4]{true, true, true, true}; // whether each side of collider is enabled or not (for Box only)
+                                                   // order: left right bottom top
 
-    bool doCollisions = true;
-    bool isTrigger = false;
+    bool doCollisions = true; // if true, detects collisions between other colliders
+    bool isTrigger = false;   // if true and if collision detected, doesn't alter position of pTransform
 
     ColliderComponent();
-    bool init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions = true, bool isTrigger = false);      // returns true if successful
-    void update(float time);
-    void kill() override;
+
+    // initializes state of collider, returns true if sucessful
+    bool init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions = true, bool isTrigger = false);
+
+    void update(float time); // performs whileTouching on colliders in collidersTouching, also updates positions of borders
+
     void onCollisionEnter(std::shared_ptr<ColliderComponent> other);
     void onCollisionExit(std::shared_ptr<ColliderComponent> other);
     void whileTouching(std::shared_ptr<ColliderComponent> other);
-    bool isTouching(std::shared_ptr<ColliderComponent> other);
+    bool isTouching(std::shared_ptr<ColliderComponent> other); // returns true if this is touching other
+
+    void kill() override;
 };
 
 class RigidbodyComponent : public Component

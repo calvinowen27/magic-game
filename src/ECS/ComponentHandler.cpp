@@ -56,73 +56,213 @@ void ComponentHandler::updateColliders(float time)
             if (!pCol->doCollisions || !pOther->doCollisions)
                 continue;
 
-            // skip if not touching
-            if (pCol->leftX + deltaPos.x > pOther->rightX || pCol->rightX + deltaPos.x < pOther->leftX ||
-                pCol->bottomY + deltaPos.y > pOther->topY || pCol->topY + deltaPos.y < pOther->bottomY)
+            // Box v. Box
+            if (pCol->colliderType == ColliderType::Box && pOther->colliderType == ColliderType::Box)
             {
-                if (pCol->isTouching(pOther) || pOther->isTouching(pCol))
+                // skip if not touching
+                if (pCol->bottomLeft.x + deltaPos.x > pOther->topRight.x || pCol->topRight.x + deltaPos.x < pOther->bottomLeft.x ||
+                    pCol->bottomLeft.y + deltaPos.y > pOther->topRight.y || pCol->topRight.y + deltaPos.y < pOther->bottomLeft.y)
                 {
-                    pCol->onCollisionExit(pOther);
-                    pOther->onCollisionExit(pCol);
+                    if (pCol->isTouching(pOther) || pOther->isTouching(pCol))
+                    {
+                        pCol->onCollisionExit(pOther);
+                        pOther->onCollisionExit(pCol);
+                    }
+                    continue;
                 }
-                continue;
-            }
-
-            // this left and other right
-            if (pCol->borderEnabled[0] && pOther->borderEnabled[1])
-            {
-                if (pCol->leftX >= pOther->rightX && pCol->leftX + deltaPos.x < pOther->rightX)
+                else
                 {
-                    if (!(pCol->isTrigger || pOther->isTrigger))
-                        nextPos.x = pOther->rightX - (pCol->start.x * pCol->pTransform->dims.x);
-
-                    pCol->onCollisionEnter(pOther);
-                    pOther->onCollisionEnter(pCol);
+                    nextPos = handleCollisionBoxBox(pCol, pOther, deltaPos);
                 }
             }
 
-            // this right and other left
-            if (pCol->borderEnabled[1] && pOther->borderEnabled[0])
+            // Circle v. Box
+            if (pCol->colliderType == ColliderType::Circle && pOther->colliderType == ColliderType::Box)
             {
-                if (pCol->rightX <= pOther->leftX && pCol->rightX + deltaPos.x > pOther->leftX)
+                // skip if not touching
+                if (pCol->bottomLeft.x + deltaPos.x > pOther->topRight.x || pCol->topRight.x + deltaPos.x < pOther->bottomLeft.x ||
+                    pCol->bottomLeft.y + deltaPos.y > pOther->topRight.y || pCol->topRight.y + deltaPos.y < pOther->bottomLeft.y)
                 {
-                    if (!(pCol->isTrigger || pOther->isTrigger))
-                        nextPos.x = pOther->leftX - (pCol->end.x * pCol->pTransform->dims.x);
-
-                    pCol->onCollisionEnter(pOther);
-                    pOther->onCollisionEnter(pCol);
+                    if (pCol->isTouching(pOther) || pOther->isTouching(pCol))
+                    {
+                        pCol->onCollisionExit(pOther);
+                        pOther->onCollisionExit(pCol);
+                    }
+                    continue;
+                }
+                else
+                {
+                    nextPos = handleCollisionCircleBox(pCol, pOther, deltaPos);
                 }
             }
 
-            // this bottom and other top
-            if (pCol->borderEnabled[2] && pOther->borderEnabled[3])
+            // Circle v. Circle
+            if (pCol->colliderType == ColliderType::Circle && pOther->colliderType == ColliderType::Circle)
             {
-                if (pCol->bottomY >= pOther->topY && pCol->bottomY + deltaPos.y < pOther->topY)
+                // skip if not touching
+                if (Vector2::distance(pCol->center, pOther->center) > pCol->end.x + pOther->end.x)
                 {
-                    if (!(pCol->isTrigger || pOther->isTrigger))
-                        nextPos.y = pOther->topY - (pCol->start.y * pCol->pTransform->dims.y);
-
-                    pCol->onCollisionEnter(pOther);
-                    pOther->onCollisionEnter(pCol);
+                    if (pCol->isTouching(pOther) || pOther->isTouching(pCol))
+                    {
+                        pCol->onCollisionExit(pOther);
+                        pOther->onCollisionExit(pCol);
+                    }
+                    continue;
                 }
-            }
-
-            // this top and other bottom
-            if (pCol->borderEnabled[3] && pOther->borderEnabled[2])
-            {
-                if (pCol->topY <= pOther->bottomY && pCol->topY + deltaPos.y > pOther->bottomY)
+                else
                 {
-                    if (!(pCol->isTrigger || pOther->isTrigger))
-                        nextPos.y = pOther->bottomY - (pCol->end.y * pCol->pTransform->dims.y);
-
-                    pCol->onCollisionEnter(pOther);
-                    pOther->onCollisionEnter(pCol);
+                    nextPos = handleCollisionCircleCircle(pCol, pOther, deltaPos);
                 }
             }
         }
 
         pCol->pTransform->pos = nextPos;
     }
+}
+
+Vector2 ComponentHandler::handleCollisionBoxBox(std::shared_ptr<ColliderComponent> box1, std::shared_ptr<ColliderComponent> box2, Vector2 dPos)
+{
+    Vector2 nextPos = box1->pTransform->pos + dPos;
+
+    // this left and other right
+    if (box1->borderEnabled[0] && box2->borderEnabled[1])
+    {
+        if (box1->bottomLeft.x >= box2->topRight.x && box1->bottomLeft.x + dPos.x < box2->topRight.x)
+        {
+            if (!(box1->isTrigger || box2->isTrigger))
+                nextPos.x = box2->topRight.x - (box1->start.x * box1->pTransform->dims.x);
+
+            box1->onCollisionEnter(box2);
+            box2->onCollisionEnter(box1);
+        }
+    }
+
+    // this right and other left
+    if (box1->borderEnabled[1] && box2->borderEnabled[0])
+    {
+        if (box1->topRight.x <= box2->bottomLeft.x && box1->topRight.x + dPos.x > box2->bottomLeft.x)
+        {
+            if (!(box1->isTrigger || box2->isTrigger))
+                nextPos.x = box2->bottomLeft.x - (box1->end.x * box1->pTransform->dims.x);
+
+            box1->onCollisionEnter(box2);
+            box2->onCollisionEnter(box1);
+        }
+    }
+
+    // this bottom and other top
+    if (box1->borderEnabled[2] && box2->borderEnabled[3])
+    {
+        if (box1->bottomLeft.y >= box2->topRight.y && box1->bottomLeft.y + dPos.y < box2->topRight.y)
+        {
+            if (!(box1->isTrigger || box2->isTrigger))
+                nextPos.y = box2->topRight.y - (box1->start.y * box1->pTransform->dims.y);
+
+            box1->onCollisionEnter(box2);
+            box2->onCollisionEnter(box1);
+        }
+    }
+
+    // this top and other bottom
+    if (box1->borderEnabled[3] && box2->borderEnabled[2])
+    {
+        if (box1->topRight.y <= box2->bottomLeft.y && box1->topRight.y + dPos.y > box2->bottomLeft.y)
+        {
+            if (!(box1->isTrigger || box2->isTrigger))
+                nextPos.y = box2->bottomLeft.y - (box1->end.y * box1->pTransform->dims.y);
+
+            box1->onCollisionEnter(box2);
+            box2->onCollisionEnter(box1);
+        }
+    }
+
+    return nextPos;
+}
+
+Vector2 ComponentHandler::handleCollisionCircleBox(std::shared_ptr<ColliderComponent> circle, std::shared_ptr<ColliderComponent> box, Vector2 dPos)
+{
+    Vector2 nextPos = circle->pTransform->pos + dPos;
+
+    // (Vector2::distance(pCol->center + deltaPos, pOther->bottomLeft) > pCol->end.x * pCol->pTransform->dims.x &&
+    // Vector2::distance(pCol->center + deltaPos, pOther->bottomRight) > pCol->end.x * pCol->pTransform->dims.x &&
+    // Vector2::distance(pCol->center + deltaPos, pOther->topLeft) > pCol->end.x * pCol->pTransform->dims.x &&
+    // Vector2::distance(pCol->center + deltaPos, pOther->topRight) > pCol->end.x * pCol->pTransform->dims.x)
+
+    if (box->borderEnabled[0] || box->borderEnabled[2])
+    {
+        if (Vector2::distance(circle->center + dPos, box->bottomLeft) <= circle->end.x)
+        {
+            std::cout << Vector2::distance(circle->center + dPos, box->bottomLeft) << "\n";
+            if (!(circle->isTrigger || box->isTrigger))
+                nextPos = box->bottomLeft - circle->end;
+
+            circle->onCollisionEnter(box);
+            box->onCollisionEnter(circle);
+
+            return nextPos;
+        }
+    }
+
+    // circle left and box right
+    if (box->borderEnabled[1])
+    {
+        if (circle->bottomLeft.x >= box->topRight.x && circle->bottomLeft.x + dPos.x < box->topRight.x)
+        {
+            if (!(circle->isTrigger || box->isTrigger))
+                nextPos.x = box->topRight.x - (circle->end.x * circle->pTransform->dims.x);
+
+            circle->onCollisionEnter(box);
+            box->onCollisionEnter(circle);
+        }
+    }
+
+    // circle right and box left
+    if (box->borderEnabled[0])
+    {
+        if (circle->topRight.x <= box->bottomLeft.x && circle->topRight.x + dPos.x > box->bottomLeft.x)
+        {
+            if (!(circle->isTrigger || box->isTrigger))
+                nextPos.x = box->bottomLeft.x - (circle->end.x * circle->pTransform->dims.x * 2);
+
+            circle->onCollisionEnter(box);
+            box->onCollisionEnter(circle);
+        }
+    }
+
+    // circle bottom and box top
+    if (box->borderEnabled[3])
+    {
+        if (circle->bottomLeft.y >= box->topRight.y && circle->bottomLeft.y + dPos.y < box->topRight.y)
+        {
+            if (!(circle->isTrigger || box->isTrigger))
+                nextPos.y = box->topRight.y - (circle->end.x * circle->pTransform->dims.y);
+
+            circle->onCollisionEnter(box);
+            box->onCollisionEnter(circle);
+        }
+    }
+
+    // circle top and box bottom
+    if (box->borderEnabled[2])
+    {
+        if (circle->topRight.y <= box->bottomLeft.y && circle->topRight.y + dPos.y > box->bottomLeft.y)
+        {
+            if (!(circle->isTrigger || box->isTrigger))
+                nextPos.y = box->bottomLeft.y - (circle->end.x * circle->pTransform->dims.y);
+
+            circle->onCollisionEnter(box);
+            box->onCollisionEnter(circle);
+        }
+    }
+
+    return nextPos;
+}
+
+Vector2 ComponentHandler::handleCollisionCircleCircle(std::shared_ptr<ColliderComponent> circle1, std::shared_ptr<ColliderComponent> circle2, Vector2 dPos)
+{
+    Vector2 nextPos = circle1->pTransform->pos + dPos;
+
+    return nextPos;
 }
 
 void ComponentHandler::updateAnimators(float time)

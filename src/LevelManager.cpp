@@ -110,7 +110,7 @@ bool LevelManager::loadLevel(int levelIdx)
                 break;
             case '@':
                 _playerStartPos = pos;
-                if (_game.pPlayer)
+                if (_game.pPlayer && _game.pPlayer->isAlive())
                 {
                     _game.pPlayer->setPos(_playerStartPos);
                 }

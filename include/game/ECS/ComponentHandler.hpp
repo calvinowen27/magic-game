@@ -10,6 +10,8 @@
 class Game;
 class Registry;
 class RendererComponent;
+class Vector2;
+class ColliderComponent;
 
 class ComponentHandler
 {
@@ -22,7 +24,12 @@ public:
     ~ComponentHandler();
     void draw(SDL_Renderer *pRenderer);
     void update(float time);
+
     void updateColliders(float time);
+    Vector2 handleCollisionBoxBox(std::shared_ptr<ColliderComponent> box1, std::shared_ptr<ColliderComponent> box2, Vector2 dPos);
+    Vector2 handleCollisionCircleBox(std::shared_ptr<ColliderComponent> circle, std::shared_ptr<ColliderComponent> box, Vector2 dPos);
+    Vector2 handleCollisionCircleCircle(std::shared_ptr<ColliderComponent> circle1, std::shared_ptr<ColliderComponent> circle2, Vector2 dPos);
+
     void updateAnimators(float time);
 };
 

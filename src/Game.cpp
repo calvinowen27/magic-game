@@ -132,7 +132,7 @@ int Game::init()
     pObjectManager->init();
     pAnimationManager->init();
 
-    pLevelManager->loadLevel(0); // last because instantiates player and enemies
+    pLevelManager->loadLevel(2); // last because instantiates player and enemies
 
     return 0;
 }
@@ -283,7 +283,9 @@ void Game::draw()
 void Game::reset()
 {
     pObjectManager->killEntitiesOfType<Enemy>();
-    pPlayer->kill();
+
+    if(pPlayer && pPlayer->isAlive())
+        pPlayer->kill();
 
     pLevelManager->loadLevel(0);
 }

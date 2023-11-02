@@ -91,13 +91,46 @@ void RendererComponent::draw(SDL_Renderer *pRenderer)
 
     if (pCollider && game.pUIManager->getDebugUI()->isEnabled())
     {
-        Vector2Int colStart = game.worldToPixel(Vector2(pCollider->leftX, pCollider->bottomY)) - pTransform->pxRoot;
-        Vector2Int colDims = game.worldToPixel(Vector2(pCollider->rightX, pCollider->topY)) - colStart - pTransform->pxRoot;
-
-        auto colliderRect = SDL_Rect{colStart.x, colStart.y, colDims.x, colDims.y};
-
         SDL_SetRenderDrawColor(pRenderer, 255, 0, 0, 255);
-        SDL_RenderDrawRect(pRenderer, &colliderRect);
+
+        // draw box collider
+        if (pCollider->colliderType == ColliderType::Box)
+        {
+            Vector2Int colStart = game.worldToPixel(Vector2(pCollider->bottomLeft.x, pCollider->bottomLeft.y)) - pTransform->pxRoot;
+            Vector2Int colDims = game.worldToPixel(Vector2(pCollider->topRight.x, pCollider->topRight.y)) - colStart - pTransform->pxRoot;
+
+            auto colliderRect = SDL_Rect{colStart.x, colStart.y, colDims.x, colDims.y};
+
+            SDL_RenderDrawRect(pRenderer, &colliderRect);
+        }
+
+        // draw circle collider
+        if (pCollider->colliderType == ColliderType::Circle)
+        {
+            Vector2Int center = game.worldToPixel(pTransform->pos - pTransform->root + (pCollider->start * pTransform->dims));
+            int radius = pCollider->end.x * game.ppm;
+
+            int circumference = 6.28 * radius;
+
+            SDL_Point points[2 * circumference];
+
+            int x, y, val;
+            int i = 0;
+            for (x = -radius; x <= radius; x++)
+            {
+                for (y = -radius; y <= radius; y++)
+                {
+                    val = sqrt((x * x) + (y * y));
+                    if (val == radius && i < 2 * circumference)
+                    {
+                        points[i] = SDL_Point{center.x + x, center.y + y};
+                        i++;
+                    }
+                }
+            }
+
+            SDL_RenderDrawPoints(pRenderer, points, 2 * circumference);
+        }
     }
 }
 
@@ -189,6 +222,10 @@ void TransformComponent::updatePxRoot()
 }
 
 /* COLLIDER COMPONENT */
+std::map<std::string, ColliderType> ColliderComponent::_typeFromString = {
+    {"Box", ColliderType::Box},
+    {"Circle", ColliderType::Circle}};
+
 ColliderComponent::ColliderComponent() : Component()
 {
 }
@@ -197,15 +234,21 @@ bool ColliderComponent::init(EntityType entityType, std::shared_ptr<TransformCom
 {
     Component::init();
 
+    // retrieve collider data json
     json jCollider = objectManager.getEntityData(entityType)["collider"];
-    json jColliderStart = jCollider["start"];
-    json jColliderEnd = jCollider["end"];
 
+    // set collider endpoints
+    json jColliderStart = jCollider["start"];
     start = Vector2((float)jColliderStart[0], (float)jColliderStart[1]) * Vector2(1, 2); // multiply y by 2 to account for perspective
-    end = Vector2((float)jColliderEnd[0], (float)jColliderEnd[1]) * Vector2(1, 2);       // multiply y by 2 to account for perspective
+
+    json jColliderEnd = jCollider["end"];
+    end = Vector2((float)jColliderEnd[0], (float)jColliderEnd[1]) * Vector2(1, 2); // multiply y by 2 to account for perspective
+
+    // set collider type
+    colliderType = _typeFromString[jCollider["type"]];
+
     this->pTransform = pTransform;
     this->pRigidbody = pRigidbody;
-
     this->doCollisions = doCollisions;
     this->isTrigger = isTrigger;
 
@@ -237,10 +280,22 @@ void ColliderComponent::update(float time)
     for (auto other : collidersTouching)
         whileTouching(other);
 
-    leftX = pTransform->pos.x + (start.x * pTransform->dims.x);
-    rightX = pTransform->pos.x + (end.x * pTransform->dims.x);
-    bottomY = pTransform->pos.y + (start.y * pTransform->dims.y);
-    topY = pTransform->pos.y + (end.y * pTransform->dims.y);
+    if (colliderType == ColliderType::Box)
+    {
+        bottomLeft = Vector2(pTransform->pos.x + (start.x * pTransform->dims.x), pTransform->pos.y + (start.y * pTransform->dims.y));
+        topRight = Vector2(pTransform->pos.x + (end.x * pTransform->dims.x), pTransform->pos.y + (end.y * pTransform->dims.y));
+        bottomRight = Vector2(topRight.x, bottomLeft.y);
+        topLeft = Vector2(bottomLeft.x, topRight.y);
+    }
+
+    if (colliderType == ColliderType::Circle)
+    {
+        center = pTransform->pos + (start * pTransform->dims);
+        bottomLeft = Vector2(center.x - (end.x * pTransform->dims.x), center.y - (end.x * pTransform->dims.y));
+        topRight = Vector2(center.x + (end.x * pTransform->dims.x), center.y + (end.x * pTransform->dims.y));
+        bottomRight = Vector2(topRight.x, bottomLeft.y);
+        topLeft = Vector2(bottomLeft.x, topRight.y);
+    }
 }
 
 void ColliderComponent::onCollisionEnter(std::shared_ptr<ColliderComponent> other)
@@ -332,7 +387,7 @@ bool HealthComponent::init(float baseHealth)
     pGreenRenderer = registry.newComponent<RendererComponent>();
     pGreenRenderer->init("green_bar", pGreenTransform, -2);
 
-    return this;
+    return true;
 }
 
 void HealthComponent::heal(float healAmount)
