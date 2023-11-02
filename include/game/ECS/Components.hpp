@@ -130,7 +130,7 @@ public:
     bool isTrigger = false;
 
     ColliderComponent();
-    bool init(Vector2 start, Vector2 end, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions = true, bool isTrigger = false); // returns true if successful
+    bool init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions = true, bool isTrigger = false);      // returns true if successful
     void update(float time);
     void kill() override;
     void onCollisionEnter(std::shared_ptr<ColliderComponent> other);

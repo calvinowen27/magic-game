@@ -19,10 +19,7 @@ bool Object::init(EntityType entityType, Vector2 pos)
 
     pRigidbody->init(pTransform, pCollider);
 
-    json jColliderStart = objectManager.getEntityData(entityType)["collider"]["start"];
-    json jColliderEnd = objectManager.getEntityData(entityType)["collider"]["end"];
-
-    pCollider->init(Vector2((float)jColliderStart[0], (float)jColliderStart[1]), Vector2((float)jColliderEnd[0], (float)jColliderEnd[1]), pTransform, pRigidbody);
+    pCollider->init(entityType, pTransform, pRigidbody);
     pCollider->setEntity(this);
 
     pRenderer->enable();

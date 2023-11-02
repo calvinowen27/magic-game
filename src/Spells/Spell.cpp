@@ -19,10 +19,7 @@ bool Spell::init()
     pCollider = registry.newComponent<ColliderComponent>();
     pRigidbody = registry.newComponent<RigidbodyComponent>();
 
-    json jColliderStart = objectManager.getEntityData(EntityType::Spell)["collider"]["start"];
-    json jColliderEnd = objectManager.getEntityData(EntityType::Spell)["collider"]["end"];
-
-    pCollider->init(Vector2((float)jColliderStart[0], (float)jColliderStart[1]), Vector2((float)jColliderEnd[0], (float)jColliderEnd[1]), pTransform, pRigidbody, true, true);
+    pCollider->init(EntityType::Spell, pTransform, pRigidbody, true, true);
     pCollider->setEntity(this);
     pCollider->disable();
 

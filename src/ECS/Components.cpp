@@ -193,12 +193,16 @@ ColliderComponent::ColliderComponent() : Component()
 {
 }
 
-bool ColliderComponent::init(Vector2 start, Vector2 end, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions, bool isTrigger)
+bool ColliderComponent::init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions, bool isTrigger)
 {
     Component::init();
 
-    this->start = start * Vector2(1, 2); // multiply y by 2 to account for perspective
-    this->end = end * Vector2(1, 2);     // multiply y by 2 to account for perspective
+    json jCollider = objectManager.getEntityData(entityType)["collider"];
+    json jColliderStart = jCollider["start"];
+    json jColliderEnd = jCollider["end"];
+
+    start = Vector2((float)jColliderStart[0], (float)jColliderStart[1]) * Vector2(1, 2); // multiply y by 2 to account for perspective
+    end = Vector2((float)jColliderEnd[0], (float)jColliderEnd[1]) * Vector2(1, 2);       // multiply y by 2 to account for perspective
     this->pTransform = pTransform;
     this->pRigidbody = pRigidbody;
 
