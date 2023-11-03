@@ -17,12 +17,18 @@ Component::Component() : game(*Game::getInstance()), registry(*game.pRegistry), 
 
 bool Component::init()
 {
+    if (pEntity)
+        pEntity = nullptr;
+
     enable();
     return true;
 }
 
 void Component::kill()
 {
+    if (pEntity)
+        pEntity = nullptr;
+
     disable();
 }
 
@@ -57,6 +63,7 @@ bool RendererComponent::init(EntityType entityType, std::shared_ptr<TransformCom
         Component::init();
 
     pCollider = nullptr;
+    pHitbox = nullptr;
 
     pTexture = contentManager.getTextureFromType(entityType);
     this->pTransform = pTransform;
@@ -89,45 +96,61 @@ void RendererComponent::draw(SDL_Renderer *pRenderer)
 
     SDL_RenderCopyEx(pRenderer, pTexture, &sourceRect, &spriteRect, spriteAngle, NULL, isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 
-    if (pCollider && game.pUIManager->getDebugUI()->isEnabled())
+    if (game.pUIManager->getDebugUI()->isEnabled())
     {
-        SDL_SetRenderDrawColor(pRenderer, 255, 0, 0, 255);
+        if (pCollider)
+        {
+            SDL_SetRenderDrawColor(pRenderer, 255, 0, 0, 255);
 
-        // draw box collider
-        Vector2Int colStart = game.worldToPixel(Vector2(pCollider->bottomLeft.x, pCollider->bottomLeft.y)) - pTransform->pxRoot;
-        Vector2Int colDims = game.worldToPixel(Vector2(pCollider->topRight.x, pCollider->topRight.y)) - colStart - pTransform->pxRoot;
+            // draw box collider
+            Vector2Int colStart = game.worldToPixel(Vector2(pCollider->bottomLeft.x, pCollider->bottomLeft.y)) - pTransform->pxRoot;
+            Vector2Int colDims = game.worldToPixel(Vector2(pCollider->topRight.x, pCollider->topRight.y)) - colStart - pTransform->pxRoot;
 
-        auto colliderRect = SDL_Rect{colStart.x, colStart.y, colDims.x, colDims.y};
+            auto colliderRect = SDL_Rect{colStart.x, colStart.y, colDims.x, colDims.y};
 
-        SDL_RenderDrawRect(pRenderer, &colliderRect);
+            SDL_RenderDrawRect(pRenderer, &colliderRect);
+        }
 
-        // draw circle collider
-        // if (pCollider->colliderType == ColliderType::Circle)
-        // {
-        //     Vector2Int center = game.worldToPixel(pTransform->pos - pTransform->root + (pCollider->start * pTransform->dims));
-        //     int radius = pCollider->end.x * game.ppm;
+        if (pHitbox)
+        {
+            SDL_SetRenderDrawColor(pRenderer, 255, 255, 0, 255);
 
-        //     int circumference = 6.28 * radius;
+            if (pHitbox->hitboxType == HitboxType::Box) // draw box hitbox
+            {
+                Vector2Int hbStart = pHitbox->bottomLeft;
+                Vector2Int hbDims = pHitbox->topRight - hbStart;
 
-        //     SDL_Point points[2 * circumference];
+                auto hbRect = SDL_Rect{hbStart.x, hbStart.y, hbDims.x, hbDims.y};
 
-        //     int x, y, val;
-        //     int i = 0;
-        //     for (x = -radius; x <= radius; x++)
-        //     {
-        //         for (y = -radius; y <= radius; y++)
-        //         {
-        //             val = sqrt((x * x) + (y * y));
-        //             if (val == radius && i < 2 * circumference)
-        //             {
-        //                 points[i] = SDL_Point{center.x + x, center.y + y};
-        //                 i++;
-        //             }
-        //         }
-        //     }
+                SDL_RenderDrawRect(pRenderer, &hbRect);
+            }
+            else if (pHitbox->hitboxType == HitboxType::Circle) // draw circle collider
+            {
+                Vector2Int center = pHitbox->center;
+                int radius = pHitbox->end.x * pTransform->pxDims.x;
 
-        //     SDL_RenderDrawPoints(pRenderer, points, 2 * circumference);
-        // }
+                int circumference = 6.28 * radius;
+
+                SDL_Point points[2 * circumference];
+
+                int x, y, val;
+                int i = 0;
+                for (x = -radius; x <= radius; x++)
+                {
+                    for (y = -radius; y <= radius; y++)
+                    {
+                        val = sqrt((x * x) + (y * y));
+                        if (val == radius && i < 2 * circumference)
+                        {
+                            points[i] = SDL_Point{center.x + x, center.y + y};
+                            i++;
+                        }
+                    }
+                }
+
+                SDL_RenderDrawPoints(pRenderer, points, 2 * circumference);
+            }
+        }
     }
 }
 
@@ -227,6 +250,8 @@ bool ColliderComponent::init(EntityType entityType, std::shared_ptr<TransformCom
 {
     Component::init();
 
+    this->entityType = entityType;
+
     // retrieve collider data json
     json jCollider = objectManager.getEntityData(entityType)["collider"];
 
@@ -236,6 +261,10 @@ bool ColliderComponent::init(EntityType entityType, std::shared_ptr<TransformCom
 
     json jColliderEnd = jCollider["end"];
     end = Vector2((float)jColliderEnd[0], (float)jColliderEnd[1]) * Vector2(1, 2); // multiply y by 2 to account for perspective
+
+    // initialize edge positions
+    bottomLeft = Vector2(pTransform->pos.x + (start.x * pTransform->dims.x), pTransform->pos.y + (start.y * pTransform->dims.y));
+    topRight = Vector2(pTransform->pos.x + (end.x * pTransform->dims.x), pTransform->pos.y + (end.y * pTransform->dims.y));
 
     this->pTransform = pTransform;
     this->pRigidbody = pRigidbody;
@@ -252,12 +281,11 @@ bool ColliderComponent::init(EntityType entityType, std::shared_ptr<TransformCom
 
 void ColliderComponent::kill()
 {
-    pEntity = nullptr;
     borderEnabled[0] = 1;
     borderEnabled[1] = 1;
     borderEnabled[2] = 1;
     borderEnabled[3] = 1;
-    collidersTouching.clear();
+    colsTouching.clear();
 
     Component::kill();
 }
@@ -267,50 +295,142 @@ void ColliderComponent::update(float time)
     if (!enabled)
         return;
 
-    for (auto other : collidersTouching)
+    for (auto other : colsTouching)
         whileTouching(other);
 
+    // update corner positions
     bottomLeft = Vector2(pTransform->pos.x + (start.x * pTransform->dims.x), pTransform->pos.y + (start.y * pTransform->dims.y));
     topRight = Vector2(pTransform->pos.x + (end.x * pTransform->dims.x), pTransform->pos.y + (end.y * pTransform->dims.y));
-    bottomRight = Vector2(topRight.x, bottomLeft.y);
-    topLeft = Vector2(bottomLeft.x, topRight.y);
-
-    // if (colliderType == ColliderType::Circle)
-    // {
-    //     center = pTransform->pos + (start * pTransform->dims);
-    //     bottomLeft = Vector2(center.x - (end.x * pTransform->dims.x), center.y - (end.x * pTransform->dims.y));
-    //     topRight = Vector2(center.x + (end.x * pTransform->dims.x), center.y + (end.x * pTransform->dims.y));
-    //     bottomRight = Vector2(topRight.x, bottomLeft.y);
-    //     topLeft = Vector2(bottomLeft.x, topRight.y);
-    // }
 }
 
-void ColliderComponent::onCollisionEnter(std::shared_ptr<ColliderComponent> other)
+void ColliderComponent::onCollisionEnter(std::shared_ptr<ColliderComponent> pOther)
 {
-    if (pEntity && other->pEntity)
-        pEntity->onCollisionEnter(other->pEntity);
+    if (pEntity && pOther->pEntity)
+        pEntity->onCollisionEnter(pOther->pEntity);
 
-    if (enabled && other->enabled)
-        collidersTouching.emplace(other);
+    if (enabled && pOther->enabled)
+        colsTouching.emplace(pOther);
 }
 
-void ColliderComponent::onCollisionExit(std::shared_ptr<ColliderComponent> other)
+void ColliderComponent::onCollisionExit(std::shared_ptr<ColliderComponent> pOther)
 {
-    collidersTouching.erase(other);
+    colsTouching.erase(pOther);
 
-    if (pEntity && other->pEntity)
-        pEntity->onCollisionExit(other->pEntity);
+    if (pEntity && pOther->pEntity)
+        pEntity->onCollisionExit(pOther->pEntity);
 }
 
-void ColliderComponent::whileTouching(std::shared_ptr<ColliderComponent> other)
+void ColliderComponent::whileTouching(std::shared_ptr<ColliderComponent> pOther)
 {
-    if (pEntity && other->pEntity)
-        pEntity->whileTouching(other->pEntity);
+    if (pEntity && pOther->pEntity)
+        pEntity->whileTouching(pOther->pEntity);
 }
 
-bool ColliderComponent::isTouching(std::shared_ptr<ColliderComponent> other)
+bool ColliderComponent::isTouching(std::shared_ptr<ColliderComponent> pOther)
 {
-    return collidersTouching.find(other) != collidersTouching.end();
+    return colsTouching.find(pOther) != colsTouching.end();
+}
+
+/* HITBOX COMPONENT */
+std::map<std::string, HitboxType> HitboxComponent::_typeFromString = {
+    {"Box", HitboxType::Box},
+    {"Circle", HitboxType::Circle}};
+
+HitboxComponent::HitboxComponent() : Component()
+{
+}
+
+bool HitboxComponent::init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody)
+{
+    Component::init();
+
+    this->entityType = entityType;
+
+    // retrieve hitbox data json
+    json jHitbox = objectManager.getEntityData(entityType);
+    if (!jHitbox.contains("hitbox"))
+        return false;
+    
+    jHitbox = jHitbox["hitbox"];
+
+    // set hitbox type
+    if (jHitbox.contains("type"))
+        hitboxType = _typeFromString[jHitbox["type"]];
+
+    // set hitbox endpoints
+    json jHitboxStart = jHitbox["start"];
+    start = Vector2((float)jHitboxStart[0], 1 - (float)jHitboxStart[1]); // 1 - y to convert from bottom left to top left (pixels)
+
+    json jHitboxEnd = jHitbox["end"];
+    end = Vector2((float)jHitboxEnd[0], 1 - (float)jHitboxEnd[1]); // 1 - y to convert from bottom left to top left (pixels)
+
+    this->pTransform = pTransform;
+    this->pRigidbody = pRigidbody;
+
+    // initialize edge pixel positions
+    pTransform->updatePxDims();
+    pTransform->updatePxPos();
+
+    if (hitboxType == HitboxType::Box)
+    {
+        bottomLeft = pTransform->pxPos + (Vector2Int)(start * (Vector2)pTransform->pxDims);
+        topRight = pTransform->pxPos + (Vector2Int)(end * (Vector2)pTransform->pxDims);
+    }
+    else if (hitboxType == HitboxType::Circle)
+    {
+        center = (Vector2Int)(start * (Vector2)pTransform->pxDims);
+        bottomLeft = center - (Vector2Int)(end * (Vector2)pTransform->pxDims);
+        topRight = center + (Vector2Int)(end * (Vector2)pTransform->pxDims);
+    }
+
+    return true;
+}
+
+void HitboxComponent::update(float time)
+{
+    // update edge pixel positions
+    pTransform->updatePxDims();
+    pTransform->updatePxPos();
+
+    if (hitboxType == HitboxType::Box)
+    {
+        bottomLeft = pTransform->pxPos + (Vector2Int)(start * (Vector2)pTransform->pxDims);
+        topRight = pTransform->pxPos + (Vector2Int)(end * (Vector2)pTransform->pxDims);
+    }
+    else if (hitboxType == HitboxType::Circle)
+    {
+        center = pTransform->pxPos + (Vector2Int)(start * (Vector2)pTransform->pxDims);
+        bottomLeft = center - (Vector2Int)(end * (Vector2)pTransform->pxDims);
+        topRight = center + (Vector2Int)(end * (Vector2)pTransform->pxDims * Vector2(1, -1));
+    }
+}
+
+void HitboxComponent::onHitboxEnter(std::shared_ptr<HitboxComponent> pOther)
+{
+    if (pEntity && pOther->pEntity)
+        pEntity->onHitboxEnter(pOther->pEntity);
+
+    if (enabled && pOther->enabled)
+        hbTouching.emplace(pOther);
+}
+void HitboxComponent::onHitboxExit(std::shared_ptr<HitboxComponent> pOther)
+{
+    hbTouching.erase(pOther);
+
+    if (pEntity && pOther->pEntity)
+        pEntity->onHitboxExit(pOther->pEntity);
+}
+
+bool HitboxComponent::isTouching(std::shared_ptr<HitboxComponent> pOther)
+{
+    return hbTouching.find(pOther) != hbTouching.end();
+}
+
+void HitboxComponent::kill()
+{
+    hbTouching.clear();
+
+    Component::kill();
 }
 
 /* RIGIDBODY COMPONENT */
@@ -318,13 +438,11 @@ RigidbodyComponent::RigidbodyComponent() : Component()
 {
 }
 
-bool RigidbodyComponent::init(std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<ColliderComponent> pCollider, bool isStatic)
+bool RigidbodyComponent::init(std::shared_ptr<TransformComponent> pTransform, bool isStatic)
 {
     Component::init();
 
     this->pTransform = pTransform;
-    this->pCollider = pCollider;
-
     this->isStatic = isStatic;
 
     return true;

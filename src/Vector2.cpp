@@ -204,7 +204,7 @@ Vector2Int::Vector2Int(const Vector2Int &b)
     this->y = b.y;
 }
 
-float distance(const Vector2Int &a, const Vector2Int &b)
+float Vector2Int::distance(const Vector2Int &a, const Vector2Int &b)
 {
     return (float)(sqrt(pow(b.x-a.x, 2)+pow(b.y-a.y, 2)));
 }

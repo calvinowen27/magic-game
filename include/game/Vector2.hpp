@@ -88,7 +88,7 @@ public:
     Vector2Int(float x, float y);
     Vector2Int(double x, double y);
     Vector2Int(const Vector2Int &b);
-    friend float distance(Vector2Int a, Vector2Int b);
+    static float distance(const Vector2Int &a, const Vector2Int &b);
     bool equals(const Vector2Int &b) const;
     void normalize();
     Vector2Int normalized() const;

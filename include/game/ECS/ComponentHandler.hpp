@@ -26,8 +26,10 @@ public:
     void update(float time);
 
     void updateColliders(float time);
-    Vector2 handleCollision(std::shared_ptr<ColliderComponent> box1, std::shared_ptr<ColliderComponent> box2, Vector2 dPos);
+    Vector2 handleCollision(std::shared_ptr<ColliderComponent> pCol1, std::shared_ptr<ColliderComponent> pCol2, Vector2 dPos);
 
+    void updateRigidbodies(float time);
+    void updateHitboxes(float time);
     void updateAnimators(float time);
 };
 

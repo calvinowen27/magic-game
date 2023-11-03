@@ -22,6 +22,7 @@ class ObjectManager;
 class Animation;
 class AnimationManager;
 class ColliderComponent;
+class HitboxComponent;
 
 enum class EntityType;
 
@@ -59,6 +60,7 @@ public:
 
     std::shared_ptr<TransformComponent> pTransform;
     std::shared_ptr<ColliderComponent> pCollider;
+    std::shared_ptr<HitboxComponent> pHitbox;
 
     float spriteAngle = 0;  // sprite rotation angle, degrees
     bool isFlipped = false; // over y axis
@@ -74,6 +76,7 @@ public:
     bool setTexture(std::string textureName); // returns true if successful
     void refreshDimensions();
     inline void setCollider(std::shared_ptr<ColliderComponent> pCollider) { this->pCollider = pCollider; }
+    inline void setHitbox(std::shared_ptr<HitboxComponent> pHitbox) { this->pHitbox = pHitbox; }
 };
 
 class TransformComponent : public Component
@@ -100,22 +103,19 @@ public:
 class ColliderComponent : public Component
 {
 public:
+    EntityType entityType;
+
     Vector2 start; // scalar of dims, relative to bottom left of object
     Vector2 end;   // scalar of dims, relative to top right of object
 
     std::shared_ptr<TransformComponent> pTransform;
     std::shared_ptr<RigidbodyComponent> pRigidbody;
 
-    // positions of each corner of collider (for Box and Circle)
-    Vector2 bottomLeft;
-    Vector2 bottomRight;
-    Vector2 topLeft;
-    Vector2 topRight;
+    // positions of each corner of collider
+    Vector2 bottomLeft; // position of bottom left corner of collider
+    Vector2 topRight;   // position of top right corner of collider
 
-    Vector2 center; // position of center of collider (for Circle)
-
-    // colliders that are touching this on
-    std::set<std::shared_ptr<ColliderComponent>> collidersTouching;
+    std::set<std::shared_ptr<ColliderComponent>> colsTouching; // colliders that this is touching
 
     bool borderEnabled[4]{true, true, true, true}; // whether each side of collider is enabled or not (for Box only)
                                                    // order: left right bottom top
@@ -128,12 +128,57 @@ public:
     // initializes state of collider, returns true if sucessful
     bool init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions = true, bool isTrigger = false);
 
-    void update(float time); // performs whileTouching on colliders in collidersTouching, also updates positions of borders
+    void update(float time); // performs whileTouching on colliders in colsTouching, also updates positions of borders
 
-    void onCollisionEnter(std::shared_ptr<ColliderComponent> other);
-    void onCollisionExit(std::shared_ptr<ColliderComponent> other);
-    void whileTouching(std::shared_ptr<ColliderComponent> other);
-    bool isTouching(std::shared_ptr<ColliderComponent> other); // returns true if this is touching other
+    void onCollisionEnter(std::shared_ptr<ColliderComponent> pOther);
+    void onCollisionExit(std::shared_ptr<ColliderComponent> pOther);
+    void whileTouching(std::shared_ptr<ColliderComponent> pOther);
+    bool isTouching(std::shared_ptr<ColliderComponent> pOther); // returns true if this is touching other
+
+    void kill() override;
+};
+
+enum class HitboxType
+{
+    Box,
+    Circle
+};
+
+class HitboxComponent : public Component
+{
+private:
+    static std::map<std::string, HitboxType> _typeFromString;
+
+public:
+    EntityType entityType;
+
+    HitboxType hitboxType = HitboxType::Box;
+
+    Vector2 start; // for Box: gives bottom left of hitbox as a scalar of pxDims, relative to top left of sprite
+                   // for Circle: acts as center of hitbox as a scalar of pxDims, relative to top left of sprite
+    Vector2 end;   // for Box: gives top right of hitbox as a scalar of pxDims, relative to bottom right of sprite
+                   // for Circle: gives x and y radius of circle as a scalar of pxDims
+
+    std::shared_ptr<TransformComponent> pTransform;
+    std::shared_ptr<RigidbodyComponent> pRigidbody;
+
+    // pixel positions of each corner of hitbox (for Box and Circle)
+    Vector2Int bottomLeft; // pxPos of bottom left of hitbox
+    Vector2Int topRight;   // pxPos of top right of hitbox
+    Vector2Int center;     // pxPos of center of hitbox (for Circle only)
+
+    std::set<std::shared_ptr<HitboxComponent>> hbTouching; // hitboxes that this is touching
+
+    HitboxComponent();
+
+    // initializes state of hitbox, returns true if sucessful
+    bool init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody);
+
+    void update(float time); // performs whileTouching on hitboxes in hbTouching, also updates positions of edges
+
+    void onHitboxEnter(std::shared_ptr<HitboxComponent> pOther);
+    void onHitboxExit(std::shared_ptr<HitboxComponent> pOther);
+    bool isTouching(std::shared_ptr<HitboxComponent> pOther); // returns true if this is touching other
 
     void kill() override;
 };
@@ -146,10 +191,9 @@ public:
     Vector2 velocity; // meters/sec
 
     std::shared_ptr<TransformComponent> pTransform;
-    std::shared_ptr<ColliderComponent> pCollider;
 
     RigidbodyComponent();
-    bool init(std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<ColliderComponent> pCollider, bool isStatic = false); // returns true if successful
+    bool init(std::shared_ptr<TransformComponent> pTransform, bool isStatic = false); // returns true if successful
     void update(float time);
     void kill() override;
 };

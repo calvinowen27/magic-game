@@ -14,6 +14,17 @@
                 0.25
             ]
         },
+        "hitbox": {
+            "type": "Box",
+            "start": [
+                0.25,
+                0
+            ],
+            "end": [
+                0.75,
+                1
+            ]
+        },
         "relativeRoot": [
             0.5,
             0
@@ -34,6 +45,17 @@
                 0.25
             ]
         },
+        "hitbox": {
+            "type": "Box",
+            "start": [
+                0.25,
+                0
+            ],
+            "end": [
+                0.75,
+                1
+            ]
+        },
         "relativeRoot": [
             0.5,
             0
@@ -52,6 +74,17 @@
             "end": [
                 1,
                 0.4
+            ]
+        },
+        "hitbox": {
+            "type": "Box",
+            "start": [
+                0,
+                0
+            ],
+            "end": [
+                1,
+                1
             ]
         },
         "relativeRoot": [
@@ -92,6 +125,17 @@
             "end": [
                 0.75,
                 1
+            ]
+        },
+        "hitbox": {
+            "type": "Circle",
+            "start": [
+                0.5,
+                0.75
+            ],
+            "end": [
+                0.25,
+                0.25
             ]
         },
         "relativeRoot": [

@@ -287,7 +287,7 @@ void Game::reset()
     if(pPlayer && pPlayer->isAlive())
         pPlayer->kill();
 
-    pLevelManager->loadLevel(0);
+    pLevelManager->loadLevel(2);
 }
 
 Vector2Int Game::worldToPixel(const Vector2 &pos)
@@ -297,7 +297,7 @@ Vector2Int Game::worldToPixel(const Vector2 &pos)
     pxPos -= cameraPos / Vector2(1, 2);                                          // half cameraPos.y to account for perspective, make pxPos relative to cameraPos
     pxPos *= ppm;                                                                // convert from meters to pixels
     pxPos.y *= -1;                                                               // invert y relative to window (pixel y positioning is from top not bottom)
-    return (Vector2Int)pxPos.round(0) + Vector2Int(winWidth / 2, winHeight / 2); // add half of window dimensions to center on screen
+    return (Vector2Int)pxPos + Vector2Int(winWidth / 2, winHeight / 2); // add half of window dimensions to center on screen
 }
 
 Vector2 Game::pixelToWorld(const Vector2Int &pxPos)

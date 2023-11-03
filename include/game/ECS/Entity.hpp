@@ -48,6 +48,8 @@ public:
 
     virtual void onCollisionEnter(Entity *pOther);
     virtual void onCollisionExit(Entity *pOther);
+    virtual void onHitboxEnter(Entity *pOther);
+    virtual void onHitboxExit(Entity *pOther);
     virtual void whileTouching(Entity *pOther);
 
     inline EntityType getType() { return type; }

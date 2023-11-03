@@ -14,13 +14,26 @@ bool Object::init(EntityType entityType, Vector2 pos)
 
     pRigidbody = registry.newComponent<RigidbodyComponent>();
     pCollider = registry.newComponent<ColliderComponent>();
+    pHitbox = registry.newComponent<HitboxComponent>();
 
     pRenderer->setCollider(pCollider);
 
-    pRigidbody->init(pTransform, pCollider);
+    pRigidbody->init(pTransform);
 
     pCollider->init(entityType, pTransform, pRigidbody);
     pCollider->setEntity(this);
+
+    if (pHitbox->init(entityType, pTransform, pRigidbody))
+    {
+        pHitbox->setEntity(this);
+    }
+    else
+    {
+        registry.killComponent(pHitbox);
+        pHitbox = nullptr;
+    }
+
+    pRenderer->setHitbox(pHitbox);
 
     pRenderer->enable();
 
@@ -40,4 +53,7 @@ void Object::kill()
 
     registry.killComponent(pRigidbody);
     registry.killComponent(pCollider);
+
+    if(pHitbox)
+        registry.killComponent(pHitbox);
 }

@@ -41,10 +41,9 @@ protected:
     SpellManager &spellManager;
 
     std::shared_ptr<RigidbodyComponent> pRigidbody;
-    std::shared_ptr<ColliderComponent> pCollider;
+    std::shared_ptr<HitboxComponent> pHitbox;
 
     SpellElement element;
-    // std::set<SpellAttribute> attributes;
     uint8_t attributes;
     Vector2 dir;
     bool isCast = false;
@@ -75,7 +74,7 @@ public:
 
     void kill() override;
 
-    virtual void onCollisionEnter(Entity *pEntity) override;
+    virtual void onHitboxEnter(Entity *pEntity) override;
 };
 
 #endif

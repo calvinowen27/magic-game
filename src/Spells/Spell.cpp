@@ -16,16 +16,16 @@ bool Spell::init()
 
     aliveTime = 0;
 
-    pCollider = registry.newComponent<ColliderComponent>();
     pRigidbody = registry.newComponent<RigidbodyComponent>();
+    pHitbox = registry.newComponent<HitboxComponent>();
 
-    pCollider->init(EntityType::Spell, pTransform, pRigidbody, true, true);
-    pCollider->setEntity(this);
-    pCollider->disable();
+    pRigidbody->init(pTransform);
 
-    pRigidbody->init(pTransform, pCollider);
+    pHitbox->init(EntityType::Spell, pTransform, pRigidbody);
+    pHitbox->setEntity(this);
+
     pRenderer->disable();
-    pRenderer->setCollider(pCollider);
+    pRenderer->setHitbox(pHitbox);
 
     clearAttributes();
 
@@ -69,30 +69,29 @@ void Spell::kill()
     isCast = false;
 
     registry.killComponent(pRigidbody);
-    registry.killComponent(pCollider);
+    registry.killComponent(pHitbox);
 }
 
 void Spell::cast(Vector2 pos)
 {
     pTransform->pos = pos;
     pRenderer->enable();
-    pCollider->enable();
     isCast = true;
 }
 
-void Spell::onCollisionEnter(Entity *pEntity)
+void Spell::onHitboxEnter(Entity *pEntity)
 {
-    if (!pEntity)
+    if(!pEntity)
         return;
 
-    Entity::onCollisionEnter(pEntity);
+    Entity::onHitboxEnter(pEntity);
 
-    if (alive && isCast && pEntity->getType() == EntityType::Enemy)
+    if(alive && isCast && pEntity->getType() == EntityType::Enemy)
     {
         hit(pEntity);
     }
 
-    if (pEntity->getType() != EntityType::Player && pEntity->getType() != EntityType::Spell)
+    if(pEntity->getType() != EntityType::Player && pEntity->getType() != EntityType::Spell)
     {
         kill();
     }

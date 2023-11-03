@@ -16,6 +16,7 @@ class Object : public Entity
 protected:
     std::shared_ptr<RigidbodyComponent> pRigidbody;
     std::shared_ptr<ColliderComponent> pCollider;
+    std::shared_ptr<HitboxComponent> pHitbox;
 
 public:
     Object();

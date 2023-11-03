@@ -43,8 +43,8 @@ void RadialSpell::update(float time)
             enemyCollider = enemy->getCollider();
 
             if(Vector2::distance(enemyCollider->bottomLeft, _startPos) <= _currRadius || 
-                Vector2::distance(enemyCollider->topLeft, _startPos) <= _currRadius ||
-                Vector2::distance(enemyCollider->bottomRight, _startPos) <= _currRadius ||
+                Vector2::distance(Vector2(enemyCollider->bottomLeft.x, enemyCollider->topRight.y), _startPos) <= _currRadius ||
+                Vector2::distance(Vector2(enemyCollider->topRight.x, enemyCollider->bottomLeft.y), _startPos) <= _currRadius ||
                 Vector2::distance(enemyCollider->topRight, _startPos) <= _currRadius)
             {
                 enemy->pHealth->damage(damage);

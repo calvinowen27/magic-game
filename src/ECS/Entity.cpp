@@ -58,6 +58,14 @@ void Entity::onCollisionExit(Entity *pOther)
 {
 }
 
+void Entity::onHitboxEnter(Entity *pOther)
+{
+}
+
+void Entity::onHitboxExit(Entity *pOther)
+{
+}
+
 void Entity::whileTouching(Entity *pOther)
 {
 }
