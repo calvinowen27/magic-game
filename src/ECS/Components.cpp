@@ -198,6 +198,8 @@ bool TransformComponent::init(Vector2 pos, Vector2 dims)
     Component::init();
 
     this->pos = pos;
+    this->rotDeg = 0;
+    this->rotRad = 0;
 
     this->dims = dims;
     pxDims = (Vector2Int)(dims * game.ppm);
@@ -214,6 +216,8 @@ bool TransformComponent::init(EntityType entityType, Vector2 pos, Vector2 dims)
     Component::init();
 
     this->pos = pos;
+    this->rotDeg = 0;
+    this->rotRad = 0;
 
     this->dims = dims;
     pxDims = (Vector2Int)(dims * game.ppm);

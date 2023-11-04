@@ -150,7 +150,7 @@ std::shared_ptr<T> TypePool<T>::instantiate()
     }
     else
     {
-        expandPool(100);
+        expandPool(10);
         return instantiate();
     }
 }

@@ -25,6 +25,8 @@ private:
     std::queue<SpellAttribute> _spellAttributes;
     bool _hasValidSpell = false;
 
+    std::set<std::shared_ptr<Spell>> _spells;
+
 public:
     SpellManager();
 
@@ -42,6 +44,7 @@ public:
             try
             {
                 _pCurrSpell = std::dynamic_pointer_cast<Spell>(spell);
+                _spells.emplace(_pCurrSpell);
             }
             catch (const std::exception& e)
             {
@@ -74,6 +77,16 @@ public:
         std::dynamic_pointer_cast<Spell>(spell)->kill();
         auto pool = TypePool<T>::getInstance();
         pool->release(spell);
+    }
+
+    void killAllSpells()
+    {
+        for(auto pSpell : _spells)
+        {
+            pSpell->kill();
+        }
+
+        _spells.clear();
     }
 
     inline void addSpellAttribute(SpellAttribute attribute)

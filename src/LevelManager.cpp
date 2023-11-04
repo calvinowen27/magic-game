@@ -6,6 +6,7 @@
 #include "../include/game/Grass.hpp"
 #include "../include/game/Player.hpp"
 #include "../include/game/Enemy.hpp"
+#include "../include/game/Spells/SpellManager.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -157,6 +158,7 @@ bool LevelManager::unloadLevel()
 
     // kill all enemies
     _objectManager.killEntitiesOfType<Enemy>();
+    _game.pSpellManager->killAllSpells();
 
     return true;
 }
