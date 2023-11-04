@@ -19,6 +19,8 @@ private:
     Game &_game;
     Registry &_registry;
 
+    bool _showColliders = false;
+
 public:
     ComponentHandler();
     ~ComponentHandler();
@@ -31,6 +33,11 @@ public:
     void updateRigidbodies(float time);
     void updateHitboxes(float time);
     void updateAnimators(float time);
+
+    inline bool isShowingColliders() { return _showColliders; }
+    inline void showColliders() { _showColliders = true; }
+    inline void hideColliders() { _showColliders = false; }
+    inline bool toggleShowColliders() { return _showColliders = !_showColliders; }
 };
 
 bool rendererComparator(std::shared_ptr<RendererComponent> a, std::shared_ptr<RendererComponent> b);

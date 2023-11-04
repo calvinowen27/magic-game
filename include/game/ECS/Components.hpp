@@ -62,7 +62,6 @@ public:
     std::shared_ptr<ColliderComponent> pCollider;
     std::shared_ptr<HitboxComponent> pHitbox;
 
-    float spriteAngle = 0;  // sprite rotation angle, degrees
     bool isFlipped = false; // over y axis
 
     int renderOrder = 0;
@@ -88,6 +87,9 @@ public:
     Vector2Int pxDims; // pixels
     Vector2 root;      // meters
     Vector2Int pxRoot; // pixels
+
+    float rotDeg; // angle in degrees
+    float rotRad; // angle in radians
 
     TransformComponent();
     bool init(Vector2 pos, Vector2 dims = Vector2(1, 1));                        // returns true if successful

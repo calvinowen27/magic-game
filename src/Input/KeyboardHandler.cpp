@@ -3,6 +3,7 @@
 #include "../../include/game/Spells/SpellManager.hpp"
 #include"../../include/game/UI/UIManager.hpp"
 #include "../../include/game/LevelManager.hpp"
+#include "../../include/game/ECS/ComponentHandler.hpp"
 
 #include <iostream>
 
@@ -23,7 +24,8 @@ KeyboardHandler::KeyboardHandler() : _game(*Game::getInstance())
         { InputKey::ToggleSpellUI, SDL_SCANCODE_C },
         { InputKey::ToggleDebugUI, SDL_SCANCODE_B },
         { InputKey::NextLevel, SDL_SCANCODE_RIGHT },
-        { InputKey::PrevLevel, SDL_SCANCODE_LEFT }
+        { InputKey::PrevLevel, SDL_SCANCODE_LEFT },
+        { InputKey::ToggleShowColliders, SDL_SCANCODE_H }
     };
 }
 
@@ -93,6 +95,11 @@ void KeyboardHandler::onKeyUp(SDL_Scancode scancode)
     if(scancode == _keybinds[InputKey::PrevLevel])
     {
         _game.pLevelManager->prevLevel();
+    }
+
+    if(scancode == _keybinds[InputKey::ToggleShowColliders])
+    {
+        _game.pComponentHandler->toggleShowColliders();
     }
 }
 

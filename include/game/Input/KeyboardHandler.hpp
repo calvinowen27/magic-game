@@ -18,7 +18,8 @@ enum class InputKey {
     ToggleSpellUI,
     ToggleDebugUI,
     NextLevel,
-    PrevLevel
+    PrevLevel,
+    ToggleShowColliders
 };
 
 class Game;

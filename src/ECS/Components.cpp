@@ -7,6 +7,7 @@
 #include "../../include/game/Animation/AnimationManager.hpp"
 #include "../../include/game/Animation/Animation.hpp"
 #include "../../include/game/UI/UIManager.hpp"
+#include "../../include/game/ECS/ComponentHandler.hpp"
 
 #include <algorithm>
 
@@ -89,67 +90,74 @@ void RendererComponent::draw(SDL_Renderer *pRenderer)
     if (!pTransform)
         return;
 
+    // update pixel values
     pTransform->updatePxDims();
     pTransform->updatePxRoot();
     pTransform->updatePxPos();
+
+    // construct rect
     spriteRect = SDL_Rect{pTransform->pxPos.x, pTransform->pxPos.y, pTransform->pxDims.x, pTransform->pxDims.y};
 
-    SDL_RenderCopyEx(pRenderer, pTexture, &sourceRect, &spriteRect, spriteAngle, NULL, isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+    // draw sprite
+    SDL_RenderCopyEx(pRenderer, pTexture, &sourceRect, &spriteRect, pTransform->rotDeg, NULL, isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 
-    if (game.pUIManager->getDebugUI()->isEnabled())
+    // skip if not showing colliders
+    if (!game.pComponentHandler->isShowingColliders())
+        return;
+
+    // draw collider
+    if (pCollider)
     {
-        if (pCollider)
+        SDL_SetRenderDrawColor(pRenderer, 255, 0, 0, 255);
+
+        // draw box collider
+        Vector2Int colStart = game.worldToPixel(Vector2(pCollider->bottomLeft.x, pCollider->bottomLeft.y)) - pTransform->pxRoot;
+        Vector2Int colDims = game.worldToPixel(Vector2(pCollider->topRight.x, pCollider->topRight.y)) - colStart - pTransform->pxRoot;
+
+        auto colliderRect = SDL_Rect{colStart.x, colStart.y, colDims.x, colDims.y};
+
+        SDL_RenderDrawRect(pRenderer, &colliderRect);
+    }
+
+    // draw hitbox
+    if (pHitbox)
+    {
+        SDL_SetRenderDrawColor(pRenderer, 255, 255, 0, 255);
+
+        if (pHitbox->hitboxType == HitboxType::Box) // draw box hitbox
         {
-            SDL_SetRenderDrawColor(pRenderer, 255, 0, 0, 255);
+            Vector2Int hbStart = pHitbox->bottomLeft;
+            Vector2Int hbDims = pHitbox->topRight - hbStart;
 
-            // draw box collider
-            Vector2Int colStart = game.worldToPixel(Vector2(pCollider->bottomLeft.x, pCollider->bottomLeft.y)) - pTransform->pxRoot;
-            Vector2Int colDims = game.worldToPixel(Vector2(pCollider->topRight.x, pCollider->topRight.y)) - colStart - pTransform->pxRoot;
+            auto hbRect = SDL_Rect{hbStart.x, hbStart.y, hbDims.x, hbDims.y};
 
-            auto colliderRect = SDL_Rect{colStart.x, colStart.y, colDims.x, colDims.y};
-
-            SDL_RenderDrawRect(pRenderer, &colliderRect);
+            SDL_RenderDrawRect(pRenderer, &hbRect);
         }
-
-        if (pHitbox)
+        else if (pHitbox->hitboxType == HitboxType::Circle) // draw circle collider
         {
-            SDL_SetRenderDrawColor(pRenderer, 255, 255, 0, 255);
+            Vector2Int center = pHitbox->center;
+            int radius = pHitbox->end.x * pTransform->pxDims.x;
 
-            if (pHitbox->hitboxType == HitboxType::Box) // draw box hitbox
+            int circumference = 6.28 * radius;
+
+            SDL_Point points[2 * circumference];
+
+            int x, y, val;
+            int i = 0;
+            for (x = -radius; x <= radius; x++)
             {
-                Vector2Int hbStart = pHitbox->bottomLeft;
-                Vector2Int hbDims = pHitbox->topRight - hbStart;
-
-                auto hbRect = SDL_Rect{hbStart.x, hbStart.y, hbDims.x, hbDims.y};
-
-                SDL_RenderDrawRect(pRenderer, &hbRect);
-            }
-            else if (pHitbox->hitboxType == HitboxType::Circle) // draw circle collider
-            {
-                Vector2Int center = pHitbox->center;
-                int radius = pHitbox->end.x * pTransform->pxDims.x;
-
-                int circumference = 6.28 * radius;
-
-                SDL_Point points[2 * circumference];
-
-                int x, y, val;
-                int i = 0;
-                for (x = -radius; x <= radius; x++)
+                for (y = -radius; y <= radius; y++)
                 {
-                    for (y = -radius; y <= radius; y++)
+                    val = sqrt((x * x) + (y * y));
+                    if (val == radius && i < 2 * circumference)
                     {
-                        val = sqrt((x * x) + (y * y));
-                        if (val == radius && i < 2 * circumference)
-                        {
-                            points[i] = SDL_Point{center.x + x, center.y + y};
-                            i++;
-                        }
+                        points[i] = SDL_Point{center.x + x, center.y + y};
+                        i++;
                     }
                 }
-
-                SDL_RenderDrawPoints(pRenderer, points, 2 * circumference);
             }
+
+            SDL_RenderDrawPoints(pRenderer, points, 2 * circumference);
         }
     }
 }
@@ -158,7 +166,6 @@ void RendererComponent::kill()
 {
     pTexture = nullptr;
     pTransform = nullptr;
-    spriteAngle = 0;
     isFlipped = false;
     renderOrder = 0;
     pCollider = nullptr;
@@ -352,7 +359,7 @@ bool HitboxComponent::init(EntityType entityType, std::shared_ptr<TransformCompo
     json jHitbox = objectManager.getEntityData(entityType);
     if (!jHitbox.contains("hitbox"))
         return false;
-    
+
     jHitbox = jHitbox["hitbox"];
 
     // set hitbox type
@@ -401,7 +408,9 @@ void HitboxComponent::update(float time)
     }
     else if (hitboxType == HitboxType::Circle)
     {
-        center = pTransform->pxPos + (Vector2Int)(start * (Vector2)pTransform->pxDims);
+        Vector2Int rotationOffset = Vector2Int(sin(pTransform->rotRad) * pTransform->pxDims.x * end.x, (1 - cos(pTransform->rotRad)) * pTransform->pxDims.y * (1 - end.y)); // (1 -) because inverse y for pixels
+
+        center = pTransform->pxPos + (Vector2Int)(start * (Vector2)pTransform->pxDims) + rotationOffset;
         bottomLeft = center - (Vector2Int)(end * (Vector2)pTransform->pxDims);
         topRight = center + (Vector2Int)(end * (Vector2)pTransform->pxDims * Vector2(1, -1));
     }
