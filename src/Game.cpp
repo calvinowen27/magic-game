@@ -132,7 +132,7 @@ int Game::init()
     pObjectManager->init();
     pAnimationManager->init();
 
-    pLevelManager->loadLevel(2); // last because instantiates player and enemies
+    pLevelManager->loadLevel(0); // last because instantiates player and enemies
 
     return 0;
 }
@@ -285,7 +285,7 @@ void Game::reset()
     if(pPlayer && pPlayer->isAlive())
         pPlayer->kill();
 
-    pLevelManager->loadLevel(2);
+    pLevelManager->loadLevel(0);
 }
 
 Vector2Int Game::worldToPixel(const Vector2 &pos)
