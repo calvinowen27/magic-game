@@ -282,8 +282,6 @@ void Game::draw()
 
 void Game::reset()
 {
-    pObjectManager->killEntitiesOfType<Enemy>();
-
     if(pPlayer && pPlayer->isAlive())
         pPlayer->kill();
 

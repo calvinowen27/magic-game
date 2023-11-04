@@ -21,26 +21,29 @@ private:
     Game &_game;
     ObjectManager &_objectManager;
 
-    std::map<Vector2, std::shared_ptr<Object>> _worldMap;
+    std::shared_ptr<Object> **_world; // 2D array, each cell containing an object
 
-    int _currLevelIdx = -1;
-    int _currLevelHalfSize;
+    int _currLevelIdx = -1; // -1 at start of game
 
-    Vector2 _playerStartPos;
+    int _currLevelWidth;
+    int _currLevelHeight;
+    int _currLevelHalfWidth;
+    int _currLevelHalfHeight;
+
+    Vector2 _playerStartPos; // position to place player when level loads
 
 public:
     LevelManager();
     static LevelManager *getInstance();
-    bool init();
 
-    bool loadLevel(int levelIdx);
-    bool unloadLevel();
+    bool loadLevel(int levelIdx); // creates world map and initializes all objects, returns true if levelIdx valid and successful, false otherwise
+    bool unloadLevel(); // unloads the current level, returns true if successful
     inline void nextLevel() { loadLevel(_currLevelIdx + 1); }
     inline void prevLevel() { loadLevel(_currLevelIdx - 1); }
 
-    std::shared_ptr<Object> getObjAtPos(Vector2 pos);
-    bool placeObjAtPos(std::shared_ptr<Object> obj, Vector2 pos);
-    void removeObjAtPos(Vector2 pos);
+    std::shared_ptr<Object> getObjAtPos(Vector2Int pos); // returns object at pos, nullptr if nothing there or if position outside of level dimensions
+    bool placeObjAtPos(std::shared_ptr<Object> obj, Vector2Int pos); // places obj at pos if there is nothing at that position, otherwise does nothing, returns true if successful
+    void removeObjAtPos(Vector2Int pos); // kills object at pos
 };
 
 #endif

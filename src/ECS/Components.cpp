@@ -161,6 +161,8 @@ void RendererComponent::kill()
     spriteAngle = 0;
     isFlipped = false;
     renderOrder = 0;
+    pCollider = nullptr;
+    pHitbox = nullptr;
 
     Component::kill();
 }
