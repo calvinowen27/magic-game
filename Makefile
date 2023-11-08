@@ -1,36 +1,48 @@
 SRC_DIR = src
 DBG_DIR = build/debug
 RLS_DIR = build/release
-ECS_DIR = $(SRC_DIR)/ECS
-UI_DIR = $(SRC_DIR)/UI
-SPELLS_DIR = $(SRC_DIR)/Spells
-INPUT_DIR = $(SRC_DIR)/Input
 ANIMATION_DIR = $(SRC_DIR)/Animation
+ENTITY_DIR = $(SRC_DIR)/Entity
+INPUT_DIR = $(SRC_DIR)/Input
+LEVEL_DIR = $(SRC_DIR)/Level
+OBJECTS_DIR = $(SRC_DIR)/Objects
+SPELLS_DIR = $(SRC_DIR)/Spells
+UI_DIR = $(SRC_DIR)/UI
+UTIL_DIR = $(SRC_DIR)/Util
 
 INCLUDE_DIR = include
 INCLUDE_GAME = $(INCLUDE_DIR)/game
-INCLUDE_ECS = $(INCLUDE_GAME)/ECS
-INCLUDE_UI = $(INCLUDE_GAME)/UI
-INCLUDE_JSON = $(INCLUDE_DIR)/nlohmann_json
-INCLUDE_SPELLS = $(INCLUDE_GAME)/Spells
-INCLUDE_INPUT = $(INCLUDE_GAME)/Input
 INCLUDE_ANIMATION = $(INCLUDE_GAME)/Animation
+INCLUDE_ENTITY = $(INCLUDE_GAME)/Entity
+INCLUDE_INPUT = $(INCLUDE_GAME)/Input
+INCLUDE_LEVEL = $(INCLUDE_GAME)/Level
+INCLUDE_OBJECTS = $(INCLUDE_GAME)/Objects
+INCLUDE_SPELLS = $(INCLUDE_GAME)/Spells
+INCLUDE_UI = $(INCLUDE_GAME)/UI
+INCLUDE_UTIL = $(INCLUDE_GAME)/Util
+INCLUDE_JSON = $(INCLUDE_DIR)/nlohmann_json
 
 SRC_DIR_O = build/obj
-ECS_DIR_O = $(SRC_DIR_O)/ECS
-UI_DIR_O = $(SRC_DIR_O)/UI
-SPELLS_DIR_O = $(SRC_DIR_O)/Spells
-INPUT_DIR_O = $(SRC_DIR_O)/Input
 ANIMATION_DIR_O = $(SRC_DIR_O)/Animation
+ENTITY_DIR_O = $(SRC_DIR_O)/Entity
+INPUT_DIR_O = $(SRC_DIR_O)/Input
+LEVEL_DIR_O = $(SRC_DIR_O)/Level
+OBJECTS_DIR_O = $(SRC_DIR_O)/Objects
+SPELLS_DIR_O = $(SRC_DIR_O)/Spells
+UI_DIR_O = $(SRC_DIR_O)/UI
+UTIL_DIR_O = $(SRC_DIR_O)/Util
 
 BUILD_DIR = $(DBG_DIR)
 
 SRC_OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(SRC_DIR_O)/%.o, $(wildcard $(SRC_DIR)/*.cpp))
-ECS_OBJS = $(patsubst $(ECS_DIR)/%.cpp, $(ECS_DIR_O)/%.o, $(wildcard $(ECS_DIR)/*.cpp))
-UI_OBJS = $(patsubst $(UI_DIR)/%.cpp, $(UI_DIR_O)/%.o, $(wildcard $(UI_DIR)/*.cpp))
-SPELLS_OBJS = $(patsubst $(SPELLS_DIR)/%.cpp, $(SPELLS_DIR_O)/%.o, $(wildcard $(SPELLS_DIR)/*.cpp))
-INPUT_OBJS = $(patsubst $(INPUT_DIR)/%.cpp, $(INPUT_DIR_O)/%.o, $(wildcard $(INPUT_DIR)/*.cpp))
 ANIMATION_OBJS = $(patsubst $(ANIMATION_DIR)/%.cpp, $(ANIMATION_DIR_O)/%.o, $(wildcard $(ANIMATION_DIR)/*.cpp))
+ENTITY_OBJS = $(patsubst $(ENTITY_DIR)/%.cpp, $(ENTITY_DIR_O)/%.o, $(wildcard $(ENTITY_DIR)/*.cpp))
+INPUT_OBJS = $(patsubst $(INPUT_DIR)/%.cpp, $(INPUT_DIR_O)/%.o, $(wildcard $(INPUT_DIR)/*.cpp))
+LEVEL_OBJS = $(patsubst $(LEVEL_DIR)/%.cpp, $(LEVEL_DIR_O)/%.o, $(wildcard $(LEVEL_DIR)/*.cpp))
+OBJECTS_OBJS = $(patsubst $(OBJECTS_DIR)/%.cpp, $(OBJECTS_DIR_O)/%.o, $(wildcard $(OBJECTS_DIR)/*.cpp))
+SPELLS_OBJS = $(patsubst $(SPELLS_DIR)/%.cpp, $(SPELLS_DIR_O)/%.o, $(wildcard $(SPELLS_DIR)/*.cpp))
+UI_OBJS = $(patsubst $(UI_DIR)/%.cpp, $(UI_DIR_O)/%.o, $(wildcard $(UI_DIR)/*.cpp))
+UTIL_OBJS = $(patsubst $(UTIL_DIR)/%.cpp, $(UTIL_DIR_O)/%.o, $(wildcard $(UTIL_DIR)/*.cpp))
 
 CC = g++
 CFLAGS = -std=c++17
@@ -50,43 +62,57 @@ debug: build
 release: BUILD_DIR = $(RLS_DIR)
 release: build
 
-build: make_dirs refresh_addtl $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS)
-	$(CC) $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS) $(LDFLAGS) -o $(BUILD_DIR)/$(EXECUTABLE) -static-libgcc -static-libstdc++
+build: make_dirs refresh_addtl $(SRC_OBJS) $(ANIMATION_OBJS) $(ENTITY_OBJS) $(INPUT_OBJS) $(LEVEL_OBJS) $(OBJECTS_OBJS) $(SPELLS_OBJS) $(UI_OBJS) $(UTIL_OBJS)
+	$(CC) $(SRC_OBJS) $(ANIMATION_OBJS) $(ENTITY_OBJS) $(INPUT_OBJS) $(LEVEL_OBJS) $(OBJECTS_OBJS) $(SPELLS_OBJS) $(UI_OBJS) $(UTIL_OBJS) $(LDFLAGS) -o $(BUILD_DIR)/$(EXECUTABLE) -static-libgcc -static-libstdc++
 
 refresh_addtl: refresh_content refresh_data refresh_level
 
 ### CREATE OBJECTS ###
 
+# $(SRC_OBJS) $(ANIMATION_OBJS) $(ENTITY_OBJS) $(INPUT_OBJS) $(LEVEL_OBJS) $(OBJECTS_OBJS) $(SPELLS_OBJS) $(UI_OBJS) $(UTIL_OBJS)
+
 $(SRC_DIR_O)/%.o: $(SRC_DIR)/%.cpp $(INCLUDE_GAME)/%.hpp
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(ECS_DIR_O)/%.o: $(ECS_DIR)/%.cpp $(INCLUDE_ECS)/%.hpp
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(UI_DIR_O)/%.o: $(UI_DIR)/%.cpp $(INCLUDE_UI)/%.hpp
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(SPELLS_DIR_O)/%.o: $(SPELLS_DIR)/%.cpp $(INCLUDE_SPELLS)/%.hpp
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(INPUT_DIR_O)/%.o: $(INPUT_DIR)/%.cpp $(INCLUDE_INPUT)/%.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(ANIMATION_DIR_O)/%.o: $(ANIMATION_DIR)/%.cpp $(INCLUDE_ANIMATION)/%.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(ENTITY_DIR_O)/%.o: $(ENTITY_DIR)/%.cpp $(INCLUDE_ENTITY)/%.hpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(INPUT_DIR_O)/%.o: $(INPUT_DIR)/%.cpp $(INCLUDE_INPUT)/%.hpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(LEVEL_DIR_O)/%.o: $(LEVEL_DIR)/%.cpp $(INCLUDE_LEVEL)/%.hpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJECTS_DIR_O)/%.o: $(OBJECTS_DIR)/%.cpp $(INCLUDE_OBJECTS)/%.hpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(SPELLS_DIR_O)/%.o: $(SPELLS_DIR)/%.cpp $(INCLUDE_SPELLS)/%.hpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(UI_DIR_O)/%.o: $(UI_DIR)/%.cpp $(INCLUDE_UI)/%.hpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(UTIL_DIR_O)/%.o: $(UTIL_DIR)/%.cpp $(UTIL_INPUT)/%.hpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
 .PHONY: clean
 clean:
-	rm -f $(DBG_DIR)/$(EXECUTABLE) $(RLS_DIR)/$(EXECUTABLE) $(SRC_OBJS) $(ECS_OBJS) $(UI_OBJS) $(SPELLS_OBJS) $(INPUT_OBJS) $(ANIMATION_OBJS)
+	rm -f $(DBG_DIR)/$(EXECUTABLE) $(RLS_DIR)/$(EXECUTABLE) $(SRC_OBJS) $(ANIMATION_OBJS) $(ENTITY_OBJS) $(INPUT_OBJS) $(LEVEL_OBJS) $(OBJECTS_OBJS) $(SPELLS_OBJS) $(UI_OBJS) $(UTIL_OBJS)
 
 make_dirs:
 	mkdir -p $(BUILD_DIR)
 	mkdir -p $(SRC_DIR_O)
-	mkdir -p $(ECS_DIR_O)
-	mkdir -p $(UI_DIR_O)
-	mkdir -p $(SPELLS_DIR_O)
-	mkdir -p $(INPUT_DIR_O)
 	mkdir -p $(ANIMATION_DIR_O)
+	mkdir -p $(ENTITY_DIR_O)
+	mkdir -p $(INPUT_DIR_O)
+	mkdir -p $(LEVEL_DIR_O)
+	mkdir -p $(OBJECTS_DIR_O)
+	mkdir -p $(SPELLS_DIR_O)
+	mkdir -p $(UI_DIR_O)
+	mkdir -p $(UTIL_DIR_O)
 
 refresh_content:
 	rm -rf $(BUILD_DIR)/content

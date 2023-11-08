@@ -1,8 +1,8 @@
 #include "../../include/game/Spells/RadialSpell.hpp"
-#include "../../include/game/ObjectManager.hpp"
-#include "../../include/game/Enemy.hpp"
+#include "../../include/game/Objects/ObjectManager.hpp"
+#include "../../include/game/Entity/Enemy.hpp"
 #include "../../include/game/Spells/SpellManager.hpp"
-#include "../../include/game/Player.hpp"
+#include "../../include/game/Entity/Player.hpp"
 
 RadialSpell::RadialSpell() : Spell()
 {

@@ -1,6 +1,6 @@
 #include "../../include/game/Animation/AnimationManager.hpp"
 #include "../../include/game/Animation/Animation.hpp"
-#include "../../include/game/ECS/Entity.hpp"
+#include "../../include/game/Entity/Entity.hpp"
 
 #include <fstream>
 

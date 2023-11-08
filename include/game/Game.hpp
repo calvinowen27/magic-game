@@ -16,7 +16,7 @@
 #include "../SDL2/SDL_image.h"
 #include "../SDL2/SDL_ttf.h"
 
-#include "Vector2.hpp"
+#include "Util/Vector2.hpp"
 
 typedef void (*func_ptr)(void); // for passing function ptrs to ui buttons
 

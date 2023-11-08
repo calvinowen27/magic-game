@@ -2,7 +2,7 @@
 #include "../../include/game/Spells/SpellManager.hpp"
 #include "../../include/game/Game.hpp"
 #include "../../include/game/UI/UIManager.hpp"
-#include "../../include/game/Player.hpp"
+#include "../../include/game/Entity/Player.hpp"
 
 /* UI GROUP */
 UIGroup::UIGroup() : game(*Game::getInstance())

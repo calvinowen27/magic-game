@@ -2,25 +2,25 @@
 
 #include "../include/game/Game.hpp"
 #include "../include/game/UI/TextElement.hpp"
-#include "../include/game/Object.hpp"
-#include "../include/game/Player.hpp"
-#include "../include/game/Enemy.hpp"
-#include "../include/game/Grass.hpp"
-#include "../include/game/Wall.hpp"
+#include "../include/game/Objects/Object.hpp"
+#include "../include/game/Entity/Player.hpp"
+#include "../include/game/Entity/Enemy.hpp"
+#include "../include/game/Objects/Grass.hpp"
+#include "../include/game/Objects/Wall.hpp"
 #include "../include/game/UI/UIElement.hpp"
 #include "../include/game/UI/UIManager.hpp"
 #include "../include/game/Input/MouseHandler.hpp"
 #include "../include/game/Input/KeyboardHandler.hpp"
-#include "../include/game/ContentManager.hpp"
-#include "../include/game/ObjectManager.hpp"
+#include "../include/game/Animation/ContentManager.hpp"
+#include "../include/game/Objects/ObjectManager.hpp"
 #include "../include/game/Spells/Spell.hpp"
 #include "../include/game/Spells/RadialSpell.hpp"
-#include "../include/game/ECS/Registry.hpp"
-#include "../include/game/ECS/Components.hpp"
-#include "../include/game/ECS/ComponentHandler.hpp"
+#include "../include/game/Entity/Registry.hpp"
+#include "../include/game/Entity/Components.hpp"
+#include "../include/game/Entity/ComponentHandler.hpp"
 #include "../include/game/Spells/SpellManager.hpp"
 #include "../include/game/Animation/AnimationManager.hpp"
-#include "../include/game/LevelManager.hpp"
+#include "../include/game/Level/LevelManager.hpp"
 
 #include <thread>
 #include <chrono>
@@ -295,7 +295,7 @@ Vector2Int Game::worldToPixel(const Vector2 &pos)
     pxPos -= cameraPos / Vector2(1, 2);                                          // half cameraPos.y to account for perspective, make pxPos relative to cameraPos
     pxPos *= ppm;                                                                // convert from meters to pixels
     pxPos.y *= -1;                                                               // invert y relative to window (pixel y positioning is from top not bottom)
-    return (Vector2Int)pxPos + Vector2Int(winWidth / 2, winHeight / 2); // add half of window dimensions to center on screen
+    return (Vector2Int)(pxPos.round(0)) + (Vector2Int)(Vector2(winWidth / 2, winHeight / 2).round(0)); // add half of window dimensions to center on screen
 }
 
 Vector2 Game::pixelToWorld(const Vector2Int &pxPos)

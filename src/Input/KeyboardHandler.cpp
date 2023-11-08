@@ -2,8 +2,8 @@
 #include "../../include/game/Game.hpp"
 #include "../../include/game/Spells/SpellManager.hpp"
 #include"../../include/game/UI/UIManager.hpp"
-#include "../../include/game/LevelManager.hpp"
-#include "../../include/game/ECS/ComponentHandler.hpp"
+#include "../../include/game/Level/LevelManager.hpp"
+#include "../../include/game/Entity/ComponentHandler.hpp"
 
 #include <iostream>
 

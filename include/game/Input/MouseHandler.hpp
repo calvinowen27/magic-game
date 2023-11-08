@@ -2,7 +2,7 @@
 #define MOUSE_HANDLER_INCLUDE
 
 #include "../../SDL2/SDL.h"
-#include "../Vector2.hpp"
+#include "../Util/Vector2.hpp"
 
 class Game;
 

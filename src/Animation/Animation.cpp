@@ -1,9 +1,9 @@
 #include "../../include/game/Animation/Animation.hpp"
 #include "../../include/game/Animation/AnimationManager.hpp"
-#include "../../include/game/ECS/Registry.hpp"
-#include "../../include/game/ECS/Entity.hpp"
-#include "../../include/game/ObjectManager.hpp"
-#include "../../include/game/ContentManager.hpp"
+#include "../../include/game/Entity/Registry.hpp"
+#include "../../include/game/Entity/Entity.hpp"
+#include "../../include/game/Objects/ObjectManager.hpp"
+#include "../../include/game/Animation/ContentManager.hpp"
 #include "../../include/game/Game.hpp"
 
 Animation::Animation(AnimationManager *animationManager) : _game(*Game::getInstance()), _animationManager(*animationManager), _objectManager(*ObjectManager::getInstance()), _contentManager(*_game.pContentManager)

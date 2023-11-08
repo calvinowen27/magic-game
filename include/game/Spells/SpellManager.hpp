@@ -4,7 +4,7 @@
 #include "Spell.hpp"
 #include "RadialSpell.hpp"
 #include "ProjectileSpell.hpp"
-#include "../ObjectManager.hpp"
+#include "../Objects/ObjectManager.hpp"
 #include "../Game.hpp"
 
 #include <memory>

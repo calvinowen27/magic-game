@@ -1,6 +1,6 @@
 #include "../../include/game/UI/TextElement.hpp"
 #include "../../include/game/Game.hpp"
-#include "../../include/game/ContentManager.hpp"
+#include "../../include/game/Animation/ContentManager.hpp"
 
 TextElement::TextElement() : UIElement()
 {

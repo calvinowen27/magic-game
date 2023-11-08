@@ -1,5 +1,5 @@
 #include "../../include/game/UI/UIManager.hpp"
-#include "../../include/game/Player.hpp"
+#include "../../include/game/Entity/Player.hpp"
 #include "../../include/game/Game.hpp"
 #include "../../include/game/UI/TextButton.hpp"
 #include "../../include/game/UI/Button.hpp"

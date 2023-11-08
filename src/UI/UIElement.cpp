@@ -1,7 +1,7 @@
 #include "../../include/game/UI/UIElement.hpp"
 #include "../../include/game/UI/UIManager.hpp"
 #include "../../include/game/Game.hpp"
-#include "../../include/game/ContentManager.hpp"
+#include "../../include/game/Animation/ContentManager.hpp"
 
 UIElement::UIElement() : _game(*Game::getInstance()), _contentManager(*_game.pContentManager), _uiManager(*_game.pUIManager)
 {

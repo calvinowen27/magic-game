@@ -7,7 +7,7 @@
 #include "../../SDL2/SDL_image.h"
 #include "../../SDL2/SDL_ttf.h"
 
-#include "../Vector2.hpp"
+#include "../Util/Vector2.hpp"
 
 class Game;
 class UIManager;

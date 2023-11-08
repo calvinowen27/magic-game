@@ -1,6 +1,6 @@
 #include "../../include/game/Spells/TrailSpell.hpp"
-#include "../../include/game/ObjectManager.hpp"
-#include "../../include/game/Enemy.hpp"
+#include "../../include/game/Objects/ObjectManager.hpp"
+#include "../../include/game/Entity/Enemy.hpp"
 #include "../../include/game/Spells/SpellManager.hpp"
 
 TrailSpell::TrailSpell() : Spell()
