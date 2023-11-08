@@ -38,13 +38,6 @@ bool Object::init(EntityType entityType, Vector2 pos)
     return true;
 }
 
-void Object::update(float time)
-{
-    pRenderer->isFlipped = pRigidbody->velocity.x < 0;
-
-    Entity::update(time);
-}
-
 void Object::kill()
 {
     Entity::kill();

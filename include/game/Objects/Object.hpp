@@ -21,7 +21,6 @@ protected:
 public:
     Object();
     bool init(EntityType entityType, Vector2 pos) override;
-    void update(float time) override;
     void kill() override;
 
     inline Vector2 getVelocity() { return pRigidbody->velocity; }
