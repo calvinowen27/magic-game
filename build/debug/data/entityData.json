@@ -42,7 +42,7 @@
             ],
             "end": [
                 0.75,
-                0.25
+                0.4
             ]
         },
         "hitbox": {
@@ -64,7 +64,11 @@
     "Wall": {
         "spriteDims": [
             16,
-            32
+            36
+        ],
+        "sourceRect": [
+            80,
+            0
         ],
         "collider": {
             "start": [
@@ -95,7 +99,7 @@
     "WallTL": {
         "spriteDims": [
             16,
-            32
+            36
         ],
         "sourceRect": [
             0,
@@ -130,7 +134,7 @@
     "WallTR": {
         "spriteDims": [
             16,
-            32
+            36
         ],
         "sourceRect": [
             32,
@@ -165,7 +169,7 @@
     "WallH": {
         "spriteDims": [
             16,
-            32
+            36
         ],
         "sourceRect": [
             16,
@@ -204,7 +208,7 @@
         ],
         "sourceRect": [
             0,
-            32
+            36
         ],
         "collider": {
             "start": [
@@ -239,7 +243,7 @@
         ],
         "sourceRect": [
             0,
-            64
+            68
         ],
         "collider": {
             "start": [
@@ -274,7 +278,147 @@
         ],
         "sourceRect": [
             32,
-            64
+            68
+        ],
+        "collider": {
+            "start": [
+                0,
+                0.11
+            ],
+            "end": [
+                1,
+                1
+            ]
+        },
+        "hitbox": {
+            "type": "Box",
+            "start": [
+                0,
+                0
+            ],
+            "end": [
+                1,
+                1
+            ]
+        },
+        "relativeRoot": [
+            0.5,
+            0
+        ]
+    },
+    "WallNL": {
+        "spriteDims": [
+            16,
+            36
+        ],
+        "sourceRect": [
+            48,
+            0
+        ],
+        "collider": {
+            "start": [
+                0,
+                0.11
+            ],
+            "end": [
+                1,
+                1
+            ]
+        },
+        "hitbox": {
+            "type": "Box",
+            "start": [
+                0,
+                0
+            ],
+            "end": [
+                1,
+                1
+            ]
+        },
+        "relativeRoot": [
+            0.5,
+            0
+        ]
+    },
+    "WallNR": {
+        "spriteDims": [
+            16,
+            36
+        ],
+        "sourceRect": [
+            64,
+            0
+        ],
+        "collider": {
+            "start": [
+                0,
+                0.11
+            ],
+            "end": [
+                1,
+                1
+            ]
+        },
+        "hitbox": {
+            "type": "Box",
+            "start": [
+                0,
+                0
+            ],
+            "end": [
+                1,
+                1
+            ]
+        },
+        "relativeRoot": [
+            0.5,
+            0
+        ]
+    },
+    "WallNB": {
+        "spriteDims": [
+            16,
+            36
+        ],
+        "sourceRect": [
+            64,
+            36
+        ],
+        "collider": {
+            "start": [
+                0,
+                0.11
+            ],
+            "end": [
+                1,
+                1
+            ]
+        },
+        "hitbox": {
+            "type": "Box",
+            "start": [
+                0,
+                0
+            ],
+            "end": [
+                1,
+                1
+            ]
+        },
+        "relativeRoot": [
+            0.5,
+            0
+        ]
+    },
+    "WallNT": {
+        "spriteDims": [
+            16,
+            36
+        ],
+        "sourceRect": [
+            48,
+            36
         ],
         "collider": {
             "start": [

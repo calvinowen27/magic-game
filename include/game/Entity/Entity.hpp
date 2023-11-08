@@ -19,6 +19,10 @@ enum class EntityType
     WallV,
     WallBL,
     WallBR,
+    WallNL,
+    WallNR,
+    WallNB,
+    WallNT,
     Grass
 };
 

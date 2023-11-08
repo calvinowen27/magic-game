@@ -16,6 +16,10 @@ std::map<EntityType, std::string> Entity::_stringFromType = {
     {EntityType::WallV, "WallV"},
     {EntityType::WallBL, "WallBL"},
     {EntityType::WallBR, "WallBR"},
+    {EntityType::WallNL, "WallNL"},
+    {EntityType::WallNR, "WallNR"},
+    {EntityType::WallNB, "WallNB"},
+    {EntityType::WallNT, "WallNT"},
     {EntityType::Grass, "Grass"},
     {EntityType::Spell, "Spell"}};
 
@@ -29,6 +33,10 @@ std::map<std::string, EntityType> Entity::_typeFromString = {
     {"WallV", EntityType::WallV},
     {"WallBL", EntityType::WallBL},
     {"WallBR", EntityType::WallBR},
+    {"WallNL", EntityType::WallNL},
+    {"WallNR", EntityType::WallNR},
+    {"WallNB", EntityType::WallNB},
+    {"WallNT", EntityType::WallNT},
     {"Grass", EntityType::Grass},
     {"Spell", EntityType::Spell}};
 

@@ -10,12 +10,17 @@
 
 enum class WallState
 {
+    Default,
     TopLeft,
     TopRight,
     Horizontal,
     Vertical,
     BottomLeft,
-    BottomRight
+    BottomRight,
+    NotLeft,
+    NotRight,
+    NotBottom,
+    NotTop
 };
 
 class Wall : public Object

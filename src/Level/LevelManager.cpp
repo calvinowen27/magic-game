@@ -68,9 +68,8 @@ bool LevelManager::loadLevel(int levelIdx)
     objPos.y = -_currLevelHalfHeight;
 
     std::getline(in, line); // for skipping first line, which contains dimensions of level
-    for (wy = 0; wy < _currLevelHeight; wy++)
+    for (wy = 0; wy < _currLevelHeight && std::getline(in, line); wy++)
     {
-        std::getline(in, line);
         for (wx = 0; wx < _currLevelWidth; wx++)
         {
             objPos.x = wx - _currLevelHalfWidth; // so middle of level is (0, 0)
@@ -80,8 +79,8 @@ bool LevelManager::loadLevel(int levelIdx)
             /* ---------- WALL ------------------------------------- */
             case '#':
                 // instantiate and initialize object, set position in world
-                _world[wx][wy] = _objectManager.newEntity<Wall>();
-                _walls[wx][wy] = std::static_pointer_cast<Wall>(_world[wx][wy]);
+                _walls[wx][wy] = _objectManager.newEntity<Wall>();
+                _world[wx][wy] = _walls[wx][wy];
 
                 break;
 
@@ -121,12 +120,12 @@ bool LevelManager::loadLevel(int levelIdx)
         objPos.y++;
     }
 
-    for (wx = 0; wx < _currLevelWidth; wx++)
+    for (wy = 0; wy < _currLevelHeight; wy++)
     {
-        for (wy = 0; wy < _currLevelHeight; wy++)
+        for (wx = 0; wx < _currLevelWidth; wx++)
         {
             auto wall = _walls[wx][wy];
-            if (wall)
+            if (wall && !wall->isAlive())
                 wall->pickState(Vector2Int(wx - _currLevelHalfWidth, wy - _currLevelHalfHeight));
         }
     }
