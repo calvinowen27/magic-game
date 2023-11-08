@@ -402,8 +402,6 @@ bool HitboxComponent::init(EntityType entityType, std::shared_ptr<TransformCompo
 void HitboxComponent::update(float time)
 {
     // update edge pixel positions
-    pTransform->updatePxDims();
-    pTransform->updatePxPos();
 
     if (hitboxType == HitboxType::Box)
     {
