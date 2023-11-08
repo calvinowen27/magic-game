@@ -96,6 +96,7 @@ public:
     Vector2Int operator+(const Vector2Int &b) const;
     Vector2Int operator-(const Vector2Int &b) const;
     Vector2Int operator*(const float &a) const;
+    Vector2Int operator*(const Vector2Int &b) const;                               // cross product between [this] and [b]
     Vector2Int operator/(const float &a) const;
     Vector2Int &operator=(const Vector2Int &b);
     Vector2Int &operator+=(const Vector2Int &b);

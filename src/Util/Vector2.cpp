@@ -246,6 +246,11 @@ Vector2Int Vector2Int::operator*(const float &a) const
     return Vector2Int((int)(x*a), (int)(y*a));
 }
 
+Vector2Int Vector2Int::operator*(const Vector2Int &b) const
+{
+    return Vector2Int((int)(x*b.x), (int)(y*b.y));
+}
+
 Vector2Int Vector2Int::operator/(const float &a) const
 {
     return Vector2Int((int)(x/a), (int)(y/a));

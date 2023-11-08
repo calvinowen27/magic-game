@@ -13,6 +13,14 @@ enum class EntityType
     Enemy,
     Spell,
     Wall,
+    WallTL,
+    WallT,
+    WallTR,
+    WallL,
+    WallR,
+    WallBL,
+    WallB,
+    WallBR,
     Grass
 };
 

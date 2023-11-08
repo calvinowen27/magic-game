@@ -47,7 +47,7 @@ bool LevelManager::loadLevel(int levelIdx)
 
     // set level bounds
     _levelBoundsStart = Vector2(-_currLevelHalfWidth, -_currLevelHalfHeight);
-    _levelBoundsEnd = Vector2(_currLevelHalfWidth - 1, _currLevelHalfHeight - 1);
+    _levelBoundsEnd = Vector2(_currLevelHalfWidth, _currLevelHalfHeight);
 
     // allocate and initialize _world 2D array
     _world = new std::shared_ptr<Object> *[_currLevelWidth];
@@ -77,20 +77,66 @@ bool LevelManager::loadLevel(int levelIdx)
             /* ---------- WALL ------------------------------------- */
             case '#':
                 // instantiate and initialize object, set position in world
-                _world[wx][wy] = _objectManager.newEntity<Wall>();
-                std::static_pointer_cast<Wall>(_world[wx][wy])->init(WallState::Top, objPos);
-                
+                if (wx == 0)
+                {
+                    if (wy == 0)
+                    {
+                        _world[wx][wy] = _objectManager.newEntity<WallBL>();
+                        std::static_pointer_cast<WallBL>(_world[wx][wy])->init(objPos);
+                    }
+                    else if (wy == _currLevelHeight - 1)
+                    {
+                        _world[wx][wy] = _objectManager.newEntity<WallTL>();
+                        std::static_pointer_cast<WallTL>(_world[wx][wy])->init(objPos);
+                    }
+                    else
+                    {
+                        _world[wx][wy] = _objectManager.newEntity<WallL>();
+                        std::static_pointer_cast<WallL>(_world[wx][wy])->init(objPos);
+                    }
+                }
+                else if (wx == _currLevelWidth - 1)
+                {
+                    if (wy == 0)
+                    {
+                        _world[wx][wy] = _objectManager.newEntity<WallBR>();
+                        std::static_pointer_cast<WallBR>(_world[wx][wy])->init(objPos);
+                    }
+                    else if (wy == _currLevelHeight - 1)
+                    {
+                        _world[wx][wy] = _objectManager.newEntity<WallTR>();
+                        std::static_pointer_cast<WallTR>(_world[wx][wy])->init(objPos);
+                    }
+                    else
+                    {
+                        _world[wx][wy] = _objectManager.newEntity<WallR>();
+                        std::static_pointer_cast<WallR>(_world[wx][wy])->init(objPos);
+                    }
+                }
+                else
+                {
+                    if (wy == 0)
+                    {
+                        _world[wx][wy] = _objectManager.newEntity<WallB>();
+                        std::static_pointer_cast<WallB>(_world[wx][wy])->init(objPos);
+                    }
+                    else
+                    {
+                        _world[wx][wy] = _objectManager.newEntity<WallT>();
+                        std::static_pointer_cast<WallT>(_world[wx][wy])->init(objPos);
+                    }
+                }
 
                 // disable collider borders on sides with neighboring walls
                 // left
-                if (wx > 0 && _world[wx - 1][wy] && _world[wx - 1][wy]->getType() == EntityType::Wall)
+                if (wx > 0 && _world[wx - 1][wy])
                 {
                     _world[wx][wy]->getCollider()->borderEnabled[0] = 0;
                     _world[wx - 1][wy]->getCollider()->borderEnabled[1] = 0;
                 }
 
                 // top
-                if (wy > 0 && _world[wx][wy - 1] && _world[wx][wy - 1]->getType() == EntityType::Wall)
+                if (wy > 0 && _world[wx][wy - 1])
                 {
                     _world[wx][wy]->getCollider()->borderEnabled[2] = 0;
                     _world[wx][wy - 1]->getCollider()->borderEnabled[3] = 0;
@@ -220,5 +266,5 @@ void LevelManager::removeObjAtPos(Vector2Int pos)
 bool LevelManager::isTransformInLevel(const TransformComponent &transform)
 {
     return transform.pos.x > _levelBoundsStart.x && transform.pos.x + transform.dims.x < _levelBoundsEnd.x &&
-            transform.pos.y > _levelBoundsStart.y && transform.pos.y + transform.dims.y < _levelBoundsEnd.y;
+           transform.pos.y > _levelBoundsStart.y && transform.pos.y + transform.dims.y < _levelBoundsEnd.y;
 }

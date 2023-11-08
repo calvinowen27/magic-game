@@ -51,7 +51,15 @@ void ContentManager::loadTextures()
         SDL_FreeSurface(pSurface);
     }
 
-    _textureFromType[EntityType::Wall] = _textureFromName["wall"];
+    _textureFromType[EntityType::Wall] = _textureFromName["wall-sheet"];
+    _textureFromType[EntityType::WallTL] = _textureFromName["wall-sheet"];
+    _textureFromType[EntityType::WallT] = _textureFromName["wall-sheet"];
+    _textureFromType[EntityType::WallTR] = _textureFromName["wall-sheet"];
+    _textureFromType[EntityType::WallL] = _textureFromName["wall-sheet"];
+    _textureFromType[EntityType::WallR] = _textureFromName["wall-sheet"];
+    _textureFromType[EntityType::WallBL] = _textureFromName["wall-sheet"];
+    _textureFromType[EntityType::WallB] = _textureFromName["wall-sheet"];
+    _textureFromType[EntityType::WallBR] = _textureFromName["wall-sheet"];
     _textureFromType[EntityType::Player] = _textureFromName["player-sheet"];
     _textureFromType[EntityType::Enemy] = _textureFromName["enemy"];
     _textureFromType[EntityType::Grass] = _textureFromName["grass"];
