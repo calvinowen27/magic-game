@@ -45,8 +45,7 @@ UI_OBJS = $(patsubst $(UI_DIR)/%.cpp, $(UI_DIR_O)/%.o, $(wildcard $(UI_DIR)/*.cp
 UTIL_OBJS = $(patsubst $(UTIL_DIR)/%.cpp, $(UTIL_DIR_O)/%.o, $(wildcard $(UTIL_DIR)/*.cpp))
 
 CC = g++
-CFLAGS = -std=c++17
-#  -Wall -Wextra -pedantic
+CFLAGS = -std=c++17 -Wall -Wextra -pedantic
 
 LDFLAGS = -L./lib -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lUser32
 

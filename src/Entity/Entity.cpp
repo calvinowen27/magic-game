@@ -4,18 +4,17 @@
 #include "../../include/game/Entity/Registry.hpp"
 #include "../../include/game/Objects/ObjectManager.hpp"
 #include "../../include/game/Input/MouseHandler.hpp"
+#include "../../include/game/Level/LevelManager.hpp"
 
 std::map<EntityType, std::string> Entity::_stringFromType = {
     {EntityType::Player, "Player"},
     {EntityType::Enemy, "Enemy"},
     {EntityType::Wall, "Wall"},
     {EntityType::WallTL, "WallTL"},
-    {EntityType::WallT, "WallT"},
     {EntityType::WallTR, "WallTR"},
-    {EntityType::WallL, "WallL"},
-    {EntityType::WallR, "WallR"},
+    {EntityType::WallH, "WallH"},
+    {EntityType::WallV, "WallV"},
     {EntityType::WallBL, "WallBL"},
-    {EntityType::WallB, "WallB"},
     {EntityType::WallBR, "WallBR"},
     {EntityType::Grass, "Grass"},
     {EntityType::Spell, "Spell"}};
@@ -25,17 +24,15 @@ std::map<std::string, EntityType> Entity::_typeFromString = {
     {"Enemy", EntityType::Enemy},
     {"Wall", EntityType::Wall},
     {"WallTL", EntityType::WallTL},
-    {"WallT", EntityType::WallT},
     {"WallTR", EntityType::WallTR},
-    {"WallL", EntityType::WallL},
-    {"WallR", EntityType::WallR},
+    {"WallH", EntityType::WallH},
+    {"WallV", EntityType::WallV},
     {"WallBL", EntityType::WallBL},
-    {"WallB", EntityType::WallB},
     {"WallBR", EntityType::WallBR},
     {"Grass", EntityType::Grass},
     {"Spell", EntityType::Spell}};
 
-Entity::Entity() : game(*Game::getInstance()), registry(*game.pRegistry), contentManager(*game.pContentManager), objectManager(*game.pObjectManager)
+Entity::Entity() : game(*Game::getInstance()), registry(*game.pRegistry), contentManager(*game.pContentManager), objectManager(*game.pObjectManager), levelManager(*game.pLevelManager)
 {
 }
 

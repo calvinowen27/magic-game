@@ -51,13 +51,16 @@ bool LevelManager::loadLevel(int levelIdx)
 
     // allocate and initialize _world 2D array
     _world = new std::shared_ptr<Object> *[_currLevelWidth];
+    _walls = new std::shared_ptr<Wall> *[_currLevelWidth];
 
     for (wx = 0; wx < _currLevelWidth; wx++)
     {
         _world[wx] = new std::shared_ptr<Object>[_currLevelHeight];
+        _walls[wx] = new std::shared_ptr<Wall>[_currLevelHeight];
         for (wy = 0; wy < _currLevelHeight; wy++)
         {
             _world[wx][wy] = nullptr;
+            _walls[wx][wy] = nullptr;
         }
     }
 
@@ -77,70 +80,8 @@ bool LevelManager::loadLevel(int levelIdx)
             /* ---------- WALL ------------------------------------- */
             case '#':
                 // instantiate and initialize object, set position in world
-                if (wx == 0)
-                {
-                    if (wy == 0)
-                    {
-                        _world[wx][wy] = _objectManager.newEntity<WallBL>();
-                        std::static_pointer_cast<WallBL>(_world[wx][wy])->init(objPos);
-                    }
-                    else if (wy == _currLevelHeight - 1)
-                    {
-                        _world[wx][wy] = _objectManager.newEntity<WallTL>();
-                        std::static_pointer_cast<WallTL>(_world[wx][wy])->init(objPos);
-                    }
-                    else
-                    {
-                        _world[wx][wy] = _objectManager.newEntity<WallL>();
-                        std::static_pointer_cast<WallL>(_world[wx][wy])->init(objPos);
-                    }
-                }
-                else if (wx == _currLevelWidth - 1)
-                {
-                    if (wy == 0)
-                    {
-                        _world[wx][wy] = _objectManager.newEntity<WallBR>();
-                        std::static_pointer_cast<WallBR>(_world[wx][wy])->init(objPos);
-                    }
-                    else if (wy == _currLevelHeight - 1)
-                    {
-                        _world[wx][wy] = _objectManager.newEntity<WallTR>();
-                        std::static_pointer_cast<WallTR>(_world[wx][wy])->init(objPos);
-                    }
-                    else
-                    {
-                        _world[wx][wy] = _objectManager.newEntity<WallR>();
-                        std::static_pointer_cast<WallR>(_world[wx][wy])->init(objPos);
-                    }
-                }
-                else
-                {
-                    if (wy == 0)
-                    {
-                        _world[wx][wy] = _objectManager.newEntity<WallB>();
-                        std::static_pointer_cast<WallB>(_world[wx][wy])->init(objPos);
-                    }
-                    else
-                    {
-                        _world[wx][wy] = _objectManager.newEntity<WallT>();
-                        std::static_pointer_cast<WallT>(_world[wx][wy])->init(objPos);
-                    }
-                }
-
-                // disable collider borders on sides with neighboring walls
-                // left
-                if (wx > 0 && _world[wx - 1][wy])
-                {
-                    _world[wx][wy]->getCollider()->borderEnabled[0] = 0;
-                    _world[wx - 1][wy]->getCollider()->borderEnabled[1] = 0;
-                }
-
-                // top
-                if (wy > 0 && _world[wx][wy - 1])
-                {
-                    _world[wx][wy]->getCollider()->borderEnabled[2] = 0;
-                    _world[wx][wy - 1]->getCollider()->borderEnabled[3] = 0;
-                }
+                _world[wx][wy] = _objectManager.newEntity<Wall>();
+                _walls[wx][wy] = std::static_pointer_cast<Wall>(_world[wx][wy]);
 
                 break;
 
@@ -180,6 +121,16 @@ bool LevelManager::loadLevel(int levelIdx)
         objPos.y++;
     }
 
+    for (wx = 0; wx < _currLevelWidth; wx++)
+    {
+        for (wy = 0; wy < _currLevelHeight; wy++)
+        {
+            auto wall = _walls[wx][wy];
+            if (wall)
+                wall->pickState(Vector2Int(wx - _currLevelHalfWidth, wy - _currLevelHalfHeight));
+        }
+    }
+
     return true;
 }
 
@@ -198,15 +149,18 @@ bool LevelManager::unloadLevel()
             {
                 pObj->kill();
                 _world[wx][wy] = nullptr;
+                _walls[wx][wy] = nullptr;
             }
         }
 
         // deallocate row
         delete[] _world[wx];
+        delete[] _walls[wx];
     }
 
     // deallocate array
     delete _world;
+    delete _walls;
 
     // kill all enemies
     _objectManager.killEntitiesOfType<Enemy>();
@@ -235,6 +189,21 @@ std::shared_ptr<Object> LevelManager::getObjAtPos(Vector2Int pos)
     }
 
     return nullptr;
+}
+
+bool LevelManager::isWallAtPos(Vector2Int pos)
+{
+    // if pos within bounds of level, return check for wall, false otherwise
+    if (pos.x >= -_currLevelHalfWidth && pos.x < _currLevelHalfWidth &&
+        pos.y >= -_currLevelHalfHeight && pos.y < _currLevelHalfHeight)
+    {
+        if (_walls[pos.x + _currLevelHalfWidth][pos.y + _currLevelHalfHeight])
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool LevelManager::placeObjAtPos(std::shared_ptr<Object> obj, Vector2Int pos)

@@ -1,84 +1,63 @@
 #include "../../include/game/Objects/Wall.hpp"
 #include "../../include/nlohmann_json/json.hpp"
 #include "../../include/game/Objects/ObjectManager.hpp"
+#include "../../include/game/Level/LevelManager.hpp"
 
-bool Wall::init(Vector2 pos)
+void Wall::pickState(Vector2Int pos)
 {
-    Object::init(EntityType::Wall, pos);
+    _possibleStates = {WallState::TopLeft, WallState::TopRight, WallState::Horizontal, WallState::Vertical, WallState::BottomLeft, WallState::BottomRight};
 
-    pRenderer->sourceRect = SDL_Rect{16, 0, pRenderer->spriteDims.x, pRenderer->spriteDims.y};
+    int colBorderEnabled[4] = {1, 1, 1, 1};
 
-    return true;
-}
+    // left
+    if (levelManager.isWallAtPos(pos + Vector2Int(-1, 0)))
+    {
+        _possibleStates.erase(WallState::TopLeft);
+        _possibleStates.erase(WallState::BottomLeft);
+        _possibleStates.erase(WallState::Vertical);
+        colBorderEnabled[0] = 0;
+    }
 
-bool WallTL::init(Vector2 pos)
-{
-    Object::init(EntityType::WallTL, pos);
+    // right
+    if (levelManager.isWallAtPos(pos + Vector2Int(1, 0)))
+    {
+        _possibleStates.erase(WallState::TopRight);
+        _possibleStates.erase(WallState::BottomRight);
+        _possibleStates.erase(WallState::Vertical);
+        colBorderEnabled[1] = 0;
+    }
 
-    pRenderer->sourceRect = SDL_Rect{0, 0, pRenderer->spriteDims.x, pRenderer->spriteDims.y};
+    // bottom
+    if (levelManager.isWallAtPos(pos + Vector2Int(0, -1)))
+    {
+        _possibleStates.erase(WallState::Horizontal);
+        _possibleStates.erase(WallState::BottomLeft);
+        _possibleStates.erase(WallState::BottomRight);
+        colBorderEnabled[2] = 0;
+    }
 
-    return true;
-}
+    // top
+    if (levelManager.isWallAtPos(pos + Vector2Int(0, 1)))
+    {
+        _possibleStates.erase(WallState::Horizontal);
+        _possibleStates.erase(WallState::TopLeft);
+        _possibleStates.erase(WallState::TopRight);
+        colBorderEnabled[3] = 0;
+    }
 
-bool WallT::init(Vector2 pos)
-{
-    Object::init(EntityType::WallT, pos);
+    if (_possibleStates.find(WallState::TopLeft) != _possibleStates.end())
+        Object::init(EntityType::WallTL, (Vector2)pos);
+    else if (_possibleStates.find(WallState::TopRight) != _possibleStates.end())
+        Object::init(EntityType::WallTR, (Vector2)pos);
+    else if (_possibleStates.find(WallState::Horizontal) != _possibleStates.end())
+        Object::init(EntityType::WallH, (Vector2)pos);
+    else if (_possibleStates.find(WallState::Vertical) != _possibleStates.end())
+        Object::init(EntityType::WallV, (Vector2)pos);
+    else if (_possibleStates.find(WallState::BottomLeft) != _possibleStates.end())
+        Object::init(EntityType::WallBL, (Vector2)pos);
+    else if (_possibleStates.find(WallState::BottomRight) != _possibleStates.end())
+        Object::init(EntityType::WallBR, (Vector2)pos);
 
-    pRenderer->sourceRect = SDL_Rect{16, 0, pRenderer->spriteDims.x, pRenderer->spriteDims.y};
-
-    return true;
-}
-
-bool WallTR::init(Vector2 pos)
-{
-    Object::init(EntityType::WallTR, pos);
-
-    pRenderer->sourceRect = SDL_Rect{32, 0, pRenderer->spriteDims.x, pRenderer->spriteDims.y};
-
-    return true;
-}
-
-bool WallL::init(Vector2 pos)
-{
-    Object::init(EntityType::WallL, pos);
-
-    pRenderer->sourceRect = SDL_Rect{0, 32, pRenderer->spriteDims.x, pRenderer->spriteDims.y};
-
-    return true;
-}
-
-bool WallR::init(Vector2 pos)
-{
-    Object::init(EntityType::WallR, pos);
-
-    pRenderer->sourceRect = SDL_Rect{32, 32, pRenderer->spriteDims.x, pRenderer->spriteDims.y};
-
-    return true;
-}
-
-bool WallBL::init(Vector2 pos)
-{
-    Object::init(EntityType::WallBL, pos);
-
-    pRenderer->sourceRect = SDL_Rect{0, 48, pRenderer->spriteDims.x, pRenderer->spriteDims.y};
-
-    return true;
-}
-
-bool WallB::init(Vector2 pos)
-{
-    Object::init(EntityType::WallB, pos);
-
-    pRenderer->sourceRect = SDL_Rect{16, 48, pRenderer->spriteDims.x, pRenderer->spriteDims.y};
-
-    return true;
-}
-
-bool WallBR::init(Vector2 pos)
-{
-    Object::init(EntityType::WallBR, pos);
-
-    pRenderer->sourceRect = SDL_Rect{32, 48, pRenderer->spriteDims.x, pRenderer->spriteDims.y};
-
-    return true;
+    for(int i = 0; i < 4; i++)
+        pCollider->borderEnabled[i] = colBorderEnabled[i];
 }

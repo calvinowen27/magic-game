@@ -69,10 +69,14 @@ bool RendererComponent::init(EntityType entityType, std::shared_ptr<TransformCom
     this->pTransform = pTransform;
     this->renderOrder = renderOrder;
 
-    json jSpriteDims = objectManager.getEntityData(entityType)["spriteDims"];
+    json jEntity = objectManager.getEntityData(entityType);
+    json jSpriteDims = jEntity["spriteDims"];
     spriteDims = Vector2Int((int)jSpriteDims[0], (int)jSpriteDims[1]);
 
-    sourceRect = SDL_Rect{0, 0, spriteDims.x, spriteDims.y};
+    if (jEntity.contains("sourceRect"))
+        sourceRect = SDL_Rect{(int)jEntity["sourceRect"][0], (int)jEntity["sourceRect"][1], spriteDims.x, spriteDims.y};
+    else    
+        sourceRect = SDL_Rect{0, 0, spriteDims.x, spriteDims.y};
 
     refreshDimensions();
 
@@ -238,16 +242,24 @@ void TransformComponent::update(float time)
     Vector2 levelBoundsEnd = _levelManager.getLevelBoundsEnd();
 
     if (pos.x < levelBoundsStart.x)
+    {
         pos.x = levelBoundsStart.x;
+    }
 
-    if (pos.x + dims.x > levelBoundsEnd.x)
-        pos.x = levelBoundsEnd.x - dims.x;
+    if (pos.x > levelBoundsEnd.x)
+    {
+        pos.x = levelBoundsEnd.x;
+    }
 
     if (pos.y < levelBoundsStart.y)
+    {
         pos.y = levelBoundsStart.y;
+    }
 
-    if (pos.y + dims.y > levelBoundsEnd.y)
-        pos.y = levelBoundsEnd.y - dims.y;
+    if (pos.y > levelBoundsEnd.y)
+    {
+        pos.y = levelBoundsEnd.y;
+    }
 }
 
 void TransformComponent::setPxDims(Vector2Int newPxDims)

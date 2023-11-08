@@ -9,6 +9,7 @@
 
 class Game;
 class Object;
+class Wall;
 class ObjectManager;
 class TransformComponent;
 
@@ -23,6 +24,7 @@ private:
     ObjectManager &_objectManager;
 
     std::shared_ptr<Object> **_world; // 2D array, each cell containing an object
+    std::shared_ptr<Wall> **_walls; // 2D array, each cell containing an object
 
     int _currLevelIdx = -1; // -1 at start of game
 
@@ -45,6 +47,7 @@ public:
     inline void prevLevel() { loadLevel(_currLevelIdx - 1); }
 
     std::shared_ptr<Object> getObjAtPos(Vector2Int pos); // returns object at pos, nullptr if nothing there or if position outside of level dimensions
+    bool isWallAtPos(Vector2Int pos); // returns true if there is a wall at pos, false otherwise
     bool placeObjAtPos(std::shared_ptr<Object> obj, Vector2Int pos); // places obj at pos if there is nothing at that position, otherwise does nothing, returns true if successful
     void removeObjAtPos(Vector2Int pos); // kills object at pos
 

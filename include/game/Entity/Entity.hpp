@@ -14,12 +14,10 @@ enum class EntityType
     Spell,
     Wall,
     WallTL,
-    WallT,
     WallTR,
-    WallL,
-    WallR,
+    WallH,
+    WallV,
     WallBL,
-    WallB,
     WallBR,
     Grass
 };
@@ -28,6 +26,7 @@ class Game;
 class ContentManager;
 class Registry;
 class ObjectManager;
+class LevelManager;
 
 class Entity
 {
@@ -40,6 +39,7 @@ protected:
     ObjectManager &objectManager;
     ContentManager &contentManager;
     Registry &registry;
+    LevelManager &levelManager;
 
     EntityType type;
 

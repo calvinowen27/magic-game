@@ -53,12 +53,10 @@ void ContentManager::loadTextures()
 
     _textureFromType[EntityType::Wall] = _textureFromName["wall-sheet"];
     _textureFromType[EntityType::WallTL] = _textureFromName["wall-sheet"];
-    _textureFromType[EntityType::WallT] = _textureFromName["wall-sheet"];
     _textureFromType[EntityType::WallTR] = _textureFromName["wall-sheet"];
-    _textureFromType[EntityType::WallL] = _textureFromName["wall-sheet"];
-    _textureFromType[EntityType::WallR] = _textureFromName["wall-sheet"];
+    _textureFromType[EntityType::WallH] = _textureFromName["wall-sheet"];
+    _textureFromType[EntityType::WallV] = _textureFromName["wall-sheet"];
     _textureFromType[EntityType::WallBL] = _textureFromName["wall-sheet"];
-    _textureFromType[EntityType::WallB] = _textureFromName["wall-sheet"];
     _textureFromType[EntityType::WallBR] = _textureFromName["wall-sheet"];
     _textureFromType[EntityType::Player] = _textureFromName["player-sheet"];
     _textureFromType[EntityType::Enemy] = _textureFromName["enemy"];
