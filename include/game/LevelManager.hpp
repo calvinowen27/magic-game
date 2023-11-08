@@ -10,6 +10,7 @@
 class Game;
 class Object;
 class ObjectManager;
+class TransformComponent;
 
 class LevelManager
 {
@@ -31,6 +32,8 @@ private:
     int _currLevelHalfHeight;
 
     Vector2 _playerStartPos; // position to place player when level loads
+    Vector2 _levelBoundsStart;
+    Vector2 _levelBoundsEnd;
 
 public:
     LevelManager();
@@ -44,6 +47,10 @@ public:
     std::shared_ptr<Object> getObjAtPos(Vector2Int pos); // returns object at pos, nullptr if nothing there or if position outside of level dimensions
     bool placeObjAtPos(std::shared_ptr<Object> obj, Vector2Int pos); // places obj at pos if there is nothing at that position, otherwise does nothing, returns true if successful
     void removeObjAtPos(Vector2Int pos); // kills object at pos
+
+    inline Vector2 getLevelBoundsStart() { return _levelBoundsStart; }
+    inline Vector2 getLevelBoundsEnd() { return _levelBoundsEnd; }
+    bool isTransformInLevel(const TransformComponent &transform);
 };
 
 #endif

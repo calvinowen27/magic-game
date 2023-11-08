@@ -7,6 +7,7 @@
 #include "../include/game/Player.hpp"
 #include "../include/game/Enemy.hpp"
 #include "../include/game/Spells/SpellManager.hpp"
+#include "../include/game/ECS/Components.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -43,6 +44,10 @@ bool LevelManager::loadLevel(int levelIdx)
     in >> _currLevelWidth >> _currLevelHeight;
     _currLevelHalfWidth = _currLevelWidth / 2;
     _currLevelHalfHeight = _currLevelHeight / 2;
+
+    // set level bounds
+    _levelBoundsStart = Vector2(-_currLevelHalfWidth, -_currLevelHalfHeight);
+    _levelBoundsEnd = Vector2(_currLevelHalfWidth - 1, _currLevelHalfHeight - 1);
 
     // allocate and initialize _world 2D array
     _world = new std::shared_ptr<Object> *[_currLevelWidth];
@@ -209,4 +214,10 @@ void LevelManager::removeObjAtPos(Vector2Int pos)
         _world[pos.x + _currLevelHalfWidth][pos.y + _currLevelHalfHeight]->kill();
         _world[pos.x + _currLevelHalfWidth][pos.y + _currLevelHalfHeight] = nullptr;
     }
+}
+
+bool LevelManager::isTransformInLevel(const TransformComponent &transform)
+{
+    return transform.pos.x > _levelBoundsStart.x && transform.pos.x + transform.dims.x < _levelBoundsEnd.x &&
+            transform.pos.y > _levelBoundsStart.y && transform.pos.y + transform.dims.y < _levelBoundsEnd.y;
 }

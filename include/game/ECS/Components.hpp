@@ -23,6 +23,7 @@ class Animation;
 class AnimationManager;
 class ColliderComponent;
 class HitboxComponent;
+class LevelManager;
 
 enum class EntityType;
 
@@ -80,6 +81,9 @@ public:
 
 class TransformComponent : public Component
 {
+private:
+    LevelManager &_levelManager;
+
 public:
     Vector2 pos;       // meters
     Vector2Int pxPos;  // pixels
@@ -94,6 +98,8 @@ public:
     TransformComponent();
     bool init(Vector2 pos, Vector2 dims = Vector2(1, 1));                        // returns true if successful
     bool init(EntityType entityType, Vector2 pos, Vector2 dims = Vector2(1, 1)); // returns true if successful
+
+    void update(float time);
 
     void setPxDims(Vector2Int newPxDims); // set new px dims
 
@@ -192,6 +198,8 @@ public:
 
     Vector2 velocity; // meters/sec
     Vector2 nextPos;  // meters
+
+    bool nextPosSet = false;
 
     std::shared_ptr<TransformComponent> pTransform;
     std::shared_ptr<ColliderComponent> pCollider;

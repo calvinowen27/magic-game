@@ -8,6 +8,7 @@
 #include "../../include/game/Animation/Animation.hpp"
 #include "../../include/game/UI/UIManager.hpp"
 #include "../../include/game/ECS/ComponentHandler.hpp"
+#include "../../include/game/LevelManager.hpp"
 
 #include <algorithm>
 
@@ -18,8 +19,7 @@ Component::Component() : game(*Game::getInstance()), registry(*game.pRegistry), 
 
 bool Component::init()
 {
-    if (pEntity)
-        pEntity = nullptr;
+    pEntity = nullptr;
 
     enable();
     return true;
@@ -27,8 +27,7 @@ bool Component::init()
 
 void Component::kill()
 {
-    if (pEntity)
-        pEntity = nullptr;
+    pEntity = nullptr;
 
     disable();
 }
@@ -82,7 +81,7 @@ bool RendererComponent::init(EntityType entityType, std::shared_ptr<TransformCom
 
 void RendererComponent::update(float time)
 {
-    enabled = game.isTransformOnScreen(*pTransform);
+    enabled = game.isTransformOnScreen(*pTransform) && game.pLevelManager->isTransformInLevel(*pTransform);
 }
 
 void RendererComponent::draw(SDL_Renderer *pRenderer)
@@ -189,7 +188,7 @@ void RendererComponent::refreshDimensions()
 }
 
 /* TRANSFORM COMPONENT */
-TransformComponent::TransformComponent() : Component()
+TransformComponent::TransformComponent() : Component(), _levelManager(*LevelManager::getInstance())
 {
 }
 
@@ -231,6 +230,24 @@ bool TransformComponent::init(EntityType entityType, Vector2 pos, Vector2 dims)
     updatePxPos();
 
     return true;
+}
+
+void TransformComponent::update(float time)
+{
+    Vector2 levelBoundsStart = _levelManager.getLevelBoundsStart();
+    Vector2 levelBoundsEnd = _levelManager.getLevelBoundsEnd();
+
+    if (pos.x < levelBoundsStart.x)
+        pos.x = levelBoundsStart.x;
+
+    if (pos.x + dims.x > levelBoundsEnd.x)
+        pos.x = levelBoundsEnd.x - dims.x;
+
+    if (pos.y < levelBoundsStart.y)
+        pos.y = levelBoundsStart.y;
+
+    if (pos.y + dims.y > levelBoundsEnd.y)
+        pos.y = levelBoundsEnd.y - dims.y;
 }
 
 void TransformComponent::setPxDims(Vector2Int newPxDims)
@@ -458,6 +475,7 @@ bool RigidbodyComponent::init(std::shared_ptr<TransformComponent> pTransform, st
     this->pTransform = pTransform;
     this->pCollider = pCollider;
     this->isStatic = isStatic;
+    nextPosSet = false;
 
     return true;
 }
@@ -472,7 +490,16 @@ void RigidbodyComponent::update(float time)
     if (SDL_fabsf(velocity.y) < 0.0625)
         velocity.y = 0;
 
-    pTransform->pos = nextPos;
+    if (nextPosSet)
+    {
+        pTransform->pos = nextPos;
+    }
+    else
+    {
+        nextPosSet = true;
+        pTransform->pos += velocity * time;
+    }
+
     nextPos = pTransform->pos + velocity * time;
 }
 

@@ -31,6 +31,7 @@ void ComponentHandler::update(float time)
 {
     updateColliders(time);
     updateRigidbodies(time);
+    updateTransforms(time);
     updateHitboxes(time);
     updateAnimators(time);
 }
@@ -140,6 +141,15 @@ void ComponentHandler::updateRigidbodies(float time)
     for (auto pRb : rigidbodies)
     {
         pRb->update(time);
+    }
+}
+
+void ComponentHandler::updateTransforms(float time)
+{
+    auto transforms = _registry.getComponents<TransformComponent>();
+    for (auto pTransform : transforms)
+    {
+        pTransform->update(time);
     }
 }
 
