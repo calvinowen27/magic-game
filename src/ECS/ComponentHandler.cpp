@@ -2,6 +2,7 @@
 #include "../../include/game/ECS/Registry.hpp"
 #include "../../include/game/Game.hpp"
 #include "../../include/game/ECS/Components.hpp"
+#include "../../include/game/ECS/Entity.hpp"
 
 #include <algorithm>
 
@@ -65,24 +66,23 @@ void ComponentHandler::updateColliders(float time)
                 if (pCol->isTouching(pOther) || pOther->isTouching(pCol))
                 {
                     pCol->onCollisionExit(pOther);
-                    // pOther->onCollisionExit(pCol);
                 }
+
                 continue;
             }
             else
             {
-                nextPos = handleCollision(pCol, pOther, deltaPos);
+                nextPos = handleCollision(pCol, pOther, nextPos, deltaPos);
             }
         }
 
-        pCol->pRigidbody->velocity = (nextPos - pCol->pTransform->pos) / time;
+        if(pCol->pRigidbody->nextPos != nextPos)
+            pCol->pRigidbody->nextPos = nextPos;
     }
 }
 
-Vector2 ComponentHandler::handleCollision(std::shared_ptr<ColliderComponent> pCol1, std::shared_ptr<ColliderComponent> pCol2, Vector2 dPos)
+Vector2 ComponentHandler::handleCollision(std::shared_ptr<ColliderComponent> pCol1, std::shared_ptr<ColliderComponent> pCol2, Vector2 nextPos, Vector2 dPos)
 {
-    Vector2 nextPos = pCol1->pTransform->pos + dPos;
-
     // this left and other right
     if (pCol1->borderEnabled[0] && pCol2->borderEnabled[1])
     {
@@ -199,8 +199,8 @@ void ComponentHandler::updateHitboxes(float time)
                         continue;
                     }
                     // check distance from circle center to each corner of box
-                    else if(Vector2Int::distance(pHb1->center, pHb2->bottomLeft) <= radius || Vector2Int::distance(pHb1->center, Vector2Int(pHb2->bottomLeft.x, pHb2->topRight.y)) <= radius ||
-                            Vector2Int::distance(pHb1->center, pHb2->topRight) <= radius || Vector2Int::distance(pHb1->center, Vector2Int(pHb2->topRight.x, pHb2->bottomLeft.y)) <= radius)
+                    else if (Vector2Int::distance(pHb1->center, pHb2->bottomLeft) <= radius || Vector2Int::distance(pHb1->center, Vector2Int(pHb2->bottomLeft.x, pHb2->topRight.y)) <= radius ||
+                             Vector2Int::distance(pHb1->center, pHb2->topRight) <= radius || Vector2Int::distance(pHb1->center, Vector2Int(pHb2->topRight.x, pHb2->bottomLeft.y)) <= radius)
                     {
                         // if we make it here there is a collision
                         pHb1->onHitboxEnter(pHb2);

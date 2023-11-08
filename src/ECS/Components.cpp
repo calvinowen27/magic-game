@@ -453,11 +453,12 @@ RigidbodyComponent::RigidbodyComponent() : Component()
 {
 }
 
-bool RigidbodyComponent::init(std::shared_ptr<TransformComponent> pTransform, bool isStatic)
+bool RigidbodyComponent::init(std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<ColliderComponent> pCollider, bool isStatic)
 {
     Component::init();
 
     this->pTransform = pTransform;
+    this->pCollider = pCollider;
     this->isStatic = isStatic;
 
     return true;
@@ -473,7 +474,8 @@ void RigidbodyComponent::update(float time)
     if (SDL_fabsf(velocity.y) < 0.0625)
         velocity.y = 0;
 
-    pTransform->pos += velocity * time;
+    pTransform->pos = nextPos;
+    nextPos = pTransform->pos + velocity * time;
 }
 
 void RigidbodyComponent::kill()

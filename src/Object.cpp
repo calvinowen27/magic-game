@@ -18,7 +18,7 @@ bool Object::init(EntityType entityType, Vector2 pos)
 
     pRenderer->setCollider(pCollider);
 
-    pRigidbody->init(pTransform);
+    pRigidbody->init(pTransform, pCollider);
 
     pCollider->init(entityType, pTransform, pRigidbody);
     pCollider->setEntity(this);

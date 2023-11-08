@@ -122,8 +122,8 @@ public:
     bool borderEnabled[4]{true, true, true, true}; // whether each side of collider is enabled or not (for Box only)
                                                    // order: left right bottom top
 
-    bool doCollisions = true; // if true, detects collisions between other colliders
-    bool isTrigger = false;   // if true and if collision detected, doesn't alter position of pTransform
+    bool doCollisions = true;    // if true, detects collisions between other colliders
+    bool isTrigger = false;      // if true and if collision detected, doesn't alter position of pTransform
 
     ColliderComponent();
 
@@ -191,11 +191,13 @@ public:
     bool isStatic = false; // doesn't move if static
 
     Vector2 velocity; // meters/sec
+    Vector2 nextPos;  // meters
 
     std::shared_ptr<TransformComponent> pTransform;
+    std::shared_ptr<ColliderComponent> pCollider;
 
     RigidbodyComponent();
-    bool init(std::shared_ptr<TransformComponent> pTransform, bool isStatic = false); // returns true if successful
+    bool init(std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<ColliderComponent> pCollider = nullptr, bool isStatic = false); // returns true if successful
     void update(float time);
     void kill() override;
 };
