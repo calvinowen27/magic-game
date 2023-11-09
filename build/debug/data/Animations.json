@@ -2,8 +2,8 @@
     "Player": [
         {
             "name": "idle_down",
-            "duration": 1.5,
-            "frameCount": 2,
+            "duration": 1,
+            "frameCount": 4,
             "loops": true
         },
         {
