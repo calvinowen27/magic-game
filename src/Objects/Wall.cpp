@@ -52,7 +52,7 @@ void Wall::pickState(Vector2Int pos)
     if (_possibleStates.find(WallState::Horizontal) != _possibleStates.end())
         Object::init(EntityType::WallH, (Vector2)pos);
     else if (_possibleStates.find(WallState::Vertical) != _possibleStates.end())
-        Object::init(EntityType::WallH, (Vector2)pos);
+        Object::init(EntityType::WallV, (Vector2)pos);
     else if (_possibleStates.find(WallState::TopLeft) != _possibleStates.end())
         Object::init(EntityType::WallTL, (Vector2)pos);
     else if (_possibleStates.find(WallState::TopRight) != _possibleStates.end())

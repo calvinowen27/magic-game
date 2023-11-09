@@ -64,12 +64,12 @@ bool LevelManager::loadLevel(int levelIdx)
         }
     }
 
-    // middle of level (in file) should be position (0, 0) in game
-    objPos.y = -_currLevelHalfHeight;
-
     std::getline(in, line); // for skipping first line, which contains dimensions of level
     for (wy = 0; wy < _currLevelHeight && std::getline(in, line); wy++)
     {
+        // middle of level (in file) should be position (0, 0) in game
+        objPos.y = wy - _currLevelHalfHeight;
+
         for (wx = 0; wx < _currLevelWidth; wx++)
         {
             objPos.x = wx - _currLevelHalfWidth; // so middle of level is (0, 0)
@@ -116,8 +116,6 @@ bool LevelManager::loadLevel(int levelIdx)
                 break;
             }
         }
-
-        objPos.y++;
     }
 
     for (wy = 0; wy < _currLevelHeight; wy++)
@@ -181,8 +179,8 @@ LevelManager *LevelManager::getInstance()
 std::shared_ptr<Object> LevelManager::getObjAtPos(Vector2Int pos)
 {
     // if pos within bounds of level, return object at that position, nullptr otherwise
-    if (pos.x >= -_currLevelHalfWidth && pos.x < _currLevelHalfWidth &&
-        pos.y >= -_currLevelHalfHeight && pos.y < _currLevelHalfHeight)
+    if (pos.x >= -_currLevelHalfWidth && pos.x <= _currLevelHalfWidth - 1 + (_currLevelWidth % 2) &&
+        pos.y >= -_currLevelHalfHeight && pos.y <= _currLevelHalfHeight - 1 + (_currLevelHeight % 2))
     {
         return _world[pos.x + _currLevelHalfWidth][pos.y + _currLevelHalfHeight];
     }
@@ -193,8 +191,8 @@ std::shared_ptr<Object> LevelManager::getObjAtPos(Vector2Int pos)
 bool LevelManager::isWallAtPos(Vector2Int pos)
 {
     // if pos within bounds of level, return check for wall, false otherwise
-    if (pos.x >= -_currLevelHalfWidth && pos.x < _currLevelHalfWidth &&
-        pos.y >= -_currLevelHalfHeight && pos.y < _currLevelHalfHeight)
+    if (pos.x >= -_currLevelHalfWidth && pos.x <= _currLevelHalfWidth - 1 + (_currLevelWidth % 2)&&
+        pos.y >= -_currLevelHalfHeight && pos.y <= _currLevelHalfHeight - 1 + (_currLevelHeight % 2))
     {
         if (_walls[pos.x + _currLevelHalfWidth][pos.y + _currLevelHalfHeight])
         {
