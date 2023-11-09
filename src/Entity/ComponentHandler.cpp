@@ -37,7 +37,7 @@ void ComponentHandler::updateColliders(float time)
     auto colliders = _registry.getComponents<ColliderComponent>();
     for (auto pCol : colliders)
     {
-        if (!pCol->isEnabled())
+        if (!pCol->isEnabled() || pCol->pRigidbody->isStatic)
             continue;
 
         pCol->update(time);

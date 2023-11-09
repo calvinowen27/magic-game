@@ -15,7 +15,6 @@ private:
     Vector2 _prevMoveDir;
 
 public:
-    std::shared_ptr<HealthComponent> pHealth;
     std::shared_ptr<AnimatorComponent> pAnimator;
 
     Player();
@@ -24,6 +23,7 @@ public:
     void kill() override;
 
     inline void setPos(Vector2 newPos) { pTransform->pos = newPos; }
+    inline bool damage(float damage) { return pHealth->damage(damage); }
 };
 
 #endif

@@ -16,8 +16,6 @@ private:
     float _damage = 2;
 
 public:
-    std::shared_ptr<HealthComponent> pHealth;
-
     Enemy();
     bool init(EntityType entityType, Vector2 pos) override;
     void update(float time) override;

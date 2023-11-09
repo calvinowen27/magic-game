@@ -217,6 +217,10 @@ void Game::frameUpdate()
 
     pUIManager->update();
 
+    // set camera position to follow player
+    if (pPlayer && pPlayer->isAlive())
+        cameraPos = pPlayer->getPos() + Vector2(0, 0.5);
+
     draw();
 
     auto execTime = duration_cast<nanoseconds>(high_resolution_clock::now() - startTime);
@@ -246,13 +250,9 @@ void Game::physicsUpdate()
     if (paused) // don't update any of the following 
         return;
 
-    pComponentHandler->update(updateTime); // call update function on all entity components
-
     pObjectManager->update(updateTime); // call update function on all objects
 
-    // set camera position to follow player
-    if (pPlayer && pPlayer->isAlive())
-        cameraPos = pPlayer->getPos() + Vector2(0, 0.5);
+    pComponentHandler->update(updateTime); // call update function on all entity components
 
     auto execTime = duration_cast<nanoseconds>(high_resolution_clock::now() - startTime);
 
@@ -295,7 +295,7 @@ Vector2Int Game::worldToPixel(const Vector2 &pos)
     pxPos -= cameraPos / Vector2(1, 2);                                          // half cameraPos.y to account for perspective, make pxPos relative to cameraPos
     pxPos *= ppm;                                                                // convert from meters to pixels
     pxPos.y *= -1;                                                               // invert y relative to window (pixel y positioning is from top not bottom)
-    return (Vector2Int)(pxPos.round(0)) + (Vector2Int)(Vector2(winWidth / 2, winHeight / 2).round(0)); // add half of window dimensions to center on screen
+    return (Vector2Int)(pxPos + Vector2(0.5, 0.5)) + Vector2Int((winWidth / 2) + 0.5, (winHeight / 2) + 0.5); // add half of window dimensions to center on screen
 }
 
 Vector2 Game::pixelToWorld(const Vector2Int &pxPos)

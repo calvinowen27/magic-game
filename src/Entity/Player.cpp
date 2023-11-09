@@ -14,10 +14,6 @@ bool Player::init(EntityType entityType, Vector2 pos)
 {
     LiveEntity::init(entityType, pos);
 
-    pHealth = registry.newComponent<HealthComponent>();
-    pHealth->init(10);
-    pHealth->setEntity(this);
-
     pAnimator = registry.newComponent<AnimatorComponent>();
     pAnimator->init(pRenderer);
     pAnimator->setAnimation(entityType, "idle_down");
@@ -29,6 +25,8 @@ void Player::update(float time)
 {
     if (!alive)
         return;
+
+    LiveEntity::update(time);
 
     std::string nextAnimation;
 
@@ -106,11 +104,6 @@ void Player::update(float time)
 
     if(nextAnimation != "")
         pAnimator->setAnimation(type, nextAnimation);
-
-    pHealth->pGreenRenderer->pTransform->pos = pTransform->pos + Vector2(0, pTransform->dims.y + 0.5);
-    pHealth->pRedRenderer->pTransform->pos = pHealth->pGreenRenderer->pTransform->pos;
-
-    Entity::update(time);
 }
 
 void Player::kill()
