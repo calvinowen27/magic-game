@@ -527,18 +527,18 @@ HealthComponent::HealthComponent() : Component()
 {
 }
 
-bool HealthComponent::init(float baseHealth)
+bool HealthComponent::init(float baseHealth, Vector2 startPos)
 {
     Component::init();
 
     this->baseHealth = baseHealth;
     health = baseHealth;
 
-    auto pRedTransform = registry.newComponent<TransformComponent>();
-    pRedTransform->init(Vector2::zero);
+    pRedTransform = registry.newComponent<TransformComponent>();
+    pRedTransform->init(startPos);
 
-    auto pGreenTransform = registry.newComponent<TransformComponent>();
-    pGreenTransform->init(Vector2(1, 1));
+    pGreenTransform = registry.newComponent<TransformComponent>();
+    pGreenTransform->init(startPos);
 
     pRedRenderer = registry.newComponent<RendererComponent>();
     pRedRenderer->init("red_bar", pRedTransform, -1);
@@ -582,6 +582,12 @@ void HealthComponent::kill()
     registry.killComponent(pRedRenderer);
 
     Component::kill();
+}
+
+void HealthComponent::setPos(Vector2 pos)
+{
+    pGreenTransform->pos = pos;
+    pRedTransform->pos = pos;
 }
 
 /* ANIMATION COMPONENT */

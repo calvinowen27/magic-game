@@ -52,7 +52,7 @@ void Spell::hit(Entity *pEntity)
 {
     if (Enemy *enemy = dynamic_cast<Enemy *>(pEntity))
     {
-        enemy->pHealth->damage(damage);
+        enemy->damage(damage);
     }
     else
     {

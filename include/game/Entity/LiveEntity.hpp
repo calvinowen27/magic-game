@@ -20,6 +20,7 @@ public:
 
     inline Vector2 getVelocity() { return pRigidbody->velocity; }
     inline std::shared_ptr<ColliderComponent> getCollider() { return pCollider; }
+    inline bool damage(float damage) { return pHealth->damage(damage); }
 };
 
 #endif

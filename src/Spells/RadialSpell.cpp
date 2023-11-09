@@ -47,7 +47,7 @@ void RadialSpell::update(float time)
                 Vector2::distance(Vector2(enemyCollider->topRight.x, enemyCollider->bottomLeft.y), _startPos) <= _currRadius ||
                 Vector2::distance(enemyCollider->topRight, _startPos) <= _currRadius)
             {
-                enemy->pHealth->damage(damage);
+                enemy->damage(damage);
                 _entitiesHit.emplace(pEntity);
             }
         }

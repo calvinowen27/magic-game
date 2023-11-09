@@ -217,13 +217,17 @@ public:
     float health;
 
     std::shared_ptr<RendererComponent> pRedRenderer;
+    std::shared_ptr<TransformComponent> pRedTransform;
+
     std::shared_ptr<RendererComponent> pGreenRenderer;
+    std::shared_ptr<TransformComponent> pGreenTransform;
 
     HealthComponent();
-    bool init(float baseHealth);
+    bool init(float baseHealth, Vector2 startPos = Vector2::zero);
     void heal(float healAmount);
     bool damage(float dmgAmount); // returns true if dead after damage dealt
     void kill() override;
+    void setPos(Vector2 pos);
 };
 
 class AnimatorComponent : public Component
