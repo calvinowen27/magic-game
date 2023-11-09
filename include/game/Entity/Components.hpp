@@ -95,8 +95,10 @@ public:
     float rotDeg; // angle in degrees
     float rotRad; // angle in radians
 
+    bool constrain = true;
+
     TransformComponent();
-    bool init(Vector2 pos, Vector2 dims = Vector2(1, 1));                        // returns true if successful
+    bool init(Vector2 pos, Vector2 dims = Vector2(1, 1), bool constrain = true);                        // returns true if successful
     bool init(EntityType entityType, Vector2 pos, Vector2 dims = Vector2(1, 1)); // returns true if successful
 
     void update(float time);

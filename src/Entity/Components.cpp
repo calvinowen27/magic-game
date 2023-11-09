@@ -196,7 +196,7 @@ TransformComponent::TransformComponent() : Component(), _levelManager(*LevelMana
 {
 }
 
-bool TransformComponent::init(Vector2 pos, Vector2 dims)
+bool TransformComponent::init(Vector2 pos, Vector2 dims, bool constrain)
 {
     Component::init();
 
@@ -208,6 +208,8 @@ bool TransformComponent::init(Vector2 pos, Vector2 dims)
     pxDims = (Vector2Int)(dims * game.ppm);
 
     this->root = Vector2(0.5, 0);
+
+    this->constrain = constrain;
 
     updatePxPos();
 
@@ -238,6 +240,9 @@ bool TransformComponent::init(EntityType entityType, Vector2 pos, Vector2 dims)
 
 void TransformComponent::update(float time)
 {
+    if(!constrain)
+        return;
+
     Vector2 levelBoundsStart = _levelManager.getLevelBoundsStart();
     Vector2 levelBoundsEnd = _levelManager.getLevelBoundsEnd();
 
@@ -535,10 +540,10 @@ bool HealthComponent::init(float baseHealth, Vector2 startPos)
     health = baseHealth;
 
     pRedTransform = registry.newComponent<TransformComponent>();
-    pRedTransform->init(startPos);
+    pRedTransform->init(startPos, Vector2(1, 1), false);
 
     pGreenTransform = registry.newComponent<TransformComponent>();
-    pGreenTransform->init(startPos);
+    pGreenTransform->init(startPos, Vector2(1, 1), false);
 
     pRedRenderer = registry.newComponent<RendererComponent>();
     pRedRenderer->init("red_bar", pRedTransform, -1);
