@@ -293,7 +293,7 @@ ColliderComponent::ColliderComponent() : Component()
 {
 }
 
-bool ColliderComponent::init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions, bool isTrigger)
+bool ColliderComponent::init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions)
 {
     Component::init();
 
@@ -316,7 +316,10 @@ bool ColliderComponent::init(EntityType entityType, std::shared_ptr<TransformCom
     this->pTransform = pTransform;
     this->pRigidbody = pRigidbody;
     this->doCollisions = doCollisions;
-    this->isTrigger = isTrigger;
+    if(jCollider.contains("isTrigger"))
+        isTrigger = (bool)jCollider["isTrigger"];
+    else
+        isTrigger = false;
 
     borderEnabled[0] = 1;
     borderEnabled[1] = 1;

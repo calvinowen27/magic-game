@@ -4,6 +4,8 @@
 #include"../../include/game/UI/UIManager.hpp"
 #include "../../include/game/Level/LevelManager.hpp"
 #include "../../include/game/Entity/ComponentHandler.hpp"
+#include "../../include/game/Entity/Player.hpp"
+#include "../../include/game/Objects/InteractableObject.hpp"
 
 #include <iostream>
 
@@ -23,9 +25,8 @@ KeyboardHandler::KeyboardHandler() : _game(*Game::getInstance())
         { InputKey::Pause, SDL_SCANCODE_ESCAPE },
         { InputKey::ToggleSpellUI, SDL_SCANCODE_C },
         { InputKey::ToggleDebugUI, SDL_SCANCODE_B },
-        { InputKey::NextLevel, SDL_SCANCODE_RIGHT },
-        { InputKey::PrevLevel, SDL_SCANCODE_LEFT },
-        { InputKey::ToggleShowColliders, SDL_SCANCODE_H }
+        { InputKey::ToggleShowColliders, SDL_SCANCODE_H },
+        { InputKey::Interact, SDL_SCANCODE_E }
     };
 }
 
@@ -85,16 +86,12 @@ void KeyboardHandler::onKeyUp(SDL_Scancode scancode)
         _game.togglePause();
     }
 
-    // Next Level
-    if(scancode == _keybinds[InputKey::NextLevel])
+    // Interact
+    if(scancode == _keybinds[InputKey::Interact])
     {
-        _game.pLevelManager->nextLevel();
-    }
-
-    // Prev Level
-    if(scancode == _keybinds[InputKey::PrevLevel])
-    {
-        _game.pLevelManager->prevLevel();
+        InteractableObject *pInteractable = _game.pPlayer->getCurrInteractable();
+        if(pInteractable)
+            pInteractable->interact();
     }
 
     if(scancode == _keybinds[InputKey::ToggleShowColliders])

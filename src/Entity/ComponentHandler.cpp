@@ -63,6 +63,7 @@ void ComponentHandler::updateColliders(float time)
                 if (pCol->isTouching(pOther) || pOther->isTouching(pCol))
                 {
                     pCol->onCollisionExit(pOther);
+                    pOther->onCollisionExit(pCol);
                 }
 
                 continue;
@@ -89,6 +90,7 @@ Vector2 ComponentHandler::handleCollision(std::shared_ptr<ColliderComponent> pCo
                 nextPos.x = pCol2->topRight.x - (pCol1->start.x * pCol1->pTransform->dims.x);
 
             pCol1->onCollisionEnter(pCol2);
+            pCol2->onCollisionEnter(pCol1);
         }
     }
 
@@ -101,6 +103,7 @@ Vector2 ComponentHandler::handleCollision(std::shared_ptr<ColliderComponent> pCo
                 nextPos.x = pCol2->bottomLeft.x - (pCol1->end.x * pCol1->pTransform->dims.x);
 
             pCol1->onCollisionEnter(pCol2);
+            pCol2->onCollisionEnter(pCol1);
         }
     }
 
@@ -113,6 +116,7 @@ Vector2 ComponentHandler::handleCollision(std::shared_ptr<ColliderComponent> pCo
                 nextPos.y = pCol2->topRight.y - (pCol1->start.y * pCol1->pTransform->dims.y);
 
             pCol1->onCollisionEnter(pCol2);
+            pCol2->onCollisionEnter(pCol1);
         }
     }
 
@@ -125,6 +129,7 @@ Vector2 ComponentHandler::handleCollision(std::shared_ptr<ColliderComponent> pCo
                 nextPos.y = pCol2->bottomLeft.y - (pCol1->end.y * pCol1->pTransform->dims.y);
 
             pCol1->onCollisionEnter(pCol2);
+            pCol2->onCollisionEnter(pCol1);
         }
     }
 
@@ -248,10 +253,10 @@ void ComponentHandler::updateAnimators(float time)
 
 bool rendererComparator(std::shared_ptr<RendererComponent> a, std::shared_ptr<RendererComponent> b)
 {
-    if (!a->isEnabled())
+    if (!a->isEnabled() || !a->pTransform)
         return false;
 
-    if (!b->isEnabled())
+    if (!b->isEnabled() || !b->pTransform)
         return false;
 
     if (a->renderOrder != b->renderOrder)

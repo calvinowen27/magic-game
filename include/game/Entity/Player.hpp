@@ -6,6 +6,7 @@
 #include <map>
 
 class KeyboardHandler;
+class InteractableObject;
 
 class Player : public LiveEntity
 {
@@ -13,6 +14,8 @@ private:
     KeyboardHandler *_pKeyboardHandler;
     Vector2 _moveDir;
     Vector2 _prevMoveDir;
+
+    InteractableObject *_pCurrInteractable;
 
 public:
     std::shared_ptr<AnimatorComponent> pAnimator;
@@ -23,6 +26,8 @@ public:
     void kill() override;
 
     inline void setPos(Vector2 newPos) { pTransform->pos = newPos; }
+    inline void setCurrInteractable(InteractableObject *pInteractable) { _pCurrInteractable = pInteractable; }
+    inline InteractableObject *getCurrInteractable() { return _pCurrInteractable; }
 };
 
 #endif

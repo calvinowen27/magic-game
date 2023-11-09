@@ -136,7 +136,7 @@ public:
     ColliderComponent();
 
     // initializes state of collider, returns true if sucessful
-    bool init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions = true, bool isTrigger = false);
+    bool init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, std::shared_ptr<RigidbodyComponent> pRigidbody, bool doCollisions = true);
 
     void update(float time); // performs whileTouching on colliders in colsTouching, also updates positions of borders
 

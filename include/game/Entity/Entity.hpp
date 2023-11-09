@@ -23,7 +23,8 @@ enum class EntityType
     WallNR,
     WallNB,
     WallNT,
-    Grass
+    Grass,
+    LevelChanger
 };
 
 class Game;

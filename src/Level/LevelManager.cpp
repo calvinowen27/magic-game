@@ -8,6 +8,7 @@
 #include "../../include/game/Entity/Enemy.hpp"
 #include "../../include/game/Spells/SpellManager.hpp"
 #include "../../include/game/Entity/Components.hpp"
+#include "../../include/game/Objects/LevelChanger.hpp"
 
 #include <fstream>
 #include <iostream>
@@ -113,6 +114,15 @@ bool LevelManager::loadLevel(int levelIdx)
                 // enemy not stored in map
 
                 _objectManager.newEntity<Enemy>()->init(EntityType::Enemy, objPos);
+                break;
+
+            case '<':
+                _world[wx][wy] = _objectManager.newEntity<LevelChanger>();
+                std::static_pointer_cast<LevelChanger>(_world[wx][wy])->init(objPos, LevelChangeMode::Previous);
+                break;
+            case '>':
+                _world[wx][wy] = _objectManager.newEntity<LevelChanger>();
+                std::static_pointer_cast<LevelChanger>(_world[wx][wy])->init(objPos, LevelChangeMode::Next);
                 break;
             }
         }

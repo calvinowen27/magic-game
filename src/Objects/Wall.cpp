@@ -77,6 +77,7 @@ void Wall::pickState(Vector2Int pos)
         for (int i = 0; i < 4; i++)
             pCollider->borderEnabled[i] = colBorderEnabled[i];
     }
+    
     if(pRigidbody)
         pRigidbody->isStatic = true;
 }

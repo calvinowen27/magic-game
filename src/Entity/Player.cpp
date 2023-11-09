@@ -18,6 +18,8 @@ bool Player::init(EntityType entityType, Vector2 pos)
     pAnimator->init(pRenderer);
     pAnimator->setAnimation(entityType, "idle_down");
 
+    _pCurrInteractable = nullptr;
+
     return true;
 }
 
@@ -112,4 +114,6 @@ void Player::kill()
 
     registry.killComponent(pHealth);
     registry.killComponent(pAnimator);
+
+    _pCurrInteractable = nullptr;
 }

@@ -21,6 +21,7 @@ std::map<EntityType, std::string> Entity::_stringFromType = {
     {EntityType::WallNB, "WallNB"},
     {EntityType::WallNT, "WallNT"},
     {EntityType::Grass, "Grass"},
+    {EntityType::LevelChanger, "LevelChanger"},
     {EntityType::Spell, "Spell"}};
 
 std::map<std::string, EntityType> Entity::_typeFromString = {
@@ -38,6 +39,7 @@ std::map<std::string, EntityType> Entity::_typeFromString = {
     {"WallNB", EntityType::WallNB},
     {"WallNT", EntityType::WallNT},
     {"Grass", EntityType::Grass},
+    {"LevelChanger", EntityType::LevelChanger},
     {"Spell", EntityType::Spell}};
 
 Entity::Entity() : game(*Game::getInstance()), registry(*game.pRegistry), contentManager(*game.pContentManager), objectManager(*game.pObjectManager), levelManager(*game.pLevelManager)

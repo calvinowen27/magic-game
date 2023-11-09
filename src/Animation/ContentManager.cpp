@@ -66,6 +66,7 @@ void ContentManager::loadTextures()
     _textureFromType[EntityType::Player] = _textureFromName["player-sheet"];
     _textureFromType[EntityType::Enemy] = _textureFromName["enemy"];
     _textureFromType[EntityType::Grass] = _textureFromName["grass"];
+    _textureFromType[EntityType::LevelChanger] = _textureFromName["level-changer-sheet"];
     _textureFromType[EntityType::Spell] = _textureFromName["ice_spell"];
 
     _spriteSheetFromType[EntityType::Player] = _textureFromName["player-sheet"];
