@@ -27,6 +27,8 @@ bool Spell::init()
     pRenderer->disable();
     pRenderer->setHitbox(pHitbox);
 
+    pTransform->constrain = false;
+
     clearAttributes();
 
     return true;

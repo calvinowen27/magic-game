@@ -10,6 +10,7 @@ class TrailSpell : public Spell
 public:
     TrailSpell();
     bool init() override;
+    void cast(Vector2 pos) override;
     void kill() override;
 };
 

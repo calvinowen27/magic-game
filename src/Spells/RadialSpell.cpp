@@ -14,6 +14,9 @@ bool RadialSpell::init()
 
     pRenderer->setTexture("radial_spell");
 
+    pHitbox->start = Vector2(0.5, 0.5);
+    pHitbox->end = Vector2(0.5, 0.5);
+
     return true;
 }
 
@@ -26,34 +29,8 @@ void RadialSpell::update(float time)
     {
         aliveTime += time;
         _currRadius += speed * time;
-
-        auto entities = objectManager.getEntities();
-        std::shared_ptr<Enemy> enemy;
-        std::shared_ptr<ColliderComponent> enemyCollider;
-
-        for(auto pEntity : entities)
-        {
-            if(pEntity->getType() != EntityType::Enemy)
-                continue;
-
-            if(_entitiesHit.find(pEntity) != _entitiesHit.end())
-                continue;
-            
-            enemy = std::dynamic_pointer_cast<Enemy>(pEntity);
-            enemyCollider = enemy->getCollider();
-
-            if(Vector2::distance(enemyCollider->bottomLeft, _startPos) <= _currRadius || 
-                Vector2::distance(Vector2(enemyCollider->bottomLeft.x, enemyCollider->topRight.y), _startPos) <= _currRadius ||
-                Vector2::distance(Vector2(enemyCollider->topRight.x, enemyCollider->bottomLeft.y), _startPos) <= _currRadius ||
-                Vector2::distance(enemyCollider->topRight, _startPos) <= _currRadius)
-            {
-                enemy->damage(damage);
-                _entitiesHit.emplace(pEntity);
-            }
-        }
-
-        pTransform->pos = _startPos - Vector2(_currRadius, _currRadius);
         pTransform->dims = Vector2(_currRadius, _currRadius) * 2;
+        pTransform->root = Vector2(0.5, 1) * pTransform->dims;
     }
     else
     {
@@ -61,13 +38,16 @@ void RadialSpell::update(float time)
     }
 }
 
+void RadialSpell::setDir(Vector2 dir)
+{
+    this->dir = dir;
+}
+
 void RadialSpell::cast(Vector2 pos)
 {
     isCast = true;
-    _startPos = pos;
-    pTransform->pos = pos;
-
-    // if(attributes.find(SpellAttribute::Projectile) != attributes.end())
+    _startPos = pos - Vector2(0, 0.5);
+    pTransform->pos = _startPos;
 
     if(hasAttribute(SpellAttribute::Projectile))
     {
@@ -153,4 +133,22 @@ void RadialSpell::kill()
     _entitiesHit.clear();
 
     Spell::kill();
+}
+
+void RadialSpell::onHitboxEnter(Entity *pEntity)
+{
+    if(!pEntity)
+        return;
+
+    Entity::onHitboxEnter(pEntity);
+
+    if(alive && isCast && pEntity->getType() == EntityType::Enemy)
+    {
+        hit(pEntity);
+    }
+
+    if(pEntity->getType() != EntityType::Player && pEntity->getType() != EntityType::Spell && (pEntity->getType() < EntityType::Wall || pEntity->getType() > EntityType::WallNT))
+    {
+        kill();
+    }
 }

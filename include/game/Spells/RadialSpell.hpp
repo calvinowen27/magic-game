@@ -18,9 +18,12 @@ public:
     RadialSpell();
     bool init() override;
     void update(float time) override;
+    void setDir(Vector2 dir) override;
     void cast(Vector2 pos) override;
     void hit(Entity *pEntity) override;
     void kill() override;
+
+    void onHitboxEnter(Entity *pEntity) override;
 };
 
 #endif

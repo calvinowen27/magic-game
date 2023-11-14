@@ -62,7 +62,7 @@ public:
     inline void setDamage(float damage) { this->damage = damage; }
     inline void setLifeDur(float lifeDur) { this->lifeDur = lifeDur; }
     inline void setSpeed(float speed) { this->speed = speed; }
-    void setDir(Vector2 dir);
+    virtual void setDir(Vector2 dir);
     inline void addAttribute(SpellAttribute attribute) { attributes |= attribute; }
     inline void removeAttribute(SpellAttribute attribute) { attributes &= (~attribute); }
     inline bool hasAttribute(SpellAttribute attribute) { return attributes & attribute; }

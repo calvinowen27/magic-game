@@ -17,6 +17,7 @@ public:
     ProjectileSpell();
     bool init() override;
     void update(float time) override;
+    void cast(Vector2 pos) override;
     void kill() override;
 };
 

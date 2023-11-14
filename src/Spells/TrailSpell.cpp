@@ -16,6 +16,11 @@ bool TrailSpell::init()
     return true;
 }
 
+void TrailSpell::cast(Vector2 pos)
+{
+    Spell::cast(pos + dir);
+}
+
 void TrailSpell::kill()
 {
     if(hasAttribute(SpellAttribute::Radial))

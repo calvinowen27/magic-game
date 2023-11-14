@@ -45,6 +45,11 @@ void ProjectileSpell::update(float time)
     }
 }
 
+void ProjectileSpell::cast(Vector2 pos)
+{
+    Spell::cast(pos + dir);
+}
+
 void ProjectileSpell::kill()
 {
     // if(attributes.find(SpellAttribute::Radial) != attributes.end())
