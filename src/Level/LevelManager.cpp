@@ -105,7 +105,7 @@ bool LevelManager::loadLevel(int levelIdx)
                 else
                 {
                     _game.pPlayer = _objectManager.newEntity<Player>();
-                    _game.pPlayer->init(EntityType::Player, objPos);
+                    _game.pPlayer->init(objPos);
                 }
                 break;
 
@@ -113,7 +113,7 @@ bool LevelManager::loadLevel(int levelIdx)
             case '!':
                 // enemy not stored in map
 
-                _objectManager.newEntity<Enemy>()->init(EntityType::Enemy, objPos);
+                _objectManager.newEntity<Enemy>()->init(objPos);
                 break;
 
             case '<':

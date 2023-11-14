@@ -17,9 +17,8 @@ private:
 
 public:
     Enemy();
-    bool init(EntityType entityType, Vector2 pos) override;
+    bool init(Vector2 pos);
     void update(float time) override;
-    void kill() override;
     void onCollisionEnter(Entity *pOther) override;
 };
 

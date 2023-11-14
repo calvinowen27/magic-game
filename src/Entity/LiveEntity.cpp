@@ -43,6 +43,7 @@ void LiveEntity::kill()
     registry.killComponent(pRigidbody);
     registry.killComponent(pCollider);
     registry.killComponent(pHitbox);
+    registry.killComponent(pHealth);
 
     Entity::kill();
 }

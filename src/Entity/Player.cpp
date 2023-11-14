@@ -10,13 +10,13 @@ Player::Player() : LiveEntity()
     _pKeyboardHandler = game.pKeyboardHandler;
 }
 
-bool Player::init(EntityType entityType, Vector2 pos)
+bool Player::init(Vector2 pos)
 {
-    LiveEntity::init(entityType, pos);
+    LiveEntity::init(EntityType::Player, pos);
 
     pAnimator = registry.newComponent<AnimatorComponent>();
     pAnimator->init(pRenderer);
-    pAnimator->setAnimation(entityType, "idle_down");
+    pAnimator->setAnimation(EntityType::Player, "idle_down");
 
     _pCurrInteractable = nullptr;
 
@@ -58,10 +58,12 @@ void Player::update(float time)
     if (_pKeyboardHandler->isPressed(InputKey::ZoomOut)) // zoom out
         game.zoomOut();
 
-    if (_moveDir.x != 0)
-        pRigidbody->velocity = _moveDir.normalized() * 2;
-    else
-        pRigidbody->velocity = _moveDir * 2;
+    // if (_moveDir.x != 0)
+    //     pRigidbody->velocity = _moveDir.normalized() * 2;
+    // else
+    //     pRigidbody->velocity = _moveDir * 2;
+
+    pRigidbody->velocity = _moveDir * 2.5;
 
     if (_pKeyboardHandler->isPressed(InputKey::Sprint)) // sprint
     {
@@ -112,7 +114,6 @@ void Player::kill()
 {
     LiveEntity::kill();
 
-    registry.killComponent(pHealth);
     registry.killComponent(pAnimator);
 
     _pCurrInteractable = nullptr;

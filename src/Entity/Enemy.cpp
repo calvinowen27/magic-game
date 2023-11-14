@@ -9,9 +9,9 @@ Enemy::Enemy() : LiveEntity()
 {
 }
 
-bool Enemy::init(EntityType entityType, Vector2 pos)
+bool Enemy::init(Vector2 pos)
 {
-    LiveEntity::init(entityType, pos);
+    LiveEntity::init(EntityType::Enemy, pos);
 
     return true;
 }
@@ -41,13 +41,6 @@ void Enemy::update(float time)
     {
         _timeSinceHit += time;
     }
-}
-
-void Enemy::kill()
-{
-    LiveEntity::kill();
-
-    registry.killComponent(pHealth);
 }
 
 void Enemy::onCollisionEnter(Entity *pOther)
