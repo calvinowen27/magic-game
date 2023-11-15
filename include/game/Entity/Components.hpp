@@ -224,8 +224,12 @@ public:
     std::shared_ptr<RendererComponent> pGreenRenderer;
     std::shared_ptr<TransformComponent> pGreenTransform;
 
+    std::shared_ptr<TransformComponent> pFollowTransform;
+    Vector2 followOffset;
+
     HealthComponent();
-    bool init(float baseHealth, Vector2 startPos = Vector2::zero);
+    bool init(float baseHealth, std::shared_ptr<TransformComponent> pFollowTransform, Vector2 followOffset);
+    void update(float time);
     void heal(float healAmount);
     bool damage(float dmgAmount); // returns true if dead after damage dealt
     void kill() override;

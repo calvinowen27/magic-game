@@ -27,6 +27,7 @@ void ComponentHandler::update(float time)
 {
     updateColliders(time);
     updateRigidbodies(time);
+    updateHealthComponents(time);
     updateTransforms(time);
     updateHitboxes(time);
     updateAnimators(time);
@@ -142,6 +143,15 @@ void ComponentHandler::updateRigidbodies(float time)
     for (auto pRb : rigidbodies)
     {
         pRb->update(time);
+    }
+}
+
+void ComponentHandler::updateHealthComponents(float time)
+{
+    auto healthComponents = _registry.getComponents<HealthComponent>();
+    for (auto pHC : healthComponents)
+    {
+        pHC->update(time);
     }
 }
 

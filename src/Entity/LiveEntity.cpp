@@ -25,7 +25,7 @@ bool LiveEntity::init(EntityType entityType, Vector2 pos)
     pRenderer->setHitbox(pHitbox);
 
     pHealth = registry.newComponent<HealthComponent>();
-    pHealth->init(10, pTransform->pos + Vector2(0, pTransform->dims.y + 0.5));
+    pHealth->init(10, pTransform, Vector2(0, pTransform->dims.y + 0.5));
     pHealth->setEntity(this);
 
     return true;
@@ -33,8 +33,6 @@ bool LiveEntity::init(EntityType entityType, Vector2 pos)
 
 void LiveEntity::update(float time)
 {
-    pHealth->setPos(pTransform->pos + Vector2(0, pTransform->dims.y + 0.5));
-
     Entity::update(time);
 }
 

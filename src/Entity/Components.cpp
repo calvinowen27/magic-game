@@ -535,18 +535,21 @@ HealthComponent::HealthComponent() : Component()
 {
 }
 
-bool HealthComponent::init(float baseHealth, Vector2 startPos)
+bool HealthComponent::init(float baseHealth, std::shared_ptr<TransformComponent> pFollowTransform, Vector2 followOffset)
 {
     Component::init();
 
     this->baseHealth = baseHealth;
     health = baseHealth;
 
+    this->pFollowTransform = pFollowTransform;
+    this->followOffset = followOffset;
+
     pRedTransform = registry.newComponent<TransformComponent>();
-    pRedTransform->init(startPos, Vector2(1, 1), false);
+    pRedTransform->init(pFollowTransform->pos + followOffset, Vector2(1, 1), false);
 
     pGreenTransform = registry.newComponent<TransformComponent>();
-    pGreenTransform->init(startPos, Vector2(1, 1), false);
+    pGreenTransform->init(pFollowTransform->pos + followOffset, Vector2(1, 1), false);
 
     pRedRenderer = registry.newComponent<RendererComponent>();
     pRedRenderer->init("red_bar", pRedTransform, -1);
@@ -555,6 +558,11 @@ bool HealthComponent::init(float baseHealth, Vector2 startPos)
     pGreenRenderer->init("green_bar", pGreenTransform, -2);
 
     return true;
+}
+
+void HealthComponent::update(float time)
+{
+    setPos(pFollowTransform->pos + followOffset);
 }
 
 void HealthComponent::heal(float healAmount)
