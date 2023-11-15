@@ -66,7 +66,7 @@ bool LevelManager::loadLevel(int levelIdx)
     }
 
     std::getline(in, line); // for skipping first line, which contains dimensions of level
-    for (wy = 0; wy < _currLevelHeight && std::getline(in, line); wy++)
+    for (wy = _currLevelHeight - 1; wy >= 0 && std::getline(in, line); wy--)
     {
         // middle of level (in file) should be position (0, 0) in game
         objPos.y = wy - _currLevelHalfHeight;
