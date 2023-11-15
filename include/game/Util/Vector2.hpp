@@ -93,6 +93,7 @@ public:
     void normalize();
     Vector2Int normalized() const;
     friend bool operator==(const Vector2Int &a, const Vector2Int &b);
+    friend bool operator!=(const Vector2Int &a, const Vector2Int &b);
     Vector2Int operator+(const Vector2Int &b) const;
     Vector2Int operator-(const Vector2Int &b) const;
     Vector2Int operator*(const float &a) const;
