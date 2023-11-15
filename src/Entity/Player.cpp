@@ -43,6 +43,8 @@ void Player::update(float time)
     if (_pKeyboardHandler->isPressed(InputKey::Down)) // move down
         _moveDir.y -= 1;
 
+    _moveDir.normalize();
+
     if (_moveDir == Vector2::zero && _prevMoveDir != Vector2::zero)
     {
         nextAnimation = _prevMoveDir.x < 0 ? "idle_left" : "idle_right";
@@ -53,21 +55,11 @@ void Player::update(float time)
 
     _prevMoveDir = _moveDir;
 
-    if (_pKeyboardHandler->isPressed(InputKey::ZoomIn)) // zoom in
-        game.zoomIn();
-    if (_pKeyboardHandler->isPressed(InputKey::ZoomOut)) // zoom out
-        game.zoomOut();
-
-    // if (_moveDir.x != 0)
-    //     pRigidbody->velocity = _moveDir.normalized() * 2;
-    // else
-    //     pRigidbody->velocity = _moveDir * 2;
-
-    pRigidbody->velocity = _moveDir * 2.5;
+    pRigidbody->velocity = _moveDir * _walkSpeed;
 
     if (_pKeyboardHandler->isPressed(InputKey::Sprint)) // sprint
     {
-        pRigidbody->velocity *= 2.5;
+        pRigidbody->velocity = _moveDir * _sprintSpeed;
 
         if (_moveDir.y > 0)
         {

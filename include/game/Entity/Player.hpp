@@ -15,6 +15,9 @@ private:
     Vector2 _moveDir;
     Vector2 _prevMoveDir;
 
+    float _walkSpeed = 2.5; // meters/sec
+    float _sprintSpeed = 5; // meters/sec
+
     InteractableObject *_pCurrInteractable;
 
 public:
