@@ -52,8 +52,6 @@ void ProjectileSpell::cast(Vector2 pos)
 
 void ProjectileSpell::kill()
 {
-    // if(attributes.find(SpellAttribute::Radial) != attributes.end())
-    
     if(hasAttribute(SpellAttribute::Radial))
     {
         std::shared_ptr<RadialSpell> radial = spellManager.newSpell<RadialSpell>();
@@ -61,7 +59,7 @@ void ProjectileSpell::kill()
         radial->setDamage(3);
         radial->setLifeDur(1);
         radial->setSpeed(3.5);
-        radial->cast(pTransform->pos + (pTransform->dims / 2));
+        radial->cast(pTransform->pos + Vector2(0, 0.5));
     }
 
     Spell::kill();
