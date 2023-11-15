@@ -231,6 +231,11 @@ bool operator==(const Vector2Int &a, const Vector2Int &b)
     return a.equals(b);
 }
 
+bool operator!=(const Vector2Int &a, const Vector2Int &b)
+{
+    return !a.equals(b);
+}
+
 Vector2Int Vector2Int::operator+(const Vector2Int &b) const
 {
     return Vector2Int(x+b.x, y+b.y);
