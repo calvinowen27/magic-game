@@ -103,9 +103,9 @@ bool LevelManager::loadLevel(int levelIdx)
                     _game.pPlayer->setPos(_playerStartPos);
                 }
                 else
-                {
+                {                    
                     _game.pPlayer = _objectManager.newEntity<Player>();
-                    _game.pPlayer->init(objPos);
+                    _game.pPlayer->init(_playerStartPos);
                 }
                 break;
 
