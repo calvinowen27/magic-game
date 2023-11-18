@@ -20,6 +20,8 @@ bool Player::init(Vector2 pos)
 
     _pCurrInteractable = nullptr;
 
+    pTransform->setEntity(this);
+
     return true;
 }
 

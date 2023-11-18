@@ -87,7 +87,6 @@ int Game::init()
     ppm *= ddpi / 96.f;
     minPPM *= ddpi / 96.f;
     maxPPM *= ddpi / 96.f;
-    zoomScale *= ddpi / 96.f;
 
     Uint64 windowFlags = SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE;
 
@@ -107,7 +106,7 @@ int Game::init()
         return EXIT_FAILURE;
     }
 
-    pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED);
+    pRenderer = SDL_CreateRenderer(pWindow, -1, SDL_RENDERER_ACCELERATED); // | SDL_RENDERER_PRESENTVSYNC);
     if (pRenderer == NULL)
     {
         std::cerr << "Failed to create renderer " << SDL_GetError() << std::endl;
@@ -115,6 +114,8 @@ int Game::init()
         SDL_Quit();
         return EXIT_FAILURE;
     }
+
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 
     pRegistry = new Registry();
     pComponentHandler = new ComponentHandler();
@@ -295,7 +296,7 @@ Vector2Int Game::worldToPixel(const Vector2 &pos)
     pxPos -= cameraPos / Vector2(1, 2);                                          // half cameraPos.y to account for perspective, make pxPos relative to cameraPos
     pxPos *= ppm;                                                                // convert from meters to pixels
     pxPos.y *= -1;                                                               // invert y relative to window (pixel y positioning is from top not bottom)
-    return (Vector2Int)(pxPos + Vector2(0.5, 0.5)) + Vector2Int((winWidth / 2) + 0.5, (winHeight / 2) + 0.5); // add half of window dimensions to center on screen
+    return (Vector2Int)(pxPos + Vector2(0.9, 0.9)) + Vector2Int((winWidth / 2) + 0.9, (winHeight / 2) + 0.9); // add half of window dimensions to center on screen
 }
 
 Vector2 Game::pixelToWorld(const Vector2Int &pxPos)
@@ -316,14 +317,14 @@ bool Game::isTransformOnScreen(TransformComponent &transform)
 
 void Game::zoomIn()
 {
-    ppm *= zoomScale;
+    ppm += SPRITE_PPM; // ppm has to be multiple of SPRITE_PPM to prevent subpixel rendering
     if (ppm > maxPPM)
         ppm = maxPPM;
 }
 
 void Game::zoomOut()
 {
-    ppm /= zoomScale;
+    ppm -= SPRITE_PPM; // ppm has to be multiple of SPRITE_PPM to prevent subpixel rendering
     if (ppm < minPPM)
         ppm = minPPM;
 }

@@ -99,7 +99,7 @@
     "WallTL": {
         "spriteDims": [
             16,
-            36
+            32
         ],
         "sourceRect": [
             0,
@@ -128,13 +128,13 @@
         },
         "relativeRoot": [
             0.5,
-            0
+            0.25
         ]
     },
     "WallTR": {
         "spriteDims": [
             16,
-            36
+            32
         ],
         "sourceRect": [
             32,
@@ -163,13 +163,13 @@
         },
         "relativeRoot": [
             0.5,
-            0
+            0.25
         ]
     },
     "WallH": {
         "spriteDims": [
             16,
-            36
+            32
         ],
         "sourceRect": [
             16,
@@ -208,7 +208,7 @@
         ],
         "sourceRect": [
             0,
-            36
+            32
         ],
         "collider": {
             "start": [
@@ -239,11 +239,11 @@
     "WallBL": {
         "spriteDims": [
             16,
-            36
+            32
         ],
         "sourceRect": [
             0,
-            68
+            64
         ],
         "collider": {
             "start": [
@@ -274,11 +274,11 @@
     "WallBR": {
         "spriteDims": [
             16,
-            36
+            32
         ],
         "sourceRect": [
             32,
-            68
+            64
         ],
         "collider": {
             "start": [
@@ -309,7 +309,7 @@
     "WallNL": {
         "spriteDims": [
             16,
-            36
+            32
         ],
         "sourceRect": [
             48,
@@ -338,13 +338,13 @@
         },
         "relativeRoot": [
             0.5,
-            0
+            0.245
         ]
     },
     "WallNR": {
         "spriteDims": [
             16,
-            36
+            32
         ],
         "sourceRect": [
             64,
@@ -373,17 +373,17 @@
         },
         "relativeRoot": [
             0.5,
-            0
+            0.25
         ]
     },
     "WallNB": {
         "spriteDims": [
             16,
-            36
+            32
         ],
         "sourceRect": [
             64,
-            36
+            32
         ],
         "collider": {
             "start": [
@@ -408,17 +408,17 @@
         },
         "relativeRoot": [
             0.5,
-            0
+            0.25
         ]
     },
     "WallNT": {
         "spriteDims": [
             16,
-            36
+            32
         ],
         "sourceRect": [
             48,
-            36
+            32
         ],
         "collider": {
             "start": [
@@ -443,7 +443,7 @@
         },
         "relativeRoot": [
             0.5,
-            0
+            0.25
         ]
     },
     "Grass": {

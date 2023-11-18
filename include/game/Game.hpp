@@ -63,12 +63,11 @@ public:
 
     std::shared_ptr<Player> pPlayer;
 
-    int winWidth = 1250, winHeight = 835; // window dimensions, 1250x835 by default in windowed mode
+    int winWidth = 1280, winHeight = 960; // window dimensions, 1250x835 by default in windowed mode
     int screenWidth, screenHeight;
     int ppm = 64; // screen pixels per meter, 64 by default
-    int maxPPM = 512;
-    int minPPM = 8;
-    float zoomScale = 1.125; // scalar to multiply or divide ppm by when zooming
+    int maxPPM = 256;
+    int minPPM = 64;
     SDL_Window *pWindow;
     SDL_Renderer *pRenderer;
 

@@ -14,7 +14,7 @@ protected:
 
 public:
     LiveEntity();
-    bool init(EntityType entityType, Vector2 pos) override;
+    bool init(EntityType entityType, Vector2 pos, Vector2 dims = Vector2(1, 2)) override;
     void update(float time) override;
     void kill() override;
 

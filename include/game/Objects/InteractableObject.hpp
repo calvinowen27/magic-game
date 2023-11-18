@@ -6,7 +6,7 @@
 class InteractableObject : public Object
 {
 public:
-    bool init(EntityType entityType, Vector2 pos) override;
+    bool init(EntityType entityType, Vector2 pos, Vector2 dims = Vector2(1, 1)) override;
     virtual bool interact();
 
     void onCollisionEnter(Entity *pOther) override;

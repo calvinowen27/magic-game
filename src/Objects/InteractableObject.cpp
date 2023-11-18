@@ -2,9 +2,9 @@
 #include "../../include/game/Game.hpp"
 #include "../../include/game/Entity/Player.hpp"
 
-bool InteractableObject::init(EntityType entityType, Vector2 pos)
+bool InteractableObject::init(EntityType entityType, Vector2 pos, Vector2 dims)
 {
-    Object::init(entityType, pos);
+    Object::init(entityType, pos, dims);
 
     return true;
 }

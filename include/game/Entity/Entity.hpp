@@ -24,7 +24,8 @@ enum class EntityType
     WallNB,
     WallNT,
     Grass,
-    LevelChanger
+    LevelChanger,
+    NotSet
 };
 
 class Game;
@@ -39,6 +40,9 @@ private:
     static std::map<EntityType, std::string> _stringFromType;
     static std::map<std::string, EntityType> _typeFromString;
 
+public:
+    EntityType type = EntityType::NotSet;
+
 protected:
     Game &game;
     ObjectManager &objectManager;
@@ -46,7 +50,7 @@ protected:
     Registry &registry;
     LevelManager &levelManager;
 
-    EntityType type;
+    // EntityType type;
 
     std::shared_ptr<RendererComponent> pRenderer;
     std::shared_ptr<TransformComponent> pTransform;
@@ -55,7 +59,7 @@ protected:
 
 public:
     Entity();
-    virtual bool init(EntityType type, Vector2 pos);
+    virtual bool init(EntityType type, Vector2 pos, Vector2 dims = Vector2(1, 1));
     virtual void update(float time);
     virtual void kill();
 

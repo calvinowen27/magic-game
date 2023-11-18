@@ -11,9 +11,9 @@ public:
     {
     }
 
-    bool init(EntityType entityType, Vector2 pos) override
+    bool init(EntityType entityType, Vector2 pos)
     {
-        Object::init(entityType, pos);
+        Object::init(entityType, pos, Vector2(1, 0.5));
         pCollider->doCollisions = false;
         return true;
     }

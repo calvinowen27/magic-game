@@ -9,6 +9,8 @@
 #include "../../include/game/UI/UIManager.hpp"
 #include "../../include/game/Entity/ComponentHandler.hpp"
 #include "../../include/game/Level/LevelManager.hpp"
+#include "../../include/game/Entity/Player.hpp"
+#include "../../include/game/Entity/Entity.hpp"
 
 #include <algorithm>
 
@@ -59,9 +61,11 @@ bool RendererComponent::init(std::string textureName, std::shared_ptr<TransformC
 
 bool RendererComponent::init(EntityType entityType, std::shared_ptr<TransformComponent> pTransform, int renderOrder, bool startEnabled)
 {
-    if (startEnabled)
-        Component::init();
+    Component::init();
 
+    if (!startEnabled)
+        disable();
+    
     pCollider = nullptr;
     pHitbox = nullptr;
 
@@ -103,6 +107,9 @@ void RendererComponent::draw(SDL_Renderer *pRenderer)
 
     // draw sprite
     SDL_RenderCopyEx(pRenderer, pTexture, &sourceRect, &spriteRect, pTransform->rotDeg, NULL, isFlipped ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+
+    // SDL_RenderCopy(pRenderer, pTexture, &sourceRect, &spriteRect);
+
 
     // skip if not showing colliders
     if (!game.pComponentHandler->isShowingColliders())
@@ -162,6 +169,16 @@ void RendererComponent::draw(SDL_Renderer *pRenderer)
 
             SDL_RenderDrawPoints(pRenderer, points, 2 * circumference);
         }
+    }
+
+    if(pEntity && pEntity->getType() == EntityType::Enemy)
+    {
+        SDL_SetRenderDrawColor(pRenderer, 255, 255, 255, 255);
+
+        Vector2Int playerPxPos = game.worldToPixel(game.pPlayer->getPos());
+        Vector2Int pxPos = game.worldToPixel(pEntity->getPos());
+
+        SDL_RenderDrawLine(pRenderer, playerPxPos.x, playerPxPos.y, pxPos.x, pxPos.y);
     }
 }
 
@@ -224,14 +241,16 @@ bool TransformComponent::init(EntityType entityType, Vector2 pos, Vector2 dims)
     this->rotDeg = 0;
     this->rotRad = 0;
 
+    json jEntity = objectManager.getEntityData(entityType);
+
     this->dims = dims;
     pxDims = (Vector2Int)(dims * game.ppm);
 
-    json jRelRoot = objectManager.getEntityData(entityType)["relativeRoot"];
+    json jRelRoot = jEntity["relativeRoot"];
     Vector2 relativeRoot = Vector2((float)jRelRoot[0], (float)jRelRoot[1]);
 
     this->root = relativeRoot * dims;
-    pxRoot = (Vector2Int)(root * game.ppm);
+    pxRoot = (Vector2Int)((root * dims) + Vector2(0.9, 0.9));
 
     updatePxPos();
 
@@ -280,12 +299,12 @@ void TransformComponent::updatePxPos()
 
 void TransformComponent::updatePxDims()
 {
-    pxDims = (Vector2Int)(dims * game.ppm);
+    pxDims = (Vector2Int)((dims * game.ppm) + Vector2(0.9, 0.9));
 }
 
 void TransformComponent::updatePxRoot()
 {
-    pxRoot = (Vector2Int)(root * game.ppm);
+    pxRoot = (Vector2Int)((root * dims) + Vector2(0.9, 0.9));
 }
 
 /* COLLIDER COMPONENT */

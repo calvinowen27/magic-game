@@ -4,9 +4,9 @@ LiveEntity::LiveEntity() : Entity()
 {
 }
 
-bool LiveEntity::init(EntityType entityType, Vector2 pos)
+bool LiveEntity::init(EntityType entityType, Vector2 pos, Vector2 dims)
 {
-    Entity::init(entityType, pos);
+    Entity::init(entityType, pos, dims);
 
     pRigidbody = registry.newComponent<RigidbodyComponent>();
     pCollider = registry.newComponent<ColliderComponent>();

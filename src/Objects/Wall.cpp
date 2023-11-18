@@ -70,7 +70,7 @@ void Wall::pickState(Vector2Int pos)
     else if (_possibleStates.find(WallState::NotTop) != _possibleStates.end())
         Object::init(EntityType::WallNT, (Vector2)pos);
     else
-        Object::init(EntityType::Wall, (Vector2)pos);
+        Object::init(EntityType::Wall, (Vector2)pos, Vector2(1, 2));
 
     if (pCollider)
     {
@@ -80,4 +80,6 @@ void Wall::pickState(Vector2Int pos)
     
     if(pRigidbody)
         pRigidbody->isStatic = true;
+
+    pTransform->setEntity(this);
 }

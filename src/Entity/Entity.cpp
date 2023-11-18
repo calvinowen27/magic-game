@@ -46,7 +46,7 @@ Entity::Entity() : game(*Game::getInstance()), registry(*game.pRegistry), conten
 {
 }
 
-bool Entity::init(EntityType type, Vector2 pos)
+bool Entity::init(EntityType type, Vector2 pos, Vector2 dims)
 {
     this->type = type;
     alive = true;
@@ -54,7 +54,7 @@ bool Entity::init(EntityType type, Vector2 pos)
     pTransform = registry.newComponent<TransformComponent>();
     pRenderer = registry.newComponent<RendererComponent>();
 
-    pTransform->init(type, pos);
+    pTransform->init(type, pos, dims);
     pRenderer->init(type, pTransform);
     pRenderer->enable();
 

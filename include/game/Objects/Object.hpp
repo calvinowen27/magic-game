@@ -20,7 +20,7 @@ protected:
 
 public:
     Object();
-    bool init(EntityType entityType, Vector2 pos) override;
+    bool init(EntityType entityType, Vector2 pos, Vector2 dims = Vector2(1, 1)) override;
     void kill() override;
 
     inline Vector2 getVelocity() { return pRigidbody->velocity; }

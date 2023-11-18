@@ -14,6 +14,8 @@ bool Enemy::init(Vector2 pos)
 {
     LiveEntity::init(EntityType::Enemy, pos);
 
+    pRenderer->setEntity(this);
+
     return true;
 }
 
